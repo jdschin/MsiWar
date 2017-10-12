@@ -1,6 +1,5 @@
 name := "MsiWar"
-
 version := "0.1"
-
 scalaVersion := "2.12.3"
-        
+libraryDependencies += "org.scala-lang" % "scala-swing" % "2.10.6"
+libraryDependencies += "org.scala-lang" % "scala-library" % "2.12.3"
