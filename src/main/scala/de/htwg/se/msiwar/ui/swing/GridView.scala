@@ -7,6 +7,8 @@ class GridView(rows: Int, columns: Int) extends GridPanel(rows, columns) {
   private val labels = Array.ofDim[Label](rows, columns)
 
   def init {
+    background = java.awt.Color.WHITE
+
     for (i <- 0 until rows; j <- 0 until columns) {
       labels(i)(j) = new Label {
         listenTo(mouse.moves)
