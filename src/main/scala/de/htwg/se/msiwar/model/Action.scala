@@ -1,5 +1,6 @@
 package de.htwg.se.msiwar.model
 
-class Action {
+  // TODO add param sound
+class Action(name:String, actionPoints:Int, range:Int, actionType:ActionType) {
 
 }
