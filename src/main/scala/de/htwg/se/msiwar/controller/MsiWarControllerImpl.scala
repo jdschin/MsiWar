@@ -1,6 +1,9 @@
 package de.htwg.se.msiwar.controller
 
-class MsiWarControllerImpl extends MsiWarController {
+import de.htwg.se.msiwar.model.MsiWarModel
+
+class MsiWarControllerImpl(model: MsiWarModel) extends MsiWarController {
+
   override def highlightCell(rowIndex: Int, columnIndex: Int): Unit = {}
   override def isCellInRange(rowIndex: Int, columnIndex: Int): Boolean = {true}
 
