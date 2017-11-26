@@ -4,37 +4,48 @@ import de.htwg.se.msiwar.controller.{CellChanged, MsiWarController}
 
 import scala.swing.Reactor;
 
-class MsiWarTui(msiWarController: MsiWarController) extends Reactor {
-  listenTo(msiWarController)
+class MsiWarTui(controller: MsiWarController) extends Reactor {
+  listenTo(controller)
   reactions += {
     case e: CellChanged => printBoard
   }
 
-  def printWelcomeMessage: Unit = {
+  def printWelcomeMessage = {
     println("___  ___ _____ _____   _    _  ___  ______ \n|  \\/  |/  ___|_   _| | |  | |/ _ \\ | ___ \\\n| .  . |\\ `--.  | |   | |  | / /_\\ \\| |_/ /\n| |\\/| | `--. \\ | |   | |/\\| |  _  ||    / \n| |  | |/\\__/ /_| |_  \\  /\\  / | | || |\\ \\ \n\\_|  |_/\\____/ \\___/   \\/  \\/\\_| |_/\\_| \\_|\n")
     println("           -Prepare to die!-           ")
   }
 
-  def printAvailableActions: Unit = {
-    println("\nAvailable Actions: ")
-    msiWarController.getActionIds.foreach(i => println("\nAction:" + msiWarController.getActionDescription(i)))
+  def printUserActions = {
+    println("Available Actions: ")
+    controller.getActionIds.foreach(i => println("\nAction: " + controller.getActionDescription(i)))
   }
 
-  def printBoard: Unit = {
-    for (i <- 0 until msiWarController.getRowCount; j <- 0 until msiWarController.getColumnCount) {
-      println(msiWarController.getCellContentToText(i, j))
+  def printHelp = {
+    println("Help:")
+    println("q => Quit the game")
+    println("b => Print the current board")
+    println("h => Show help")
+    println("a => Print available user actions")
+    println
+  }
+
+  def printBoard = {
+    for (i <- 0 until controller.getRowCount; j <- 0 until controller.getColumnCount) {
+      println(controller.getCellContentToText(i, j))
     }
   }
 
-  def executeCommand(input: String): Boolean = {
-    println(input)
-    if (input == "q" || input == "Q") {
-      false
-    } else {
-      true
+  def executeCommand(input: String) = {
+    var continue = true
+    input match {
+      case "q" => continue = false
+      case "h" => printHelp
+      case "b" => printBoard
+      case "a" => printUserActions
     }
+    continue
   }
 
   printWelcomeMessage
-  printAvailableActions
+  printHelp
 }
