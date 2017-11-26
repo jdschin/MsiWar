@@ -7,6 +7,9 @@ var tui = new MsiWarTui(new MsiWarControllerImpl(new MsiWarModelImpl))
 // Print welcome message
 tui.printWelcomeMessage
 
+// Print available commands
+tui.printAvailableActions
+
 // Print current board to console
 tui.printBoard
 

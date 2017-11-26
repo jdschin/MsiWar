@@ -11,15 +11,13 @@ class MsiWarTui(msiWarController: MsiWarController) extends Reactor {
   }
 
   def printWelcomeMessage: Unit = {
-    println("___  ___ _____ _____   _    _  ___  ______ \n|  \\/  |/  ___|_   _| | |  | |/ _ \\ | ___ \\\n| .  . |\\ `--.  | |   | |  | / /_\\ \\| |_/ /\n| |\\/| | `--. \\ | |   | |/\\| |  _  ||    / \n| |  | |/\\__/ /_| |_  \\  /\\  / | | || |\\ \\ \n\\_|  |_/\\____/ \\___/   \\/  \\/\\_| |_/\\_| \\_|\n                                           ")
-    println("\n")
-    println("Prepare to die!")
-    println("\n")
+    println("___  ___ _____ _____   _    _  ___  ______ \n|  \\/  |/  ___|_   _| | |  | |/ _ \\ | ___ \\\n| .  . |\\ `--.  | |   | |  | / /_\\ \\| |_/ /\n| |\\/| | `--. \\ | |   | |/\\| |  _  ||    / \n| |  | |/\\__/ /_| |_  \\  /\\  / | | || |\\ \\ \n\\_|  |_/\\____/ \\___/   \\/  \\/\\_| |_/\\_| \\_|\n")
+    println("           -Prepare to die!-           ")
   }
 
   def printAvailableActions: Unit = {
-    println("Available Actions: ")
-    msiWarController.getActionIds.foreach(i => println("Action:" + msiWarController.getActionDescription(i)))
+    println("\nAvailable Actions: ")
+    msiWarController.getActionIds.foreach(i => println("\nAction:" + msiWarController.getActionDescription(i)))
   }
 
   def printBoard: Unit = {
@@ -28,7 +26,15 @@ class MsiWarTui(msiWarController: MsiWarController) extends Reactor {
     }
   }
 
-  def executeCommand(input: String): Unit = {
+  def executeCommand(input: String): Boolean = {
     println(input)
+    if (input == "q" || input == "Q") {
+      false
+    } else {
+      true
+    }
   }
+
+  printWelcomeMessage
+  printAvailableActions
 }
