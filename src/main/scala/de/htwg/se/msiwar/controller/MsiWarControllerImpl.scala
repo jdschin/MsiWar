@@ -2,26 +2,26 @@ package de.htwg.se.msiwar.controller
 
 import de.htwg.se.msiwar.model.MsiWarModel
 
-import scala.collection.immutable.HashSet
-
 class MsiWarControllerImpl(model: MsiWarModel) extends MsiWarController {
 
-  override def getCellContentToText(rowIndex: Int, columnIndex: Int) = {"row:" + rowIndex + " column:" + columnIndex}
-  override def highlightCell(rowIndex: Int, columnIndex: Int) = {publish(new CellChanged(rowIndex, columnIndex))}
+  override def cellContentToText(rowIndex: Int, columnIndex: Int) = {"row:" + rowIndex + " column:" + columnIndex}
+  override def highlightCell(rowIndex: Int, columnIndex: Int) = {publish(CellChanged(rowIndex, columnIndex, true))}
   override def isCellInRange(rowIndex: Int, columnIndex: Int) = {true}
 
   override def startActionMode(actionId: Int) = {}
   override def stopActionMode(actionId: Int) = {}
   override def executeAction(actionId: Int) = {}
 
-  override def getActionIds = {new HashSet[Int]}
-  override def getActionHotkey(actionId: Int) = {""}
-  override def getActionDescription(actionId: Int) = {""}
-  override def getActionIconPath(actionId: Int) = {""}
+  override def actionIds(playerNumber: Int) : List[Int] = {model.actionIdsForPlayer(playerNumber)}
+  override def actionHotKey(actionId: Int) : String = {model.actionHotKey(actionId)}
+  override def actionDescription(actionId: Int) : String = {model.actionDescription(actionId)}
+  override def actionIconPath(actionId: Int) : String = {model.actionIconPath(actionId)}
 
-  override def getColumnCount = {1}
-  override def getRowCount = {1}
-  override def getBackgroundPath = {""}
+  override def columnCount = {1}
+  override def rowCount = {1}
+  override def backgroundPath = {""}
 
-  override def reset = {}
+  override def reset = {
+    model.reset
+  }
 }

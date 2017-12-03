@@ -1,5 +1,6 @@
 package de.htwg.se.msiwar.aview
 
+import de.htwg.se.msiwar.aview.MsiWarTuiApp.configProvider
 import de.htwg.se.msiwar.aview.swing.GridView
 import de.htwg.se.msiwar.controller.MsiWarControllerImpl
 import de.htwg.se.msiwar.model.MsiWarModelImpl
@@ -13,7 +14,8 @@ object MsiWarSwingApp extends SimpleSwingApplication {
     minimumSize = new Dimension(400, 400)
 
     // TODO inject
-    val controller = new MsiWarControllerImpl(new MsiWarModelImpl)
+    val model = MsiWarModelImpl(configProvider.rowCount, configProvider.colCount, configProvider.gameObjects)
+    val controller = new MsiWarControllerImpl(model)
     contents = new GridView(controller).content
   }
 }

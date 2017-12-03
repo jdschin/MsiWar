@@ -6,7 +6,7 @@ import scala.swing.event.MouseEntered
 import scala.swing.{GridPanel, Label}
 
 class GridView(msiWarController: MsiWarController) {
-  private val gridPanel = new GridPanel(msiWarController.getRowCount, msiWarController.getColumnCount)
+  private val gridPanel = new GridPanel(msiWarController.rowCount, msiWarController.columnCount)
   private val labels = Array.ofDim[Label](gridPanel.rows,gridPanel.columns)
 
   gridPanel.background = java.awt.Color.WHITE
