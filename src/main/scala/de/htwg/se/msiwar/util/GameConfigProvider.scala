@@ -3,6 +3,9 @@ package de.htwg.se.msiwar.util
 import de.htwg.se.msiwar.model.{Action, PlayerObject, Position}
 
 class GameConfigProvider(configFilePath: String) {
+  //TODO: sort players by number
+  //TODO: verify player numbers
+
   // Setup board
   val rowCount = 9
   val colCount = 9

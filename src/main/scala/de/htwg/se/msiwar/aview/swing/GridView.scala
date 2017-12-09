@@ -1,11 +1,11 @@
 package de.htwg.se.msiwar.aview.swing
 
-import de.htwg.se.msiwar.controller.MsiWarController
+import de.htwg.se.msiwar.controller.Controller
 
 import scala.swing.event.MouseEntered
 import scala.swing.{GridPanel, Label}
 
-class GridView(msiWarController: MsiWarController) {
+class GridView(msiWarController: Controller) {
   private val gridPanel = new GridPanel(msiWarController.rowCount, msiWarController.columnCount)
   private val labels = Array.ofDim[Label](gridPanel.rows,gridPanel.columns)
 

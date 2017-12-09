@@ -7,7 +7,7 @@ case class CellChanged(rowIndex: Int, columnIndex: Int, valid: Boolean) extends 
 case class TurnStarted(playerNumber: Int) extends Event
 case class TurnEnded(playerNumber: Int) extends Event
 
-trait MsiWarController extends Publisher{
+trait Controller extends Publisher{
   def cellContentToText(rowIndex: Int, columnIndex: Int): String
   def highlightCell(rowIndex: Int, columnIndex: Int) : Unit
   def isCellInRange(rowIndex: Int, columnIndex: Int) : Boolean
@@ -24,6 +24,9 @@ trait MsiWarController extends Publisher{
   def columnCount : Int
   def rowCount : Int
   def backgroundPath : String
+
+  def activePlayerNumber : Int
+  def playerName(playerNumber: Int) : String
 
   def reset : Unit
 }

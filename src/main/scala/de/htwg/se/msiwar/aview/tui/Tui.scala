@@ -1,10 +1,10 @@
 package de.htwg.se.msiwar.aview.tui
 
-import de.htwg.se.msiwar.controller.{CellChanged, MsiWarController, TurnEnded, TurnStarted}
+import de.htwg.se.msiwar.controller.{CellChanged, Controller, TurnEnded, TurnStarted}
 
 import scala.swing.Reactor;
 
-class Tui(controller: MsiWarController) extends Reactor {
+class Tui(controller: Controller) extends Reactor {
   listenTo(controller)
   reactions += {
     case e: CellChanged => printBoard
@@ -29,11 +29,19 @@ class Tui(controller: MsiWarController) extends Reactor {
     println("b => Print the current board")
     println("h => Show help")
     println("a => Print available user actions")
+    println("t => Print the active player")
     println
   }
 
+  def printActivePlayer = {
+    val playerNumber = controller.activePlayerNumber
+    val playerName = controller.playerName(playerNumber)
+    println("Spieler" + playerNumber + " '" + playerName + "' ist am Zug")
+
+  }
+
   def printBoard = {
-    for(i <- 0 until controller.rowCount) {
+    for (i <- 0 until controller.rowCount) {
       print("| ")
       for (j <- 0 until controller.columnCount) {
         print(controller.cellContentToText(i, j) + " | ")
@@ -45,10 +53,11 @@ class Tui(controller: MsiWarController) extends Reactor {
   def executeCommand(input: String) = {
     var continue = true
     input match {
-      case "q" => continue = false
-      case "h" => printHelp
-      case "b" => printBoard
-      case "a" => printUserActions
+      case "q" | "Q" => continue = false
+      case "h" | "H" => printHelp
+      case "b" | "b" => printBoard
+      case "a" | "A" => printUserActions
+      case "t" | "T" => printActivePlayer
       case _ => println("Unbekanntes Command")
     }
     continue
