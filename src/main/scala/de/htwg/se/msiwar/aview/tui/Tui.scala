@@ -4,7 +4,7 @@ import de.htwg.se.msiwar.controller.{CellChanged, MsiWarController, TurnEnded, T
 
 import scala.swing.Reactor;
 
-class MsiWarTui(controller: MsiWarController) extends Reactor {
+class Tui(controller: MsiWarController) extends Reactor {
   listenTo(controller)
   reactions += {
     case e: CellChanged => printBoard

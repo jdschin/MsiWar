@@ -1,6 +1,6 @@
 package de.htwg.se.msiwar.model
 
-trait MsiWarModel {
+trait GameModel {
   def gameObjectAt(rowIndex: Int, columnIndex: Int): Option[GameObject]
 
   def actionIdsForPlayer(playerNumber: Int): List[Int]

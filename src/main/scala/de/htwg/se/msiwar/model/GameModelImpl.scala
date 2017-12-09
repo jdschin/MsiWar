@@ -1,6 +1,6 @@
 package de.htwg.se.msiwar.model
 
-case class MsiWarModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject]) extends MsiWarModel {
+case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject]) extends GameModel {
   private val gameBoard = GameBoard(numRows, numCols, gameObjects)
   private var activePlayer = player(1)
 

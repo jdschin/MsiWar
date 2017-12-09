@@ -1,8 +1,8 @@
 package de.htwg.se.msiwar.controller
 
-import de.htwg.se.msiwar.model.MsiWarModel
+import de.htwg.se.msiwar.model.GameModel
 
-class MsiWarControllerImpl(model: MsiWarModel) extends MsiWarController {
+class ControllerImpl(model: GameModel) extends MsiWarController {
 
   override def cellContentToText(rowIndex: Int, columnIndex: Int) = {
     val objectAt = model.gameObjectAt(rowIndex, columnIndex)
