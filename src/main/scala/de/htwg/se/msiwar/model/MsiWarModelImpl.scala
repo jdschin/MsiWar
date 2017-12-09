@@ -53,4 +53,12 @@ case class MsiWarModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObj
       ""
     }
   }
+
+  override def gameObjectAt(rowIndex: Int, columnIndex: Int) : Option[GameObject] = {
+    gameBoard.gameObjectAt(rowIndex, columnIndex)
+  }
+
+  override def rowCount = gameBoard.rows
+
+  override def columnCount = gameBoard.columns
 }

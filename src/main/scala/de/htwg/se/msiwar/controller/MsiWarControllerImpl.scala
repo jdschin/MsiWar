@@ -4,7 +4,15 @@ import de.htwg.se.msiwar.model.MsiWarModel
 
 class MsiWarControllerImpl(model: MsiWarModel) extends MsiWarController {
 
-  override def cellContentToText(rowIndex: Int, columnIndex: Int) = {"row:" + rowIndex + " column:" + columnIndex}
+  override def cellContentToText(rowIndex: Int, columnIndex: Int) = {
+    val objectAt = model.gameObjectAt(rowIndex, columnIndex)
+    if(objectAt.isDefined){
+      objectAt.get.name
+    } else {
+      "X"
+    }
+  }
+
   override def highlightCell(rowIndex: Int, columnIndex: Int) = {publish(CellChanged(rowIndex, columnIndex, true))}
   override def isCellInRange(rowIndex: Int, columnIndex: Int) = {true}
 
@@ -17,8 +25,8 @@ class MsiWarControllerImpl(model: MsiWarModel) extends MsiWarController {
   override def actionDescription(actionId: Int) : String = {model.actionDescription(actionId)}
   override def actionIconPath(actionId: Int) : String = {model.actionIconPath(actionId)}
 
-  override def columnCount = {1}
-  override def rowCount = {1}
+  override def rowCount = {model.rowCount}
+  override def columnCount = {model.columnCount}
   override def backgroundPath = {""}
 
   override def reset = {

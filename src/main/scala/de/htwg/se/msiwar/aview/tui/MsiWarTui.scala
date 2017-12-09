@@ -20,7 +20,7 @@ class MsiWarTui(controller: MsiWarController) extends Reactor {
   def printUserActions = {
     println("Available Actions: ")
     // TODO print actions for each player
-    controller.actionIds(1).foreach(i => println("\nAction: " + controller.actionDescription(i)))
+    controller.actionIds(1).foreach(i => println("Action: " + controller.actionDescription(i)))
   }
 
   def printHelp = {
@@ -33,8 +33,12 @@ class MsiWarTui(controller: MsiWarController) extends Reactor {
   }
 
   def printBoard = {
-    for (i <- 0 until controller.rowCount; j <- 0 until controller.columnCount) {
-      println(controller.cellContentToText(i, j))
+    for(i <- 0 until controller.rowCount) {
+      print("| ")
+      for (j <- 0 until controller.columnCount) {
+        print(controller.cellContentToText(i, j) + " | ")
+      }
+      println
     }
   }
 
