@@ -1,5 +1,7 @@
 package de.htwg.se.msiwar.model
 
+import de.htwg.se.msiwar.util.Direction.Direction
+
 trait GameModel {
   def gameObjectAt(rowIndex: Int, columnIndex: Int): Option[GameObject]
 
@@ -7,6 +9,8 @@ trait GameModel {
   def actionHotKey(actionId: Int): String
   def actionDescription(actionId: Int): String
   def actionIconPath(actionId: Int): String
+
+  def executeAction(actionId: Int, direction:Direction): Unit
 
   def activePlayerNumber: Int
   def activePlayerName: String

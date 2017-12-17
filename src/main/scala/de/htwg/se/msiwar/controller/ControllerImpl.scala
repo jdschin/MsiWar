@@ -1,6 +1,7 @@
 package de.htwg.se.msiwar.controller
 
-import de.htwg.se.msiwar.model.GameModel
+import de.htwg.se.msiwar.model.{BlockObject, GameModel, PlayerObject}
+import de.htwg.se.msiwar.util.Direction.Direction
 
 class ControllerImpl(model: GameModel) extends Controller {
 
@@ -15,7 +16,10 @@ class ControllerImpl(model: GameModel) extends Controller {
   override def cellContentToText(rowIndex: Int, columnIndex: Int) = {
     val objectAt = model.gameObjectAt(rowIndex, columnIndex)
     if (objectAt.isDefined) {
-      objectAt.get.name
+      objectAt.get match {
+        case playerObj:PlayerObject => playerObj.playerNumber.toString
+        case blockObj:BlockObject => blockObj.name
+      }
     } else {
       "X"
     }
@@ -33,7 +37,14 @@ class ControllerImpl(model: GameModel) extends Controller {
 
   override def stopActionMode(actionId: Int) = {}
 
-  override def executeAction(actionId: Int) = {}
+  override def executeAction(actionId: Int, direction:Direction) = {
+    model.executeAction(actionId,direction)
+  }
+
+  override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
+    // TODO check action can be executed
+    true
+  }
 
   override def actionIds(playerNumber: Int): List[Int] = {
     model.actionIdsForPlayer(playerNumber)

@@ -1,9 +1,10 @@
 package de.htwg.se.msiwar.model
 
-abstract class GameObject(val name: String, val imagePath: String, val position: Position) {
-}
+abstract class GameObject(val name: String, val imagePath: String, val position: Position)
 
-case class PlayerObject(override val name: String, override val imagePath: String, override val position: Position, playerNumber: Int, actionPoints: Int, healthPoints: Int, skills: List[Action]) extends GameObject(name, imagePath, position) {
+case class BlockObject(override val name: String, override val imagePath: String, override val position: Position) extends GameObject(name, imagePath, position)
+
+case class PlayerObject(override val name: String, override val imagePath: String, override val position: Position, playerNumber: Int, actionPoints: Int, healthPoints: Int, actions: List[Action]) extends GameObject(name, imagePath, position) {
   def hasActionPointsLeft: Boolean = {
     actionPoints > 0
   }

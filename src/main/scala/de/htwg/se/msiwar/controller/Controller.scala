@@ -1,5 +1,7 @@
 package de.htwg.se.msiwar.controller
 
+import de.htwg.se.msiwar.util.Direction.Direction
+
 import scala.swing.Publisher
 import scala.swing.event.Event
 
@@ -14,7 +16,8 @@ trait Controller extends Publisher{
 
   def startActionMode(actionId: Int) : Unit
   def stopActionMode(actionId: Int) : Unit
-  def executeAction(actionId: Int) : Unit
+  def executeAction(actionId: Int, direction:Direction) : Unit
+  def canExecuteAction(actionId: Int, direction:Direction) : Boolean
 
   def actionIds(playerNumber: Int) : List[Int]
   def actionHotKey(actionId: Int) : String

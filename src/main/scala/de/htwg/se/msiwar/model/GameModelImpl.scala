@@ -1,15 +1,17 @@
 package de.htwg.se.msiwar.model
 
+import de.htwg.se.msiwar.util.Direction
+import de.htwg.se.msiwar.util.Direction.Direction
+
 import scala.util.control.Breaks
 
 case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject]) extends GameModel {
-  private val gameBoard = GameBoard(numRows, numCols, gameObjects)
+  private var gameBoard = GameBoard(numRows, numCols, gameObjects)
   private var activePlayer = player(1)
   private var turnNumber = 1
 
   override def reset: Unit = {
-    gameBoard.reset
-
+    gameBoard = GameBoard(numRows, numCols, gameObjects)
     activePlayer = player(1)
     turnNumber = 1
   }
@@ -21,7 +23,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
 
   private def actions: List[Action] = {
     val players = gameObjects.collect({ case s: PlayerObject => s })
-    players.flatMap(_.skills)
+    players.flatMap(_.actions)
   }
 
   override def activePlayerNumber: Int = {
@@ -33,7 +35,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   }
 
   override def actionIdsForPlayer(playerNumber: Int): List[Int] = {
-    player(playerNumber).skills.map(_.id)
+    player(playerNumber).actions.map(_.id)
   }
 
   override def actionHotKey(actionId: Int): String = {
@@ -61,6 +63,25 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
       foundAction.get.imagePath
     } else {
       ""
+    }
+  }
+
+  override def executeAction(actionId: Int, direction:Direction) = {
+    val actionForId = activePlayer.actions.find(_.id == actionId)
+    if(actionForId.isDefined){
+      // TODO check which kind of action we have
+      val actionToExecute = actionForId.get
+      direction match {
+        case Direction.UP => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x, activePlayer.position.y + actionToExecute.range))
+        case Direction.DOWN => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x, activePlayer.position.y - actionToExecute.range))
+        case Direction.LEFT => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x - actionToExecute.range, activePlayer.position.y))
+        case Direction.RIGHT => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x + actionToExecute.range, activePlayer.position.y))
+        case Direction.LEFT_UP => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x - actionToExecute.range, activePlayer.position.y + actionToExecute.range))
+        case Direction.LEFT_DOWN => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x - actionToExecute.range, activePlayer.position.y - actionToExecute.range))
+        case Direction.RIGHT_UP => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x + actionToExecute.range, activePlayer.position.y + actionToExecute.range))
+        case Direction.RIGHT_DOWN => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x + actionToExecute.range, activePlayer.position.y - actionToExecute.range))
+      }
+      //activePlayer.actionPoints -= actionToExecute.actionPoints
     }
   }
 
@@ -103,5 +124,4 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   override def rowCount = gameBoard.rows
 
   override def columnCount = gameBoard.columns
-
 }
