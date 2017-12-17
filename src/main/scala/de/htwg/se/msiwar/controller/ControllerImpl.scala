@@ -3,7 +3,6 @@ package de.htwg.se.msiwar.controller
 import de.htwg.se.msiwar.model.GameModel
 
 class ControllerImpl(model: GameModel) extends Controller {
-  updateTurn()
 
   def updateTurn(): Unit = {
     if (model.turnOver) {
@@ -74,6 +73,11 @@ class ControllerImpl(model: GameModel) extends Controller {
 
   override def reset = {
     model.reset
+
+    publish(TurnStarted(model.activePlayerNumber))
   }
 
+  override def turnCounter = {
+    model.turnCounter
+  }
 }

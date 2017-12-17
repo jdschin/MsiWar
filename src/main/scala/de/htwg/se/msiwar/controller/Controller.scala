@@ -28,5 +28,7 @@ trait Controller extends Publisher{
   def activePlayerNumber : Int
   def playerName(playerNumber: Int) : String
 
+  def turnCounter : Int
+
   def reset : Unit
 }

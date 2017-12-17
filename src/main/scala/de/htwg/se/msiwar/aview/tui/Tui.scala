@@ -8,9 +8,13 @@ class Tui(controller: Controller) extends Reactor {
   listenTo(controller)
   reactions += {
     case e: CellChanged => printBoard
-    case e: TurnStarted => println("Player" + e.playerNumber + "'s turn")
-    case e: TurnEnded => println("Player" + e.playerNumber + "'s turn ended")
+    case e: TurnStarted => println("Player" + e.playerNumber + " turn " + controller.turnCounter + " started")
+    case e: TurnEnded => println("Player" + e.playerNumber + " turn " + controller.turnCounter + " ended")
   }
+
+  printWelcomeMessage
+  printHelp
+  controller.reset
 
   def printWelcomeMessage = {
     println("___  ___ _____ _____   _    _  ___  ______ \n|  \\/  |/  ___|_   _| | |  | |/ _ \\ | ___ \\\n| .  . |\\ `--.  | |   | |  | / /_\\ \\| |_/ /\n| |\\/| | `--. \\ | |   | |/\\| |  _  ||    / \n| |  | |/\\__/ /_| |_  \\  /\\  / | | || |\\ \\ \n\\_|  |_/\\____/ \\___/   \\/  \\/\\_| |_/\\_| \\_|\n")
@@ -19,17 +23,17 @@ class Tui(controller: Controller) extends Reactor {
 
   def printUserActions = {
     println("Available Actions: ")
-    // TODO print actions for each player
-    controller.actionIds(1).foreach(i => println("Action: " + controller.actionDescription(i)))
+    controller.actionIds(1).foreach(i => println("Action: id=" + i + ", desc=" + controller.actionDescription(i)))
   }
 
   def printHelp = {
     println("Help:")
-    println("q => Quit the game")
-    println("b => Print the current board")
-    println("h => Show help")
-    println("a => Print available user actions")
-    println("t => Print the active player")
+    println("s | S => Start a new game")
+    println("q | Q => Quit the game")
+    println("b | B => Print the current board")
+    println("h | H => Show help")
+    println("a | A => Print available user actions")
+    println("t | T => Print the active player")
     println
   }
 
@@ -54,6 +58,7 @@ class Tui(controller: Controller) extends Reactor {
     var continue = true
     val executeActionRe = "(\\d+)(lu|ld|ru|rd|l|r|u|d)".r
     input match {
+      case "s" | "s" => controller.reset
       case "q" | "Q" => continue = false
       case "h" | "H" => printHelp
       case "b" | "b" => printBoard
@@ -64,7 +69,4 @@ class Tui(controller: Controller) extends Reactor {
     }
     continue
   }
-
-  printWelcomeMessage
-  printHelp
 }
