@@ -52,12 +52,14 @@ class Tui(controller: Controller) extends Reactor {
 
   def executeCommand(input: String) = {
     var continue = true
+    val executeActionRe = "(\\d+)(lu|ld|ru|rd|l|r|u|d)".r
     input match {
       case "q" | "Q" => continue = false
       case "h" | "H" => printHelp
       case "b" | "b" => printBoard
       case "a" | "A" => printUserActions
       case "t" | "T" => printActivePlayer
+      case executeActionRe(actionId, d) => println(actionId, d)
       case _ => println("Unbekanntes Command")
     }
     continue
