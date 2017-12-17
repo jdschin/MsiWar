@@ -5,10 +5,13 @@ import scala.util.control.Breaks
 case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject]) extends GameModel {
   private val gameBoard = GameBoard(numRows, numCols, gameObjects)
   private var activePlayer = player(1)
-  private var turnNumber = 0
+  private var turnNumber = 1
 
   override def reset: Unit = {
     gameBoard.reset
+
+    activePlayer = player(1)
+    turnNumber = 1
   }
 
   private def player(playerNumber: Int): PlayerObject = {
