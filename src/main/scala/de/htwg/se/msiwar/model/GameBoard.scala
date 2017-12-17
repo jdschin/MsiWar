@@ -10,16 +10,18 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
   }
 
   def gameObjectAt(position: Position) : Option[GameObject] = {
-    gameObjectAt(position.x,position.y)
+    gameObjectAt(position.x, position.y)
   }
 
   def gameObjectAt(rowIndex: Int, columnIndex: Int) : Option[GameObject] = {
-    val objectAt = board(rowIndex)(columnIndex)
+    val objectAt = board(columnIndex)(rowIndex)
     Option(objectAt)
   }
 
   def moveGameObject(gameObject: GameObject, newPosition: Position) = {
     board(gameObject.position.x)(gameObject.position.y) = null
     board(newPosition.x)(newPosition.y) = gameObject
+    gameObject.position.x = newPosition.x
+    gameObject.position.y = newPosition.y
   }
 }
