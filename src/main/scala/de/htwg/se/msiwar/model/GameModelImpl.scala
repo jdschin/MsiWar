@@ -76,14 +76,21 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
         case MOVE => {
           gameBoard.moveGameObject(activePlayer, calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
         }
-        case SHOOT => {}
+        case SHOOT => {
+          val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
+          if (collisionObjectOpt.isDefined && collisionObjectOpt.get.isInstanceOf[PlayerObject]) {
+            val playerObject = collisionObjectOpt.get.asInstanceOf[PlayerObject]
+            // TODO: check if this is correct. Maybe use destruction points or similar
+            playerObject.healthPoints -= actionToExecute.actionPoints
+          }
+        }
         case WAIT => {}
       }
       //activePlayer.actionPoints -= actionToExecute.actionPoints
     }
   }
 
-  def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int) : Position= {
+  def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int): Position = {
     var newPosition: Option[Position] = None
     direction match {
       case Direction.UP => newPosition = Some(Position(oldPosition.x, oldPosition.y + range))
@@ -98,14 +105,14 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     newPosition.get
   }
 
-  override def canExecuteAction(actionId: Int, direction: Direction) : Boolean = {
+  override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
     val actionForId = activePlayer.actions.find(_.id == actionId)
     var result = false
     if (actionForId.isDefined) {
       val actionToExecute = actionForId.get
       actionToExecute.actionType match {
         case MOVE => {
-          val newPosition = calculatePositionForDirection(activePlayer.position, direction,actionToExecute.range)
+          val newPosition = calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
           result = gameBoard.isInBound(newPosition) &&
             gameBoard.gameObjectAt(newPosition).isEmpty
         }
