@@ -1,7 +1,7 @@
 package de.htwg.se.msiwar.aview
 
 import de.htwg.se.msiwar.aview.TuiApp.configProvider
-import de.htwg.se.msiwar.aview.swing.GridView
+import de.htwg.se.msiwar.aview.swing.SwingGui
 import de.htwg.se.msiwar.controller.ControllerImpl
 import de.htwg.se.msiwar.model.GameModelImpl
 
@@ -16,6 +16,6 @@ object SwingApp extends SimpleSwingApplication {
     // TODO inject
     val model = GameModelImpl(configProvider.rowCount, configProvider.colCount, configProvider.gameObjects)
     val controller = new ControllerImpl(model)
-    contents = new GridView(controller).content
+    contents = new SwingGui(controller).content
   }
 }
