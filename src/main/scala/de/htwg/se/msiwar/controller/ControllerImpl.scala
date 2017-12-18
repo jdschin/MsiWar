@@ -25,6 +25,15 @@ class ControllerImpl(model: GameModel) extends Controller {
     }
   }
 
+  override def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String] = {
+    val objectAt = model.gameObjectAt(rowIndex, columnIndex)
+    if (objectAt.isDefined) {
+      Option(objectAt.get.imagePath)
+    } else {
+      Option.empty[String]
+    }
+  }
+
   override def highlightCell(rowIndex: Int, columnIndex: Int) = {
     publish(CellChanged(rowIndex, columnIndex, true))
   }

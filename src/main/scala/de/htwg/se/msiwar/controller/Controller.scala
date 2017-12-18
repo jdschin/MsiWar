@@ -11,6 +11,7 @@ case class TurnEnded(playerNumber: Int) extends Event
 
 trait Controller extends Publisher{
   def cellContentToText(rowIndex: Int, columnIndex: Int): String
+  def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String]
   def highlightCell(rowIndex: Int, columnIndex: Int) : Unit
   def isCellInRange(rowIndex: Int, columnIndex: Int) : Boolean
 
