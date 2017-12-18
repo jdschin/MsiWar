@@ -18,7 +18,7 @@ class GameConfigProvider(configFilePath: String) {
   val actions = List(moveAction, shootAction)
 
   // Setup players
-  val player1 = PlayerObject("Spieler1", "tank_red.png", Position(1, 2), 1, 3, 3, actions)
-  val player2 = PlayerObject("Spieler2", "tank_blue.png", Position(7, 6), 2, 3, 3, actions)
+  val player1 = PlayerObject("Spieler1", "src/main/resources/images/tank_red.png", Position(1, 2), 1, 3, 3, actions)
+  val player2 = PlayerObject("Spieler2", "src/main/resources/images/tank_blue.png", Position(7, 6), 2, 3, 3, actions)
   val gameObjects = List(player1, player2)
 }
