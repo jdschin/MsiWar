@@ -19,8 +19,7 @@ class Tui(controller: Controller) extends Reactor {
   printBoard
 
   def printWelcomeMessage = {
-    println("___  ___ _____ _____   _    _  ___  ______ \n|  \\/  |/  ___|_   _| | |  | |/ _ \\ | ___ \\\n| .  . |\\ `--.  | |   | |  | / /_\\ \\| |_/ /\n| |\\/| | `--. \\ | |   | |/\\| |  _  ||    / \n| |  | |/\\__/ /_| |_  \\  /\\  / | | || |\\ \\ \n\\_|  |_/\\____/ \\___/   \\/  \\/\\_| |_/\\_| \\_|\n")
-    println("           -Prepare to die!-           ")
+    println(" _____ _          _   _______          _     __          __        \n|  __ (_)        | | |__   __|        | |    \\ \\        / /        \n| |__) |__  _____| |    | | __ _ _ __ | | __  \\ \\  /\\  / /_ _ _ __ \n|  ___/ \\ \\/ / _ \\ |    | |/ _` | '_ \\| |/ /   \\ \\/  \\/ / _` | '__|\n| |   | |>  <  __/ |    | | (_| | | | |   <     \\  /\\  / (_| | |   \n|_|   |_/_/\\_\\___|_|    |_|\\__,_|_| |_|_|\\_\\     \\/  \\/ \\__,_|_|\n\n\n")
   }
 
   def printUserActions = {
@@ -75,9 +74,14 @@ class Tui(controller: Controller) extends Reactor {
   def executeAction(actionId:Int, direction:String) ={
     val convertedDirection = convertToDirection(direction)
     if(convertedDirection.isDefined){
-      println("Executing action " + actionId + " '" + controller.actionDescription(actionId) + "' in direction '" + convertedDirection.get + "'")
-      controller.executeAction(actionId,convertedDirection.get)
+      if(controller.canExecuteAction(actionId, convertedDirection.get)) {
+        println("Executing action " + actionId + " '" + controller.actionDescription(actionId) + "' in direction '" + convertedDirection.get + "'")
+        controller.executeAction(actionId, convertedDirection.get)
+      } else {
+        println("Action can not be executed")
+      }
     }
+    printBoard
   }
 
   def convertToDirection(direction:String): Option[Direction] ={
