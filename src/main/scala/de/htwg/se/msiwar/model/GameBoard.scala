@@ -25,8 +25,8 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
 
   def moveGameObject(gameObject: GameObject, newPosition: Position) = {
     board(gameObject.position.x)(gameObject.position.y) = null
-    board(newPosition.x)(newPosition.y) = gameObject
     gameObject.position.x = newPosition.x
     gameObject.position.y = newPosition.y
+    placeGameObject(gameObject)
   }
 }
