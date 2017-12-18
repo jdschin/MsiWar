@@ -11,6 +11,7 @@ trait GameModel {
   def actionIconPath(actionId: Int): String
 
   def executeAction(actionId: Int, direction:Direction): Unit
+  def canExecuteAction(actionId: Int, direction: Direction) : Boolean
 
   def activePlayerNumber: Int
   def activePlayerName: String

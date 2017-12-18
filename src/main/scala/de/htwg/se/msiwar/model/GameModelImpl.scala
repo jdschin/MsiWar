@@ -2,6 +2,7 @@ package de.htwg.se.msiwar.model
 
 import de.htwg.se.msiwar.util.Direction
 import de.htwg.se.msiwar.util.Direction.Direction
+import de.htwg.se.msiwar.model.ActionType._
 
 import scala.util.control.Breaks
 
@@ -66,23 +67,52 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     }
   }
 
-  override def executeAction(actionId: Int, direction:Direction) = {
+  override def executeAction(actionId: Int, direction: Direction) = {
     val actionForId = activePlayer.actions.find(_.id == actionId)
-    if(actionForId.isDefined){
-      // TODO check which kind of action we have
+    if (actionForId.isDefined) {
       val actionToExecute = actionForId.get
-      direction match {
-        case Direction.UP => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x, activePlayer.position.y + actionToExecute.range))
-        case Direction.DOWN => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x, activePlayer.position.y - actionToExecute.range))
-        case Direction.LEFT => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x - actionToExecute.range, activePlayer.position.y))
-        case Direction.RIGHT => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x + actionToExecute.range, activePlayer.position.y))
-        case Direction.LEFT_UP => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x - actionToExecute.range, activePlayer.position.y + actionToExecute.range))
-        case Direction.LEFT_DOWN => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x - actionToExecute.range, activePlayer.position.y - actionToExecute.range))
-        case Direction.RIGHT_UP => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x + actionToExecute.range, activePlayer.position.y + actionToExecute.range))
-        case Direction.RIGHT_DOWN => gameBoard.moveGameObject(activePlayer, Position(activePlayer.position.x + actionToExecute.range, activePlayer.position.y - actionToExecute.range))
+
+      actionToExecute.actionType match {
+        case MOVE => {
+          gameBoard.moveGameObject(activePlayer, calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
+        }
+        case SHOOT => {}
+        case WAIT => {}
       }
       //activePlayer.actionPoints -= actionToExecute.actionPoints
     }
+  }
+
+  def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int) : Position= {
+    var newPosition: Option[Position] = None
+    direction match {
+      case Direction.UP => newPosition = Some(Position(oldPosition.x, oldPosition.y + range))
+      case Direction.DOWN => newPosition = Some(Position(oldPosition.x, oldPosition.y - range))
+      case Direction.LEFT => newPosition = Some(Position(oldPosition.x - range, oldPosition.y))
+      case Direction.RIGHT => newPosition = Some(Position(oldPosition.x + range, oldPosition.y))
+      case Direction.LEFT_UP => newPosition = Some(Position(oldPosition.x - range, oldPosition.y + range))
+      case Direction.LEFT_DOWN => newPosition = Some(Position(oldPosition.x - range, oldPosition.y - range))
+      case Direction.RIGHT_UP => newPosition = Some(Position(oldPosition.x + range, oldPosition.y + range))
+      case Direction.RIGHT_DOWN => newPosition = Some(Position(oldPosition.x + range, oldPosition.y - range))
+    }
+    newPosition.get
+  }
+
+  override def canExecuteAction(actionId: Int, direction: Direction) : Boolean = {
+    val actionForId = activePlayer.actions.find(_.id == actionId)
+    var result = false
+    if (actionForId.isDefined) {
+      val actionToExecute = actionForId.get
+      actionToExecute.actionType match {
+        case MOVE => {
+          val newPosition = calculatePositionForDirection(activePlayer.position, direction,actionToExecute.range)
+          result = gameBoard.isInBound(newPosition) &&
+            gameBoard.gameObjectAt(newPosition).isEmpty
+        }
+        case _ => result = true
+      }
+    }
+    result
   }
 
   override def turnCounter: Int = turnNumber

@@ -13,6 +13,11 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     gameObjectAt(position.x, position.y)
   }
 
+  def isInBound(position: Position) : Boolean = {
+    (position.x >= 0 && position.y >= 0) &&
+    (position.x < columns && position.y < rows)
+  }
+
   def gameObjectAt(rowIndex: Int, columnIndex: Int) : Option[GameObject] = {
     val objectAt = board(columnIndex)(rowIndex)
     Option(objectAt)

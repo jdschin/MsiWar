@@ -42,8 +42,7 @@ class ControllerImpl(model: GameModel) extends Controller {
   }
 
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
-    // TODO check action can be executed
-    true
+    model.canExecuteAction(actionId,direction)
   }
 
   override def actionIds(playerNumber: Int): List[Int] = {
