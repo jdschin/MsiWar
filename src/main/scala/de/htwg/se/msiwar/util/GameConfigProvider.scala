@@ -1,6 +1,8 @@
 package de.htwg.se.msiwar.util
 
 import de.htwg.se.msiwar.model.{Action, PlayerObject, Position}
+import de.htwg.se.msiwar.model.ActionType._
+
 
 class GameConfigProvider(configFilePath: String) {
   //TODO: sort players by number
@@ -11,8 +13,8 @@ class GameConfigProvider(configFilePath: String) {
   val colCount = 9
 
   // Setup actions
-  val moveAction = Action(1, "Panzer bewegen", "arrow.png", "move.wav", 1, 1)
-  val shootAction = Action(2, "Schießen", "bullet.png", "shoot.wav", 1, 1)
+  val moveAction = Action(1, "Panzer bewegen", "arrow.png", "move.wav", 1, 1, MOVE)
+  val shootAction = Action(2, "Schießen", "bullet.png", "shoot.wav", 1, 1, SHOOT)
   val actions = List(moveAction, shootAction)
 
   // Setup players
