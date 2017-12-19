@@ -42,7 +42,7 @@ class SwingGui(controller: Controller) {
       if (rowIndex == i && columIndex == j) {
         label.border = new javax.swing.border.LineBorder(java.awt.Color.BLUE, 4, true)
       } else {
-        label.border = new javax.swing.border.LineBorder(java.awt.Color.WHITE)
+        label.border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
       }
     }
   }
