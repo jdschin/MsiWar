@@ -24,6 +24,7 @@ class SwingGui(controller: Controller) {
 
   for (i <- 0 until gridPanel.rows; j <- 0 until gridPanel.columns) {
     labels(i)(j) = new Label {
+      border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
       val imagePath = controller.cellContentImagePath(i,j)
       if(imagePath.isDefined) {
         icon = new ImageIcon(imagePath.get)
