@@ -22,19 +22,21 @@ class SwingGui(controller: Controller) {
   }
   private val labels = Array.ofDim[Label](gridPanel.rows, gridPanel.columns)
 
-  for (i <- 0 until gridPanel.rows; j <- 0 until gridPanel.columns) {
-    labels(i)(j) = new Label {
-      border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
-      val imagePath = controller.cellContentImagePath(i,j)
-      if(imagePath.isDefined) {
-        icon = new ImageIcon(imagePath.get)
+  for (i <- gridPanel.rows - 1 to 0 by -1) {
+    for (j <- 0 until gridPanel.columns) {
+      labels(i)(j) = new Label {
+        border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
+        val imagePath = controller.cellContentImagePath(i,j)
+        if(imagePath.isDefined) {
+          icon = new ImageIcon(imagePath.get)
+        }
+        listenTo(mouse.moves)
+        reactions += {
+          case MouseEntered(_, _, _) => updateBorder(i, j)
+        }
       }
-      listenTo(mouse.moves)
-      reactions += {
-        case MouseEntered(_, _, _) => updateBorder(i, j)
-      }
+      gridPanel.contents += labels(i)(j)
     }
-    gridPanel.contents += labels(i)(j)
   }
 
   def updateBorder(rowIndex: Int, columIndex: Int): Unit = {
