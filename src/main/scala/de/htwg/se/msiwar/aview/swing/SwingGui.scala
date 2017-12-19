@@ -5,12 +5,22 @@ import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 
-import de.htwg.se.msiwar.controller.Controller
+import de.htwg.se.msiwar.controller.{CellChanged, Controller}
 
 import scala.swing.event.MouseEntered
-import scala.swing.{Graphics2D, GridPanel, Label}
+import scala.swing.{Graphics2D, GridPanel, Label, Reactor}
 
-class SwingGui(controller: Controller) {
+class SwingGui(controller: Controller) extends Reactor {
+
+  listenTo(controller)
+  reactions += {
+    case e: CellChanged => {
+      e.rowColumnIndexes.foreach(t => {
+        updateLabel(t._1, t._2, labels(t._1)(t._2))
+      })
+    }
+  }
+
   private val gridPanel = new GridPanel(controller.rowCount, controller.columnCount) {
     // TODO get background image from controller
     private val backgroundImage = ImageIO.read(new File("src/main/resources/images/background_woodlands.png"))
@@ -26,10 +36,7 @@ class SwingGui(controller: Controller) {
     for (j <- 0 until gridPanel.columns) {
       labels(i)(j) = new Label {
         border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
-        val imagePath = controller.cellContentImagePath(i,j)
-        if(imagePath.isDefined) {
-          icon = new ImageIcon(imagePath.get)
-        }
+        updateLabel(i, j, this)
         listenTo(mouse.moves)
         reactions += {
           case MouseEntered(_, _, _) => updateBorder(i, j)
@@ -50,5 +57,17 @@ class SwingGui(controller: Controller) {
     }
   }
 
-  def content: GridPanel = {gridPanel}
+  def content: GridPanel = {
+    gridPanel
+  }
+
+  def updateLabel(rowIndex: Int, columnIndex: Int, label: Label): Unit = {
+    val imagePath = controller.cellContentImagePath(rowIndex, columnIndex)
+    if (imagePath.isDefined) {
+      label.icon = new ImageIcon(imagePath.get)
+    } else {
+      label.icon = null
+    }
+    label.repaint()
+  }
 }

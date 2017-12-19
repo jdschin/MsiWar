@@ -81,8 +81,6 @@ class Tui(controller: Controller) extends Reactor {
         println("Action can not be executed")
       }
     }
-    // TODO remove this when cell changed is implemented and board will be updated there
-    printBoard
   }
 
   def convertToDirection(direction:String): Option[Direction] ={

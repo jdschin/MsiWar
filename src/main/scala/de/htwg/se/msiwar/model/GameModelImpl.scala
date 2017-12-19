@@ -1,8 +1,8 @@
 package de.htwg.se.msiwar.model
 
+import de.htwg.se.msiwar.model.ActionType._
 import de.htwg.se.msiwar.util.Direction
 import de.htwg.se.msiwar.util.Direction.Direction
-import de.htwg.se.msiwar.model.ActionType._
 
 import scala.util.control.Breaks
 
@@ -74,7 +74,10 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
 
       actionToExecute.actionType match {
         case MOVE => {
-          gameBoard.moveGameObject(activePlayer, calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
+          val newPosition = calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range);
+          val oldPosition = activePlayer.position.copy()
+          gameBoard.moveGameObject(activePlayer, newPosition)
+          publish(GameBoardChanged(List((newPosition.y, newPosition.x), (oldPosition.y, oldPosition.x))))
         }
         case SHOOT => {
           val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))

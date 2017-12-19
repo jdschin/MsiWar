@@ -5,15 +5,14 @@ import de.htwg.se.msiwar.util.Direction.Direction
 import scala.swing.Publisher
 import scala.swing.event.Event
 
-case class CellChanged(rowIndex: Int, columnIndex: Int, valid: Boolean) extends Event
+case class CellChanged(rowColumnIndexes: List[(Int, Int)]) extends Event
 case class TurnStarted(playerNumber: Int) extends Event
 case class TurnEnded(playerNumber: Int) extends Event
 
 trait Controller extends Publisher{
   def cellContentToText(rowIndex: Int, columnIndex: Int): String
   def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String]
-  def highlightCell(rowIndex: Int, columnIndex: Int) : Unit
-  def isCellInRange(rowIndex: Int, columnIndex: Int) : Boolean
+  def cellInRange(rowIndex: Int, columnIndex: Int) : Boolean
 
   def startActionMode(actionId: Int) : Unit
   def stopActionMode(actionId: Int) : Unit

@@ -1,9 +1,16 @@
 package de.htwg.se.msiwar.controller
 
-import de.htwg.se.msiwar.model.{BlockObject, GameModel, PlayerObject}
+import de.htwg.se.msiwar.model.{BlockObject, GameBoardChanged, GameModel, PlayerObject}
 import de.htwg.se.msiwar.util.Direction.Direction
 
 class ControllerImpl(model: GameModel) extends Controller {
+
+  listenTo(model)
+  reactions += {
+    case e: GameBoardChanged => {
+      publish(CellChanged(e.rowColumnIndexes))
+    }
+  }
 
   def updateTurn(): Unit = {
     if (model.turnOver) {
@@ -17,8 +24,8 @@ class ControllerImpl(model: GameModel) extends Controller {
     val objectAt = model.gameObjectAt(rowIndex, columnIndex)
     if (objectAt.isDefined) {
       objectAt.get match {
-        case playerObj:PlayerObject => playerObj.playerNumber.toString
-        case blockObj:BlockObject => blockObj.name
+        case playerObj: PlayerObject => playerObj.playerNumber.toString
+        case blockObj: BlockObject => blockObj.name
       }
     } else {
       "X"
@@ -34,11 +41,7 @@ class ControllerImpl(model: GameModel) extends Controller {
     }
   }
 
-  override def highlightCell(rowIndex: Int, columnIndex: Int) = {
-    publish(CellChanged(rowIndex, columnIndex, true))
-  }
-
-  override def isCellInRange(rowIndex: Int, columnIndex: Int) = {
+  override def cellInRange(rowIndex: Int, columnIndex: Int) = {
     true
   }
 
@@ -46,12 +49,12 @@ class ControllerImpl(model: GameModel) extends Controller {
 
   override def stopActionMode(actionId: Int) = {}
 
-  override def executeAction(actionId: Int, direction:Direction) = {
-    model.executeAction(actionId,direction)
+  override def executeAction(actionId: Int, direction: Direction) = {
+    model.executeAction(actionId, direction)
   }
 
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
-    model.canExecuteAction(actionId,direction)
+    model.canExecuteAction(actionId, direction)
   }
 
   override def actionIds(playerNumber: Int): List[Int] = {

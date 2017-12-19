@@ -2,7 +2,12 @@ package de.htwg.se.msiwar.model
 
 import de.htwg.se.msiwar.util.Direction.Direction
 
-trait GameModel {
+import scala.swing.Publisher
+import scala.swing.event.Event
+
+case class GameBoardChanged(rowColumnIndexes: List[(Int, Int)]) extends Event
+
+trait GameModel extends Publisher {
   def gameObjectAt(rowIndex: Int, columnIndex: Int): Option[GameObject]
 
   def actionIdsForPlayer(playerNumber: Int): List[Int]
