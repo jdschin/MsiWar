@@ -80,13 +80,12 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
           val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
           if (collisionObjectOpt.isDefined && collisionObjectOpt.get.isInstanceOf[PlayerObject]) {
             val playerObject = collisionObjectOpt.get.asInstanceOf[PlayerObject]
-            // TODO: check if this is correct. Maybe use destruction points or similar
-            playerObject.healthPoints -= actionToExecute.actionPoints
+            playerObject.healthPoints -= actionToExecute.damage
           }
         }
         case WAIT => {}
       }
-      //activePlayer.actionPoints -= actionToExecute.actionPoints
+      activePlayer.actionPoints -= actionToExecute.actionPoints
     }
   }
 
