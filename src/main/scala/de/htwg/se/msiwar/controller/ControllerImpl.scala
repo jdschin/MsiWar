@@ -1,14 +1,18 @@
 package de.htwg.se.msiwar.controller
 
-import de.htwg.se.msiwar.model.{BlockObject, GameBoardChanged, GameModel, PlayerObject}
+import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.Direction.Direction
 
 class ControllerImpl(model: GameModel) extends Controller {
 
   listenTo(model)
   reactions += {
-    case e: GameBoardChanged => {
-      publish(CellChanged(e.rowColumnIndexes))
+    case e: GameBoardChanged => publish(CellChanged(e.rowColumnIndexes))
+    case e: ObjectHit => {
+      e.gameObject match {
+        case playerObject: PlayerObject => publish(PlayerHit(playerObject.name, playerObject.playerNumber, playerObject.healthPoints))
+        case blockObject: BlockObject => publish(BlockHit(blockObject.name))
+      }
     }
   }
 

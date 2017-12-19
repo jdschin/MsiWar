@@ -65,16 +65,16 @@ class Tui(controller: Controller) extends Reactor {
       case "b" | "b" => printBoard
       case "a" | "A" => printUserActions
       case "t" | "T" => printActivePlayer
-      case executeActionRe(actionId:String, direction:String) => executeAction(actionId.toInt, direction)
+      case executeActionRe(actionId: String, direction: String) => executeAction(actionId.toInt, direction)
       case _ => println("Unknown Command")
     }
     continue
   }
 
-  def executeAction(actionId:Int, direction:String) ={
+  def executeAction(actionId: Int, direction: String) = {
     val convertedDirection = convertToDirection(direction)
-    if(convertedDirection.isDefined){
-      if(controller.canExecuteAction(actionId, convertedDirection.get)) {
+    if (convertedDirection.isDefined) {
+      if (controller.canExecuteAction(actionId, convertedDirection.get)) {
         println("Executing action " + actionId + " '" + controller.actionDescription(actionId) + "' in direction '" + convertedDirection.get + "'")
         controller.executeAction(actionId, convertedDirection.get)
       } else {
@@ -83,8 +83,8 @@ class Tui(controller: Controller) extends Reactor {
     }
   }
 
-  def convertToDirection(direction:String): Option[Direction] ={
-    var dirOption:Option[Direction] = None
+  def convertToDirection(direction: String): Option[Direction] = {
+    var dirOption: Option[Direction] = None
     direction match {
       case "lu" => dirOption = Option(LEFT_UP)
       case "ld" => dirOption = Option(LEFT_DOWN)

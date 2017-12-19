@@ -6,6 +6,8 @@ import scala.swing.Publisher
 import scala.swing.event.Event
 
 case class CellChanged(rowColumnIndexes: List[(Int, Int)]) extends Event
+case class BlockHit(name: String) extends Event
+case class PlayerHit(name: String, playerNumber: Int, newHealthPoints: Int) extends Event
 case class TurnStarted(playerNumber: Int) extends Event
 case class TurnEnded(playerNumber: Int) extends Event
 
