@@ -108,6 +108,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   }
 
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
+    // TODO: check if player has actionPoints left
     val actionForId = activePlayer.actions.find(_.id == actionId)
     var result = false
     if (actionForId.isDefined) {

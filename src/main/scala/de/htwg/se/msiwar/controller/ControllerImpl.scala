@@ -51,6 +51,7 @@ class ControllerImpl(model: GameModel) extends Controller {
 
   override def executeAction(actionId: Int, direction: Direction) = {
     model.executeAction(actionId, direction)
+    updateTurn()
   }
 
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
