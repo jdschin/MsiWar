@@ -13,5 +13,6 @@ class SwingApp(controller: Controller) extends SimpleSwingApplication {
     resizable = false
     minimumSize = new Dimension(controller.rowCount * 60, controller.columnCount * 60)
     contents = new SwingPanel(controller)
+    peer.setLocationRelativeTo(null)
   }
 }
