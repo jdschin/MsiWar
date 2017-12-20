@@ -10,6 +10,6 @@ class SwingApp(controller: Controller) extends SimpleSwingApplication {
     title = "Pixel Tank War"
     preferredSize = new Dimension(600, 600)
     minimumSize = new Dimension(400, 400)
-    contents = new SwingGui(controller).content
+    contents = new SwingGui(controller)
   }
 }
