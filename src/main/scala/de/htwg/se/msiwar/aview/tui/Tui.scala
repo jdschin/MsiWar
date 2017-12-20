@@ -1,6 +1,6 @@
 package de.htwg.se.msiwar.aview.tui
 
-import de.htwg.se.msiwar.controller.{CellChanged, Controller, TurnEnded, TurnStarted}
+import de.htwg.se.msiwar.controller.{CellChanged, Controller, TurnStarted}
 import de.htwg.se.msiwar.util.Direction._
 
 import scala.swing.Reactor
@@ -10,7 +10,6 @@ class Tui(controller: Controller) extends Reactor {
   reactions += {
     case e: CellChanged => printBoard
     case e: TurnStarted => println("Player" + e.playerNumber + " turn " + controller.turnCounter + " started\n")
-    case e: TurnEnded => println("Player" + e.playerNumber + " turn " + controller.turnCounter + " ended\n")
   }
 
   printWelcomeMessage

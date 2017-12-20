@@ -18,7 +18,6 @@ class ControllerImpl(model: GameModel) extends Controller {
 
   def updateTurn(): Unit = {
     if (model.turnOver) {
-      publish(TurnEnded(model.activePlayerNumber))
       model.nextTurn
       publish(TurnStarted(model.activePlayerNumber))
     }
