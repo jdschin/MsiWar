@@ -94,7 +94,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
         }
         case WAIT => {}
       }
-      activePlayer.actionPoints -= actionToExecute.actionPoints
+      activePlayer.currentActionPoints -= actionToExecute.actionPoints
     }
   }
 
@@ -135,25 +135,23 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
 
   override def nextTurn: Int = {
     var foundNextPlayer = false
-    // TODO: maybe use Option
-    if (activePlayer == null) {
+    Breaks.breakable(
+      for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
+        if (playerObject.playerNumber > activePlayerNumber) {
+          activePlayer = playerObject
+          foundNextPlayer = true
+          Breaks.break()
+        }
+      }
+    )
+
+    // If every player did his turn, start the next turn with player 1
+    if (!foundNextPlayer) {
       activePlayer = player(1)
       turnNumber += 1
-    } else {
-      Breaks.breakable(
-        for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
-          if (playerObject.playerNumber > activePlayerNumber) {
-            activePlayer = playerObject
-            foundNextPlayer = true
-            Breaks.break()
-          }
-        }
-      )
-
-      // If every player did his turn, start the next turn with player 1
-      if (!foundNextPlayer) {
-        activePlayer = player(1)
-        turnNumber += 1
+      // Reset action points of all players when new turn has started
+      for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
+        playerObject.resetActionPoints
       }
     }
     turnCounter
