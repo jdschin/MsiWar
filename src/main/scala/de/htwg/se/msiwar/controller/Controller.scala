@@ -9,6 +9,7 @@ case class CellChanged(rowColumnIndexes: List[(Int, Int)]) extends Event
 case class BlockHit(name: String) extends Event
 case class PlayerHit(name: String, playerNumber: Int, newHealthPoints: Int) extends Event
 case class TurnStarted(playerNumber: Int) extends Event
+case class PlayerWon(playerNumber: Int) extends Event
 
 trait Controller extends Publisher{
   def cellContentToText(rowIndex: Int, columnIndex: Int): String

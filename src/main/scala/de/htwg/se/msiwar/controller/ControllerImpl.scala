@@ -10,14 +10,19 @@ class ControllerImpl(model: GameModel) extends Controller {
     case e: GameBoardChanged => publish(CellChanged(e.rowColumnIndexes))
     case e: ObjectHit => {
       e.gameObject match {
-        case playerObject: PlayerObject => publish(PlayerHit(playerObject.name, playerObject.playerNumber, playerObject.healthPoints))
+        case playerObject: PlayerObject => publish(PlayerHit(playerObject.name, playerObject.playerNumber, playerObject.currentHealthPoints))
         case blockObject: BlockObject => publish(BlockHit(blockObject.name))
       }
     }
   }
 
-  def updateTurn(): Unit = {
-    if (model.turnOver) {
+  updateTurn
+
+  def updateTurn: Unit = {
+    val winnerId = model.winnerId
+    if (winnerId.isDefined) {
+      publish(PlayerWon(winnerId.get))
+    } else if (model.turnOver) {
       model.nextTurn
       publish(TurnStarted(model.activePlayerNumber))
     }
@@ -54,7 +59,7 @@ class ControllerImpl(model: GameModel) extends Controller {
 
   override def executeAction(actionId: Int, direction: Direction) = {
     model.executeAction(actionId, direction)
-    updateTurn()
+    updateTurn
   }
 
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
@@ -101,7 +106,12 @@ class ControllerImpl(model: GameModel) extends Controller {
   override def reset = {
     model.reset
 
-    publish(TurnStarted(model.activePlayerNumber))
+    val winnerId = model.winnerId
+    if (winnerId.isDefined) {
+      publish(PlayerWon(winnerId.get))
+    } else {
+      publish(TurnStarted(model.activePlayerNumber))
+    }
   }
 
   override def turnCounter = {

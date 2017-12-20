@@ -28,6 +28,7 @@ trait GameModel extends Publisher {
   def turnCounter: Int
   def turnOver: Boolean
   def nextTurn: Int
+  def winnerId: Option[Int]
 
   def reset: Unit
 }

@@ -13,6 +13,10 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
 
   override def reset: Unit = {
     gameBoard = GameBoard(numRows, numCols, gameObjects)
+    gameObjects.collect({ case p: PlayerObject => p }).foreach(playerObject => {
+      playerObject.resetActionPoints
+      playerObject.resetHealthPoints
+    })
     activePlayer = player(1)
     turnNumber = 1
   }
@@ -84,7 +88,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
           if (collisionObjectOpt.isDefined) {
             if (collisionObjectOpt.get.isInstanceOf[PlayerObject]) {
               val playerCollisionObject = collisionObjectOpt.get.asInstanceOf[PlayerObject]
-              playerCollisionObject.healthPoints -= actionToExecute.damage
+              playerCollisionObject.currentHealthPoints -= actionToExecute.damage
               publish(ObjectHit(playerCollisionObject))
               // TODO: check if there is a winner
             } else {
@@ -114,6 +118,9 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   }
 
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
+    if (winnerId.isDefined) {
+      return false
+    }
     val actionForId = activePlayer.actions.find(_.id == actionId)
     var result = false
     if (actionForId.isDefined) {
@@ -170,4 +177,13 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   override def rowCount = gameBoard.rows
 
   override def columnCount = gameBoard.columns
+
+  override def winnerId: Option[Int] = {
+    val playersAliveIds = gameObjects.collect({ case p: PlayerObject => p }).filter(_.hasHealthPointsLeft).map(_.playerNumber)
+    if (playersAliveIds.length == 1) {
+      Option(playersAliveIds(0))
+    } else {
+      Option.empty
+    }
+  }
 }
