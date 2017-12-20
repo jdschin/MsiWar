@@ -5,20 +5,26 @@ import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 
-import de.htwg.se.msiwar.controller.{CellChanged, Controller}
+import de.htwg.se.msiwar.controller.{Controller, _}
 
 import scala.swing.event.MouseEntered
-import scala.swing.{Graphics2D, GridPanel, Label, Reactor}
+import scala.swing.{BorderPanel, Graphics2D, GridPanel, Label, Reactor}
 
-class SwingGui(controller: Controller) extends GridPanel(controller.rowCount, controller.columnCount) with Reactor {
-  // TODO get background image from controller
+class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
   private val backgroundImage = ImageIO.read(new File(controller.backgroundImagePath))
-  private val labels = Array.ofDim[Label](rows, columns)
-
-  override protected def paintComponent(g: Graphics2D): Unit = {
-    super.paintComponent(g)
-    g.drawImage(backgroundImage, null, 0, 0)
+  private val labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
+  private val gridPanel = new GridPanel(controller.rowCount, controller.columnCount) {
+    override protected def paintComponent(g: Graphics2D): Unit = {
+      super.paintComponent(g)
+      g.drawImage(backgroundImage, null, 0, 0)
+    }
   }
+  private val actionPanel = new SwingActionBarPanel
+  private val menuBar = new SwingMenuBar(controller)
+
+  add(menuBar, BorderPanel.Position.North)
+  add(gridPanel, BorderPanel.Position.Center)
+  add(actionPanel, BorderPanel.Position.South)
 
   listenTo(controller)
   reactions += {
@@ -27,12 +33,15 @@ class SwingGui(controller: Controller) extends GridPanel(controller.rowCount, co
         updateLabel(t._1, t._2)
       })
     }
+    case e: TurnStarted => print("Turn started")
+    case e: BlockHit => print("Block hit")
+    case e: PlayerHit => print("Player hit")
   }
   fillBoard
 
   def fillBoard: Unit = {
-    for (i <- rows - 1 to 0 by -1) {
-      for (j <- 0 until columns) {
+    for (i <- gridPanel.rows - 1 to 0 by -1) {
+      for (j <- 0 until gridPanel.columns) {
         labels(i)(j) = new Label {
           border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
           listenTo(mouse.moves)
@@ -40,16 +49,16 @@ class SwingGui(controller: Controller) extends GridPanel(controller.rowCount, co
             case MouseEntered(_, _, _) => updateBorder(i, j)
           }
         }
-        contents += labels(i)(j)
+        gridPanel.contents += labels(i)(j)
         updateLabel(i, j)
       }
     }
   }
 
-  def updateBorder(rowIndex: Int, columIndex: Int): Unit = {
-    for (i <- 0 until rows; j <- 0 until columns) {
+  def updateBorder(rowIndex: Int, columnIndex: Int): Unit = {
+    for (i <- 0 until gridPanel.rows; j <- 0 until gridPanel.columns) {
       val label = labels(i)(j)
-      if (rowIndex == i && columIndex == j) {
+      if (rowIndex == i && columnIndex == j) {
         label.border = new javax.swing.border.LineBorder(java.awt.Color.BLUE, 4, true)
       } else {
         label.border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
