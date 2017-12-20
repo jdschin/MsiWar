@@ -86,8 +86,9 @@ class ControllerImpl(model: GameModel) extends Controller {
     model.columnCount
   }
 
-  override def backgroundPath = {
-    ""
+  override def backgroundImagePath = {
+    // TODO get value from model
+    "src/main/resources/images/background_woodlands.png"
   }
 
   override def activePlayerNumber = {

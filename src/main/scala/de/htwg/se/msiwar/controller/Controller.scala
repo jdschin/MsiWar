@@ -28,7 +28,7 @@ trait Controller extends Publisher{
 
   def columnCount : Int
   def rowCount : Int
-  def backgroundPath : String
+  def backgroundImagePath : String
 
   def activePlayerNumber : Int
   def playerName(playerNumber: Int) : String

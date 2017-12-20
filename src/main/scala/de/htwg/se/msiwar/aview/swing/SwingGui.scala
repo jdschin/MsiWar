@@ -12,7 +12,7 @@ import scala.swing.{Graphics2D, GridPanel, Label, Reactor}
 
 class SwingGui(controller: Controller) extends GridPanel(controller.rowCount, controller.columnCount) with Reactor {
   // TODO get background image from controller
-  private val backgroundImage = ImageIO.read(new File("src/main/resources/images/background_woodlands.png"))
+  private val backgroundImage = ImageIO.read(new File(controller.backgroundImagePath))
   private val labels = Array.ofDim[Label](rows, columns)
 
   override protected def paintComponent(g: Graphics2D): Unit = {
