@@ -7,12 +7,18 @@ import javax.swing.ImageIcon
 
 import de.htwg.se.msiwar.controller.Controller
 
-import scala.swing.{FlowPanel, Graphics2D, GridPanel, ToggleButton}
+import scala.collection.mutable.Buffer
+import scala.swing.event.ButtonClicked
+import scala.swing.{AbstractButton, FlowPanel, Graphics2D, GridPanel, ToggleButton}
 
 class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   private val backgroundImage = ImageIO.read(new File(controller.actionbarBackgroundImagePath.get))
+  private var actionBarButtons: Buffer[ToggleButton] = Buffer[ToggleButton]()
 
-  preferredSize = new Dimension(50,50)
+  preferredSize = new Dimension(50, 50)
+  reactions += {
+    case e: ButtonClicked => updateActionActiveStates(e.source)
+  }
 
   override protected def paintComponent(g: Graphics2D): Unit = {
     super.paintComponent(g)
@@ -20,22 +26,36 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   }
 
   def updateActionBar(playerNumber: Int): Unit = {
+    actionBarButtons.clear()
+
     val actionIds = controller.actionIds(playerNumber)
     val actionBar = new GridPanel(1, actionIds.size)
     actionIds.foreach(a => {
-      val actionBtn = new ToggleButton(){
+      val actionBtn = new ToggleButton() {
         val imagePath = controller.actionIconPath(a)
-        if(imagePath.isDefined){
+        if (imagePath.isDefined) {
           icon = new ImageIcon(imagePath.get)
         } else {
           icon = null
           text = "Action" + a
         }
       }
+      listenTo(actionBtn)
       actionBar.contents += actionBtn
+      actionBarButtons += actionBtn
     })
 
     _contents += actionBar
     revalidate()
+  }
+
+  private def updateActionActiveStates(source: AbstractButton): Unit = {
+    if (source.enabled) {
+      actionBarButtons.foreach(t => {
+        if (t != source) {
+          t.selected = false
+        }
+      })
+    }
   }
 }
