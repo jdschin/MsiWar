@@ -16,8 +16,6 @@ trait Controller extends Publisher{
   def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String]
   def cellInRange(rowIndex: Int, columnIndex: Int) : Boolean
 
-  def startActionMode(actionId: Int) : Unit
-  def stopActionMode(actionId: Int) : Unit
   def executeAction(actionId: Int, direction:Direction) : Unit
   def canExecuteAction(actionId: Int, direction:Direction) : Boolean
 

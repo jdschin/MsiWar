@@ -51,10 +51,6 @@ class ControllerImpl(model: GameModel) extends Controller {
     true
   }
 
-  override def startActionMode(actionId: Int) = {}
-
-  override def stopActionMode(actionId: Int) = {}
-
   override def executeAction(actionId: Int, direction: Direction) = {
     model.executeAction(actionId, direction)
     updateTurn
