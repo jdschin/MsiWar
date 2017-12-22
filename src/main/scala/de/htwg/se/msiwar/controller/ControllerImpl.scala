@@ -16,8 +16,6 @@ class ControllerImpl(model: GameModel) extends Controller {
     }
   }
 
-  updateTurn
-
   def updateTurn: Unit = {
     val winnerId = model.winnerId
     if (winnerId.isDefined) {
@@ -90,9 +88,14 @@ class ControllerImpl(model: GameModel) extends Controller {
     model.columnCount
   }
 
-  override def backgroundImagePath = {
+  override def levelBackgroundImagePath: Option[String] = {
     // TODO get value from model
-    "src/main/resources/images/background_woodlands.png"
+    Option("src/main/resources/images/background_woodlands.png")
+  }
+
+  override def actionbarBackgroundImagePath: Option[String] = {
+    // TODO get value from model
+    Option("src/main/resources/images/background_actionbar.png")
   }
 
   override def activePlayerNumber = {
@@ -105,13 +108,8 @@ class ControllerImpl(model: GameModel) extends Controller {
 
   override def reset = {
     model.reset
-
-    val winnerId = model.winnerId
-    if (winnerId.isDefined) {
-      publish(PlayerWon(winnerId.get))
-    } else {
-      publish(TurnStarted(model.activePlayerNumber))
-    }
+    updateTurn
+    publish(TurnStarted(model.activePlayerNumber))
   }
 
   override def turnCounter = {
