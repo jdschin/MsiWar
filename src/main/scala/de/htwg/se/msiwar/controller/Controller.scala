@@ -28,6 +28,8 @@ trait Controller extends Publisher{
   def actionHotKey(actionId: Int) : String
   def actionDescription(actionId: Int) : String
   def actionIconPath(actionId: Int) : Option[String]
+  def actionDamage(actionId: Int) : Int
+  def actionRange(actionId: Int) : Int
 
   def columnCount : Int
   def rowCount : Int
@@ -36,6 +38,8 @@ trait Controller extends Publisher{
   def actionbarBackgroundImagePath : String
 
   def activePlayerNumber : Int
+  def activePlayerActionPoints : Int
+  def activePlayerHealthPoints : Int
   def playerName(playerNumber: Int) : String
 
   def turnCounter : Int

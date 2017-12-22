@@ -90,4 +90,20 @@ class ControllerImpl(model: GameModel) extends Controller {
   override def turnCounter = {
     model.turnCounter
   }
+
+  override def actionDamage(actionId: Int): Int = {
+    model.actionDamage(actionId)
+  }
+
+  override def actionRange(actionId: Int): Int = {
+    model.actionRange(actionId)
+  }
+
+  override def activePlayerActionPoints: Int = {
+    model.activePlayerActionPoints
+  }
+
+  override def activePlayerHealthPoints: Int = {
+    model.activePlayerHealthPoints
+  }
 }

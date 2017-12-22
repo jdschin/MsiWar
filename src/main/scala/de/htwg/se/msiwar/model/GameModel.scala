@@ -12,6 +12,8 @@ trait GameModel extends Publisher {
   def actionHotKey(actionId: Int): String
   def actionDescription(actionId: Int): String
   def actionIconPath(actionId: Int): Option[String]
+  def actionDamage(actionId: Int) : Int
+  def actionRange(actionId: Int) : Int
 
   def cellContentToText(rowIndex: Int, columnIndex: Int): String
   def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String]
@@ -25,6 +27,8 @@ trait GameModel extends Publisher {
 
   def activePlayerNumber: Int
   def activePlayerName: String
+  def activePlayerActionPoints: Int
+  def activePlayerHealthPoints: Int
 
   def rowCount: Int
   def columnCount: Int

@@ -206,4 +206,30 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
       Option.empty
     }
   }
+
+  override def actionDamage(actionId: Int): Int = {
+    val actionForId = activePlayer.actions.find(_.id == actionId)
+    if (actionForId.isDefined) {
+      actionForId.get.damage
+    } else {
+      0
+    }
+  }
+
+  override def actionRange(actionId: Int): Int = {
+    val actionForId = activePlayer.actions.find(_.id == actionId)
+    if (actionForId.isDefined) {
+      actionForId.get.range
+    } else {
+      0
+    }
+  }
+
+  override def activePlayerActionPoints: Int = {
+    activePlayer.currentActionPoints
+  }
+
+  override def activePlayerHealthPoints: Int = {
+    activePlayer.currentHealthPoints
+  }
 }
