@@ -24,10 +24,14 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
   }
 
   def moveGameObject(gameObject: GameObject, newPosition: Position) = {
-    board(gameObject.position.x)(gameObject.position.y) = null
+    removeGameObject(gameObject)
     gameObject.position.x = newPosition.x
     gameObject.position.y = newPosition.y
     placeGameObject(gameObject)
+  }
+
+  def removeGameObject(gameObject: GameObject) = {
+    board(gameObject.position.x)(gameObject.position.y) = null
   }
 
   def collisionObject(from: Position, to: Position): Option[GameObject] = {

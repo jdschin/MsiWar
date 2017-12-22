@@ -85,14 +85,30 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
         }
         case SHOOT => {
           val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
+
           if (collisionObjectOpt.isDefined) {
             val playerCollisionObject = collisionObjectOpt.get.asInstanceOf[PlayerObject]
             playerCollisionObject.currentHealthPoints -= actionToExecute.damage
+
+            val playerRemoved = removePlayerIfDead(playerCollisionObject)
+
+            if (playerRemoved) {
+              publish(GameBoardChanged(List((playerCollisionObject.position.y, playerCollisionObject.position.x))))
+            }
           }
         }
         case WAIT => {}
       }
       activePlayer.currentActionPoints -= actionToExecute.actionPoints
+    }
+  }
+
+  private def removePlayerIfDead(player: PlayerObject): Boolean = {
+    if (player.currentHealthPoints < 0) {
+      gameBoard.removeGameObject(player)
+      true
+    } else {
+      false
     }
   }
 
