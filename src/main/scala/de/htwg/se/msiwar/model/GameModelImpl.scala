@@ -6,7 +6,7 @@ import de.htwg.se.msiwar.util.Direction.Direction
 
 import scala.util.control.Breaks
 
-case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject], levelBackgroundImagePath:String , actionbarBackgroundImagePath:String) extends GameModel {
+case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject], levelBackgroundImagePath: String, actionbarBackgroundImagePath: String) extends GameModel {
   private var gameBoard = GameBoard(numRows, numCols, gameObjects)
   private var activePlayer = player(1)
   private var turnNumber = 1
@@ -116,14 +116,14 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int): Position = {
     var newPosition: Option[Position] = None
     direction match {
-      case Direction.UP => newPosition = Some(Position(oldPosition.x, oldPosition.y + range))
-      case Direction.DOWN => newPosition = Some(Position(oldPosition.x, oldPosition.y - range))
+      case Direction.UP => newPosition = Some(Position(oldPosition.x, oldPosition.y - range))
+      case Direction.DOWN => newPosition = Some(Position(oldPosition.x, oldPosition.y + range))
       case Direction.LEFT => newPosition = Some(Position(oldPosition.x - range, oldPosition.y))
       case Direction.RIGHT => newPosition = Some(Position(oldPosition.x + range, oldPosition.y))
-      case Direction.LEFT_UP => newPosition = Some(Position(oldPosition.x - range, oldPosition.y + range))
-      case Direction.LEFT_DOWN => newPosition = Some(Position(oldPosition.x - range, oldPosition.y - range))
-      case Direction.RIGHT_UP => newPosition = Some(Position(oldPosition.x + range, oldPosition.y + range))
-      case Direction.RIGHT_DOWN => newPosition = Some(Position(oldPosition.x + range, oldPosition.y - range))
+      case Direction.LEFT_UP => newPosition = Some(Position(oldPosition.x - range, oldPosition.y - range))
+      case Direction.LEFT_DOWN => newPosition = Some(Position(oldPosition.x - range, oldPosition.y + range))
+      case Direction.RIGHT_UP => newPosition = Some(Position(oldPosition.x + range, oldPosition.y - range))
+      case Direction.RIGHT_DOWN => newPosition = Some(Position(oldPosition.x + range, oldPosition.y + range))
     }
     newPosition.get
   }
@@ -182,7 +182,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   }
 
   override def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String] = {
-    val objectAt = gameBoard.gameObjectAt(rowIndex, columnIndex)
+    val objectAt = gameBoard.gameObjectAt(columnIndex, rowIndex)
     if (objectAt.isDefined) {
       Option(objectAt.get.imagePath)
     } else {
@@ -191,7 +191,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   }
 
   override def cellContentToText(rowIndex: Int, columnIndex: Int): String = {
-    val objectAt = gameBoard.gameObjectAt(rowIndex, columnIndex)
+    val objectAt = gameBoard.gameObjectAt(columnIndex, rowIndex)
     if (objectAt.isDefined) {
       objectAt.get match {
         case playerObj: PlayerObject => playerObj.playerNumber.toString
@@ -203,7 +203,12 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   }
 
   override def cellsInRange(actionId: Option[Int]): List[(Int, Int)] = {
-    // TODO calculate and return cells in range
+    if (actionId.isDefined) {
+      val actionForId = activePlayer.actions.find(_.id == actionId.get)
+      if (actionForId.isDefined) {
+        return gameBoard.cellsInRange(activePlayer.position, actionForId.get)
+      }
+    }
     List()
   }
 

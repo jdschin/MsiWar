@@ -48,7 +48,7 @@ class Tui(controller: Controller) extends Reactor {
 
   def printBoard = {
     println
-    for (i <- controller.rowCount - 1 to 0 by -1) {
+    for (i <- 0 until controller.rowCount) {
       print("| ")
       for (j <- 0 until controller.columnCount) {
         print(controller.cellContentToText(i, j) + " | ")

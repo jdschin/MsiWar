@@ -53,7 +53,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
   fillBoard
 
   private def fillBoard: Unit = {
-    for (i <- gridPanel.rows - 1 to 0 by -1) {
+    for (i <- 0 until gridPanel.rows) {
       for (j <- 0 until gridPanel.columns) {
         labels(i)(j) = new Label {
           border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
@@ -87,7 +87,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
   }
 
   private def clearCellsInRange: Unit = {
-    for (i <- gridPanel.rows - 1 to 0 by -1) {
+    for (i <- 0 until gridPanel.rows) {
       for (j <- 0 until gridPanel.columns) {
         labels(i)(j).border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
       }
