@@ -41,6 +41,7 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
           icon = null
           text = "Action" + actionId
         }
+        tooltip = controller.actionDescription(actionId)
       }
       listenTo(actionBtn)
       actionBar.contents += actionBtn
