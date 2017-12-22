@@ -11,7 +11,7 @@ object MainApp {
   def main(args: Array[String]): Unit = {
     val configProvider = new GameConfigProvider("config.txt")
 
-    val model = GameModelImpl(configProvider.rowCount, configProvider.colCount, configProvider.gameObjects)
+    val model = GameModelImpl(configProvider.rowCount, configProvider.colCount, configProvider.gameObjects, configProvider.levelBackgroundImagePath, configProvider.actionbarBackgroundImagePath)
     val controller = new ControllerImpl(model)
 
     new SwingApp(controller).main(args)
@@ -23,7 +23,6 @@ object MainApp {
         controller.reset
       }
     })
-
     while (tui.executeCommand(readLine())) {}
   }
 }

@@ -10,6 +10,9 @@ class GameConfigProvider(configFilePath: String) {
   //TODO: verify object positions by row and column count
   //TODO: generate levels
 
+  val levelBackgroundImagePath = "src/main/resources/images/background_woodlands.png"
+  val actionbarBackgroundImagePath = "src/main/resources/images/background_actionbar.png"
+
   // Setup board
   val rowCount = 9
   val colCount = 9

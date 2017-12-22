@@ -12,7 +12,7 @@ import scala.swing.event.MouseEntered
 import scala.swing.{BorderPanel, Graphics2D, GridPanel, Label, Reactor}
 
 class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
-  private val backgroundImage = ImageIO.read(new File(controller.levelBackgroundImagePath.get))
+  private val backgroundImage = ImageIO.read(new File(controller.levelBackgroundImagePath))
   private val labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
   private val actionPanel = new SwingActionBarPanel(controller)
   private val menuBar = new SwingMenuBar(controller)
@@ -39,6 +39,11 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
     case e: TurnStarted => {
       actionPanel.updateActionBar(e.playerNumber)
     }
+    case e: CellsInRange => {
+      e.rowColumnIndexes.foreach(t => {
+        labels(t._1)(t._2).border = new javax.swing.border.LineBorder(java.awt.Color.GREEN, 4, true)
+      })
+    }
     /*case e: BlockHit => print("Block hit")
     case e: PlayerHit => print("Player hit")*/
   }
@@ -64,7 +69,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
     for (i <- 0 until gridPanel.rows; j <- 0 until gridPanel.columns) {
       val label = labels(i)(j)
       if (rowIndex == i && columnIndex == j) {
-        label.border = new javax.swing.border.LineBorder(java.awt.Color.BLUE, 4, true)
+        label.border = new javax.swing.border.LineBorder(java.awt.Color.RED, 4, true)
       } else {
         label.border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
       }

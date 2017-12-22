@@ -6,7 +6,7 @@ import de.htwg.se.msiwar.util.Direction.Direction
 
 import scala.util.control.Breaks
 
-case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject]) extends GameModel {
+case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject], levelBackgroundImagePath:String , actionbarBackgroundImagePath:String) extends GameModel {
   private var gameBoard = GameBoard(numRows, numCols, gameObjects)
   private var activePlayer = player(1)
   private var turnNumber = 1
@@ -71,7 +71,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     }
   }
 
-  override def executeAction(actionId: Int, direction: Direction) = {
+  override def executeAction(actionId: Int, direction: Direction): Unit = {
     val actionForId = activePlayer.actions.find(_.id == actionId)
     if (actionForId.isDefined) {
       val actionToExecute = actionForId.get
@@ -170,13 +170,38 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     !activePlayer.hasActionPointsLeft
   }
 
-  override def gameObjectAt(rowIndex: Int, columnIndex: Int): Option[GameObject] = {
-    gameBoard.gameObjectAt(rowIndex, columnIndex)
+  override def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String] = {
+    val objectAt = gameBoard.gameObjectAt(rowIndex, columnIndex)
+    if (objectAt.isDefined) {
+      Option(objectAt.get.imagePath)
+    } else {
+      Option.empty[String]
+    }
   }
 
-  override def rowCount = gameBoard.rows
+  override def cellContentToText(rowIndex: Int, columnIndex: Int): String = {
+    val objectAt = gameBoard.gameObjectAt(rowIndex, columnIndex)
+    if (objectAt.isDefined) {
+      objectAt.get match {
+        case playerObj: PlayerObject => playerObj.playerNumber.toString
+        case blockObj: BlockObject => blockObj.name
+      }
+    } else {
+      "X"
+    }
+  }
 
-  override def columnCount = gameBoard.columns
+  override def cellsInRange(actionId: Option[Int]): List[(Int, Int)] = {
+    List()
+  }
+
+  override def rowCount: Int = {
+    gameBoard.rows
+  }
+
+  override def columnCount: Int = {
+    gameBoard.columns
+  }
 
   override def winnerId: Option[Int] = {
     val playersAliveIds = gameObjects.collect({ case p: PlayerObject => p }).filter(_.hasHealthPointsLeft).map(_.playerNumber)

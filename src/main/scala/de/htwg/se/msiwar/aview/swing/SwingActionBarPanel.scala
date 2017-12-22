@@ -12,7 +12,7 @@ import scala.swing.event.ButtonClicked
 import scala.swing.{AbstractButton, FlowPanel, Graphics2D, GridPanel, ToggleButton}
 
 class SwingActionBarPanel(controller: Controller) extends FlowPanel {
-  private val backgroundImage = ImageIO.read(new File(controller.actionbarBackgroundImagePath.get))
+  private val backgroundImage = ImageIO.read(new File(controller.actionbarBackgroundImagePath))
   private var actionBarButtons: Buffer[ToggleButton] = Buffer[ToggleButton]()
 
   preferredSize = new Dimension(50, 50)
@@ -51,6 +51,8 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
 
   private def updateActionActiveStates(source: AbstractButton): Unit = {
     if (source.enabled) {
+      // TODO set correct action id here
+      controller.cellsInRange(Option(1))
       actionBarButtons.foreach(t => {
         if (t != source) {
           t.selected = false

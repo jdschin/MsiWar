@@ -27,28 +27,15 @@ class ControllerImpl(model: GameModel) extends Controller {
   }
 
   override def cellContentToText(rowIndex: Int, columnIndex: Int) = {
-    val objectAt = model.gameObjectAt(rowIndex, columnIndex)
-    if (objectAt.isDefined) {
-      objectAt.get match {
-        case playerObj: PlayerObject => playerObj.playerNumber.toString
-        case blockObj: BlockObject => blockObj.name
-      }
-    } else {
-      "X"
-    }
+    model.cellContentToText(rowIndex, columnIndex)
   }
 
   override def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String] = {
-    val objectAt = model.gameObjectAt(rowIndex, columnIndex)
-    if (objectAt.isDefined) {
-      Option(objectAt.get.imagePath)
-    } else {
-      Option.empty[String]
-    }
+    model.cellContentImagePath(rowIndex, columnIndex)
   }
 
-  override def cellInRange(rowIndex: Int, columnIndex: Int) = {
-    true
+  override def cellsInRange(actionId: Option[Int]): Unit = {
+    publish(CellsInRange(model.cellsInRange(actionId)))
   }
 
   override def executeAction(actionId: Int, direction: Direction) = {
@@ -84,14 +71,12 @@ class ControllerImpl(model: GameModel) extends Controller {
     model.columnCount
   }
 
-  override def levelBackgroundImagePath: Option[String] = {
-    // TODO get value from model
-    Option("src/main/resources/images/background_woodlands.png")
+  override def levelBackgroundImagePath: String = {
+    model.levelBackgroundImagePath
   }
 
-  override def actionbarBackgroundImagePath: Option[String] = {
-    // TODO get value from model
-    Option("src/main/resources/images/background_actionbar.png")
+  override def actionbarBackgroundImagePath: String = {
+    model.actionbarBackgroundImagePath
   }
 
   override def activePlayerNumber = {
