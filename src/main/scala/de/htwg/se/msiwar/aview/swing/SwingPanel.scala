@@ -46,8 +46,9 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
         labels(t._1)(t._2).border = new javax.swing.border.LineBorder(java.awt.Color.GREEN, 4, true)
       })
     }
-    /*case e: BlockHit => print("Block hit")
-    case e: PlayerHit => print("Player hit")*/
+    case e: PlayerWon => {
+      // TODO display game won message
+    }
   }
   fillBoard
 
@@ -85,7 +86,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
     label.repaint()
   }
 
-  private def clearCellsInRange: Unit ={
+  private def clearCellsInRange: Unit = {
     for (i <- gridPanel.rows - 1 to 0 by -1) {
       for (j <- 0 until gridPanel.columns) {
         labels(i)(j).border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
