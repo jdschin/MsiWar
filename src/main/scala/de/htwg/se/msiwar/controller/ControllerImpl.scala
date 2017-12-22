@@ -8,12 +8,6 @@ class ControllerImpl(model: GameModel) extends Controller {
   listenTo(model)
   reactions += {
     case e: GameBoardChanged => publish(CellChanged(e.rowColumnIndexes))
-    case e: ObjectHit => {
-      e.gameObject match {
-        case playerObject: PlayerObject => publish(PlayerHit(playerObject.name, playerObject.playerNumber, playerObject.currentHealthPoints))
-        case blockObject: BlockObject => publish(BlockHit(blockObject.name))
-      }
-    }
   }
 
   def updateTurn: Unit = {

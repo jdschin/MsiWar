@@ -6,7 +6,6 @@ import scala.swing.Publisher
 import scala.swing.event.Event
 
 case class GameBoardChanged(rowColumnIndexes: List[(Int, Int)]) extends Event
-case class ObjectHit(gameObject: GameObject) extends Event
 
 trait GameModel extends Publisher {
   def actionIdsForPlayer(playerNumber: Int): List[Int]

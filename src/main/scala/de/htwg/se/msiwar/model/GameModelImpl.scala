@@ -86,14 +86,8 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
         case SHOOT => {
           val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
           if (collisionObjectOpt.isDefined) {
-            if (collisionObjectOpt.get.isInstanceOf[PlayerObject]) {
-              val playerCollisionObject = collisionObjectOpt.get.asInstanceOf[PlayerObject]
-              playerCollisionObject.currentHealthPoints -= actionToExecute.damage
-              publish(ObjectHit(playerCollisionObject))
-              // TODO: check if there is a winner
-            } else {
-              publish(ObjectHit(collisionObjectOpt.get))
-            }
+            val playerCollisionObject = collisionObjectOpt.get.asInstanceOf[PlayerObject]
+            playerCollisionObject.currentHealthPoints -= actionToExecute.damage
           }
         }
         case WAIT => {}
