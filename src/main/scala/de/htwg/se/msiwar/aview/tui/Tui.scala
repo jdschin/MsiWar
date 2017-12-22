@@ -8,14 +8,16 @@ import scala.swing.Reactor
 class Tui(controller: Controller) extends Reactor {
   listenTo(controller)
   reactions += {
-    case e: CellChanged => printBoard
-    case e: TurnStarted => println("Player" + e.playerNumber + " turn " + controller.turnCounter + " started\n")
+    case _: CellChanged => printBoard
+    case e: TurnStarted => {
+      println("Player" + e.playerNumber + " turn " + controller.turnCounter + " started\n")
+      printBoard
+    }
     case e: PlayerWon => println(Console.GREEN + "Player" + e.playerNumber + " wins!\n" + Console.WHITE)
   }
 
   printWelcomeMessage
   printHelp
-  printBoard
 
   def printWelcomeMessage = {
     println(" _____ _          _   _______          _     __          __        \n|  __ (_)        | | |__   __|        | |    \\ \\        / /        \n| |__) |__  _____| |    | | __ _ _ __ | | __  \\ \\  /\\  / /_ _ _ __ \n|  ___/ \\ \\/ / _ \\ |    | |/ _` | '_ \\| |/ /   \\ \\/  \\/ / _` | '__|\n| |   | |>  <  __/ |    | | (_| | | | |   <     \\  /\\  / (_| | |   \n|_|   |_/_/\\_\\___|_|    |_|\\__,_|_| |_|_|\\_\\     \\/  \\/ \\__,_|_|\n\n\n")
