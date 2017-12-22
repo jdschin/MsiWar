@@ -41,7 +41,7 @@ class Tui(controller: Controller) extends Reactor {
   def printActivePlayer = {
     val playerNumber = controller.activePlayerNumber
     val playerName = controller.playerName(playerNumber)
-    println("Spieler" + playerNumber + " '" + playerName + "' ist am Zug")
+    println("Player" + playerNumber + " '" + playerName + "' is at the turn")
 
   }
 
