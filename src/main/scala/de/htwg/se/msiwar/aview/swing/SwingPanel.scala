@@ -7,8 +7,9 @@ import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 
 import de.htwg.se.msiwar.controller.{Controller, _}
+import de.htwg.se.msiwar.util.Direction
 
-import scala.swing.event.MouseEntered
+import scala.swing.event.MousePressed
 import scala.swing.{BorderPanel, Graphics2D, GridPanel, Label, Reactor}
 
 class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
@@ -40,6 +41,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       actionPanel.updateActionBar(e.playerNumber)
     }
     case e: CellsInRange => {
+      clearCellsInRange
       e.rowColumnIndexes.foreach(t => {
         labels(t._1)(t._2).border = new javax.swing.border.LineBorder(java.awt.Color.GREEN, 4, true)
       })
@@ -49,14 +51,21 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
   }
   fillBoard
 
-  def fillBoard: Unit = {
+  private def fillBoard: Unit = {
     for (i <- gridPanel.rows - 1 to 0 by -1) {
       for (j <- 0 until gridPanel.columns) {
         labels(i)(j) = new Label {
           border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
-          listenTo(mouse.moves)
+          listenTo(mouse.clicks)
           reactions += {
-            case MouseEntered(_, _, _) => updateBorder(i, j)
+            case e: MousePressed => {
+              val activeActionId = actionPanel.activeActionId
+              if (activeActionId.isDefined && controller.canExecuteAction(activeActionId.get, Direction.UP)) {
+                controller.executeAction(actionPanel.activeActionId.get, Direction.UP)
+              } else {
+                // TODO play sound
+              }
+            }
           }
         }
         gridPanel.contents += labels(i)(j)
@@ -65,18 +74,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
     }
   }
 
-  def updateBorder(rowIndex: Int, columnIndex: Int): Unit = {
-    for (i <- 0 until gridPanel.rows; j <- 0 until gridPanel.columns) {
-      val label = labels(i)(j)
-      if (rowIndex == i && columnIndex == j) {
-        label.border = new javax.swing.border.LineBorder(java.awt.Color.RED, 4, true)
-      } else {
-        label.border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
-      }
-    }
-  }
-
-  def updateLabel(rowIndex: Int, columnIndex: Int): Unit = {
+  private def updateLabel(rowIndex: Int, columnIndex: Int): Unit = {
     val label = labels(rowIndex)(columnIndex)
     val imagePath = controller.cellContentImagePath(rowIndex, columnIndex)
     if (imagePath.isDefined) {
@@ -85,5 +83,13 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       label.icon = null
     }
     label.repaint()
+  }
+
+  private def clearCellsInRange: Unit ={
+    for (i <- gridPanel.rows - 1 to 0 by -1) {
+      for (j <- 0 until gridPanel.columns) {
+        labels(i)(j).border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
+      }
+    }
   }
 }

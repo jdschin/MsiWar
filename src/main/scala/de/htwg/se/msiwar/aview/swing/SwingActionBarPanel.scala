@@ -27,6 +27,7 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
 
   def updateActionBar(playerNumber: Int): Unit = {
     actionBarButtons.clear()
+    _contents.clear()
 
     val actionIds = controller.actionIds(playerNumber)
     val actionBar = new GridPanel(1, actionIds.size)
@@ -47,6 +48,11 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
 
     _contents += actionBar
     revalidate()
+  }
+
+  def activeActionId: Option[Int] = {
+    // TODO set correct action id here
+    Option(1)
   }
 
   private def updateActionActiveStates(source: AbstractButton): Unit = {
