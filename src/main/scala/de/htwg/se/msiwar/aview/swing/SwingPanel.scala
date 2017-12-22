@@ -12,8 +12,10 @@ import scala.swing.event.MouseEntered
 import scala.swing.{BorderPanel, Graphics2D, GridPanel, Label, Reactor}
 
 class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
-  private val backgroundImage = ImageIO.read(new File(controller.backgroundImagePath))
+  private val backgroundImage = ImageIO.read(new File(controller.levelBackgroundImagePath.get))
   private val labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
+  private val actionPanel = new SwingActionBarPanel(controller)
+  private val menuBar = new SwingMenuBar(controller)
   private val gridPanel = new GridPanel(controller.rowCount, controller.columnCount) {
     preferredSize = new Dimension(controller.rowCount * 60, controller.columnCount * 60)
 
@@ -22,8 +24,6 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       g.drawImage(backgroundImage, null, 0, 0)
     }
   }
-  private val actionPanel = new SwingActionBarPanel(controller)
-  private val menuBar = new SwingMenuBar(controller)
 
   add(menuBar, BorderPanel.Position.North)
   add(gridPanel, BorderPanel.Position.Center)

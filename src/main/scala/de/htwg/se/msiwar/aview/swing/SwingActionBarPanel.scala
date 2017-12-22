@@ -1,22 +1,29 @@
 package de.htwg.se.msiwar.aview.swing
 
 import java.awt.Dimension
+import java.io.File
+import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 
 import de.htwg.se.msiwar.controller.Controller
 
-import scala.swing.{FlowPanel, GridPanel, Label}
+import scala.swing.{FlowPanel, Graphics2D, GridPanel, ToggleButton}
 
 class SwingActionBarPanel(controller: Controller) extends FlowPanel {
-  preferredSize = new Dimension(32,32)
+  private val backgroundImage = ImageIO.read(new File(controller.actionbarBackgroundImagePath.get))
+
+  preferredSize = new Dimension(50,50)
+
+  override protected def paintComponent(g: Graphics2D): Unit = {
+    super.paintComponent(g)
+    g.drawImage(backgroundImage, null, 0, 0)
+  }
 
   def updateActionBar(playerNumber: Int): Unit = {
     val actionIds = controller.actionIds(playerNumber)
     val actionBar = new GridPanel(1, actionIds.size)
     actionIds.foreach(a => {
-      val actionLabel = new Label{
-        preferredSize = new Dimension(32,32)
-        border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
+      val actionBtn = new ToggleButton(){
         val imagePath = controller.actionIconPath(a)
         if(imagePath.isDefined){
           icon = new ImageIcon(imagePath.get)
@@ -25,11 +32,10 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
           text = "Action" + a
         }
       }
-      actionBar.contents += actionLabel
+      actionBar.contents += actionBtn
     })
 
     _contents += actionBar
     revalidate()
-    //repaint()
   }
 }

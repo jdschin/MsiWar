@@ -24,6 +24,10 @@ class SwingMenuBar(controller: Controller) extends MenuBar {
       // TODO load and setup config
     })
 
+    contents += new MenuItem(Action("Battle in the Alps (3P)"){
+      // TODO load and setup config
+    })
+
     contents += new MenuItem(Action("Desert War (3P)"){
       // TODO load and setup config
     })
