@@ -192,6 +192,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   }
 
   override def cellsInRange(actionId: Option[Int]): List[(Int, Int)] = {
+    // TODO calculate and return cells in range
     List()
   }
 
