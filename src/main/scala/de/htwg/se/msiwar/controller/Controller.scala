@@ -24,7 +24,7 @@ trait Controller extends Publisher{
   def actionIds(playerNumber: Int) : List[Int]
   def actionHotKey(actionId: Int) : String
   def actionDescription(actionId: Int) : String
-  def actionIconPath(actionId: Int) : String
+  def actionIconPath(actionId: Int) : Option[String]
 
   def columnCount : Int
   def rowCount : Int

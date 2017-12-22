@@ -14,7 +14,7 @@ trait GameModel extends Publisher {
   def actionIdsForPlayer(playerNumber: Int): List[Int]
   def actionHotKey(actionId: Int): String
   def actionDescription(actionId: Int): String
-  def actionIconPath(actionId: Int): String
+  def actionIconPath(actionId: Int): Option[String]
 
   def executeAction(actionId: Int, direction:Direction): Unit
   def canExecuteAction(actionId: Int, direction: Direction) : Boolean

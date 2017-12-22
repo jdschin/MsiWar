@@ -62,12 +62,12 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     }
   }
 
-  override def actionIconPath(actionId: Int): String = {
+  override def actionIconPath(actionId: Int): Option[String] = {
     val foundAction = actions.find(_.id == actionId)
     if (foundAction.isDefined) {
-      foundAction.get.imagePath
+      Option(foundAction.get.imagePath)
     } else {
-      ""
+      Option.empty
     }
   }
 

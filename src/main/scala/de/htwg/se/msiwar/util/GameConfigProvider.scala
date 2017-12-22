@@ -15,9 +15,10 @@ class GameConfigProvider(configFilePath: String) {
   val colCount = 9
 
   // Setup actions
-  val moveAction = Action(1, "Panzer bewegen", "arrow.png", "move.wav", 1, 1, MOVE, 0)
-  val shootAction = Action(2, "Schießen", "bullet.png", "shoot.wav", 1, 1, SHOOT, 3)
-  val actions = List(moveAction, shootAction)
+  val moveAction = Action(1, "Panzer bewegen", "src/main/resources/images/move_action.png", "move.wav", 1, 1, MOVE, 0)
+  val shootAction = Action(2, "Schießen", "src/main/resources/images/attack_action.png", "shoot.wav", 1, 1, SHOOT, 2)
+  val waitAction = Action(3, "Warten", "src/main/resources/images/wait_action.png", "shoot.wav", 1, 1, SHOOT, 2)
+  val actions = List(moveAction, shootAction, waitAction)
 
   // Setup players
   val player1 = PlayerObject("Spieler1", "src/main/resources/images/light_tank_red.png", Position(1, 2), 1, 3, 3, actions)

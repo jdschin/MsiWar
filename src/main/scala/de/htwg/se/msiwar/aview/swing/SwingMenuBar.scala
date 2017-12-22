@@ -6,31 +6,29 @@ import scala.swing.event.Key
 import scala.swing.{Action, Menu, MenuBar, MenuItem, Separator}
 
 class SwingMenuBar(controller: Controller) extends MenuBar {
-  contents += new Menu("File") {
-    mnemonic = Key.F
-    contents += new MenuItem(Action("New Game") {
-      controller.reset
-    })
 
-    contents += new MenuItem(Action("Quit") {
-      System.exit(0)
-    })
-  }
+  contents += new Menu("Game") {
+    mnemonic = Key.G
 
-  contents += new Menu("Options") {
-    mnemonic = Key.O
-
-    contents += new MenuItem(Action("Random Level"){
+    contents += new MenuItem(Action("Random Level..."){
       // TODO implement level generator with actors
     })
 
     contents += new Separator()
 
-    contents += new MenuItem(Action("Black Wood Battle"){
+    contents += new MenuItem(Action("Black Wood Battle (2P)"){
       // TODO load and setup config
     })
 
-    contents += new MenuItem(Action("Desert War"){
+    contents += new MenuItem(Action("Grand Canyon (2P)"){
+      // TODO load and setup config
+    })
+
+    contents += new MenuItem(Action("Desert War (3P)"){
+      // TODO load and setup config
+    })
+
+    contents += new MenuItem(Action("Black Hawk Down (4P)"){
       // TODO load and setup config
     })
   }

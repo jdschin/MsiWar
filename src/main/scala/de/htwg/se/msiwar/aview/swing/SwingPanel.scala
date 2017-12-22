@@ -1,6 +1,7 @@
 package de.htwg.se.msiwar.aview.swing
 
 
+import java.awt.Dimension
 import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
@@ -14,12 +15,14 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
   private val backgroundImage = ImageIO.read(new File(controller.backgroundImagePath))
   private val labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
   private val gridPanel = new GridPanel(controller.rowCount, controller.columnCount) {
+    preferredSize = new Dimension(controller.rowCount * 60, controller.columnCount * 60)
+
     override protected def paintComponent(g: Graphics2D): Unit = {
       super.paintComponent(g)
       g.drawImage(backgroundImage, null, 0, 0)
     }
   }
-  private val actionPanel = new SwingActionBarPanel
+  private val actionPanel = new SwingActionBarPanel(controller)
   private val menuBar = new SwingMenuBar(controller)
 
   add(menuBar, BorderPanel.Position.North)
@@ -33,9 +36,11 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
         updateLabel(t._1, t._2)
       })
     }
-    case e: TurnStarted => print("Turn started")
-    case e: BlockHit => print("Block hit")
-    case e: PlayerHit => print("Player hit")
+    case e: TurnStarted => {
+      actionPanel.updateActionBar(e.playerNumber)
+    }
+    /*case e: BlockHit => print("Block hit")
+    case e: PlayerHit => print("Player hit")*/
   }
   fillBoard
 

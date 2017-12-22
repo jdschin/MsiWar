@@ -78,7 +78,7 @@ class ControllerImpl(model: GameModel) extends Controller {
     model.actionDescription(actionId)
   }
 
-  override def actionIconPath(actionId: Int): String = {
+  override def actionIconPath(actionId: Int): Option[String] = {
     model.actionIconPath(actionId)
   }
 
