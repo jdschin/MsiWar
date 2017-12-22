@@ -15,7 +15,6 @@ class Tui(controller: Controller) extends Reactor {
 
   printWelcomeMessage
   printHelp
-  controller.reset
   printBoard
 
   def printWelcomeMessage = {
