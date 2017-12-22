@@ -7,17 +7,17 @@ import javax.swing.ImageIcon
 
 import de.htwg.se.msiwar.controller.Controller
 
-import scala.collection.mutable.Buffer
 import scala.swing.event.ButtonClicked
-import scala.swing.{AbstractButton, FlowPanel, Graphics2D, GridPanel, ToggleButton}
+import scala.swing.{FlowPanel, Graphics2D, GridPanel, ToggleButton}
 
 class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   private val backgroundImage = ImageIO.read(new File(controller.actionbarBackgroundImagePath))
-  private var actionBarButtons: Buffer[ToggleButton] = Buffer[ToggleButton]()
+  private val actionBarButtons = scala.collection.mutable.Map[Int, ToggleButton]()
+  private var currentActionId: Option[Int] = Option.empty
 
   preferredSize = new Dimension(50, 50)
   reactions += {
-    case e: ButtonClicked => updateActionActiveStates(e.source)
+    case e: ButtonClicked => updateActionActiveStates(e.source.asInstanceOf[ToggleButton])
   }
 
   override protected def paintComponent(g: Graphics2D): Unit = {
@@ -26,24 +26,25 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   }
 
   def updateActionBar(playerNumber: Int): Unit = {
+    // Clear previous content
     actionBarButtons.clear()
     _contents.clear()
 
     val actionIds = controller.actionIds(playerNumber)
     val actionBar = new GridPanel(1, actionIds.size)
-    actionIds.foreach(a => {
+    actionIds.foreach(actionId => {
       val actionBtn = new ToggleButton() {
-        val imagePath = controller.actionIconPath(a)
+        private val imagePath = controller.actionIconPath(actionId)
         if (imagePath.isDefined) {
           icon = new ImageIcon(imagePath.get)
         } else {
           icon = null
-          text = "Action" + a
+          text = "Action" + actionId
         }
       }
       listenTo(actionBtn)
       actionBar.contents += actionBtn
-      actionBarButtons += actionBtn
+      actionBarButtons.put(actionId, actionBtn)
     })
 
     _contents += actionBar
@@ -51,17 +52,22 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   }
 
   def activeActionId: Option[Int] = {
-    // TODO set correct action id here
-    Option(1)
+    currentActionId
   }
 
-  private def updateActionActiveStates(source: AbstractButton): Unit = {
+  private def updateActionActiveStates(source: ToggleButton): Unit = {
     if (source.enabled) {
-      // TODO set correct action id here
-      controller.cellsInRange(Option(1))
+      val foundEntry = actionBarButtons.find(p => p._2 == source)
+      if(foundEntry.isDefined){
+        currentActionId = Option(foundEntry.get._1)
+      } else {
+        currentActionId = Option.empty
+      }
+      controller.cellsInRange(currentActionId)
+      // Deselect all other toggle buttons
       actionBarButtons.foreach(t => {
-        if (t != source) {
-          t.selected = false
+        if (t._2 != source) {
+          t._2.selected = false
         }
       })
     }
