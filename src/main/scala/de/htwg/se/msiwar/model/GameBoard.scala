@@ -1,7 +1,5 @@
 package de.htwg.se.msiwar.model
 
-import scala.collection.mutable.Buffer
-
 case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
   private val board = Array.ofDim[GameObject](rows, columns)
 
@@ -117,72 +115,64 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     Option.empty
   }
 
+  private def addPosToListIfValid(position: Position, basePosition: Position, cellList: List[(Int, Int)]): List[(Int, Int)] = {
+    if (isInBound(position) && position != basePosition && gameObjectAt(position).isEmpty) {
+      ((position.x, position.y)) :: cellList
+    } else {
+      cellList
+    }
+  }
+
   def cellsInRange(position: Position, action: Action): List[(Int, Int)] = {
-    var cellsInRangeList = Buffer[(Int, Int)]()
+    var cellsInRangeList = List[(Int, Int)]()
     val range = action.range
 
     action.actionType match {
-      case a: ActionType.WAIT.type => cellsInRangeList += ((position.x, position.y))
+      case a: ActionType.WAIT.type => cellsInRangeList = ((position.x, position.y)) :: cellsInRangeList
       case _ => {
         loopForwards(position.x, position.x + range + 1, x => {
           val pos = Position(x, position.y)
-          if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
-            cellsInRangeList += ((pos.x, pos.y))
-          }
+          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
         })
         loopForwards(position.y, position.y + range + 1, y => {
           val pos = Position(position.x, y)
-          if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
-            cellsInRangeList += ((pos.x, pos.y))
-          }
+          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
         })
         loopBackwards(position.y, position.y - range - 1, y => {
           val pos = Position(position.x, y)
-          if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
-            cellsInRangeList += ((pos.x, pos.y))
-          }
+          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
         })
         loopBackwards(position.x, position.x - range - 1, x => {
           val pos = Position(x, position.y)
-          if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
-            cellsInRangeList += ((pos.x, pos.y))
-          }
+          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
         })
         loopForwards(position.x, position.x + range + 1, x => {
           loopBackwards(position.y, position.y - range - 1, y => {
             val pos = Position(x, y)
-            if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
-              cellsInRangeList += ((pos.x, pos.y))
-            }
+            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
           })
         })
         loopForwards(position.y, position.y + range + 1, y => {
           loopBackwards(position.x, position.x - range - 1, x => {
             val pos = Position(x, y)
-            if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
-              cellsInRangeList += ((pos.x, pos.y))
-            }
+            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
           })
         })
         loopForwards(position.x, position.x + range + 1, x => {
           loopForwards(position.y, position.y + range + 1, y => {
             val pos = Position(x, y)
-            if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
-              cellsInRangeList += ((pos.x, pos.y))
-            }
+            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
           })
         })
         loopBackwards(position.x, position.x - range - 1, x => {
           loopBackwards(position.y, position.y - range - 1, y => {
             val pos = Position(x, y)
-            if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
-              cellsInRangeList += ((pos.x, pos.y))
-            }
+            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
           })
         })
       }
     }
-    cellsInRangeList.toList
+    cellsInRangeList
   }
 
   private def loopBackwards(high: Int, low: Int, f: Int => Unit): Unit = {
