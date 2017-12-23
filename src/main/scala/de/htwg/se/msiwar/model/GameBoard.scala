@@ -148,6 +148,38 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
             cellsInRangeList += ((pos.x, pos.y))
           }
         })
+        loopForwards(position.x, position.x + range + 1, x => {
+          loopBackwards(position.y, position.y - range - 1, y => {
+            val pos = Position(x, y)
+            if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
+              cellsInRangeList += ((pos.x, pos.y))
+            }
+          })
+        })
+        loopForwards(position.y, position.y + range + 1, y => {
+          loopBackwards(position.x, position.x - range - 1, x => {
+            val pos = Position(x, y)
+            if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
+              cellsInRangeList += ((pos.x, pos.y))
+            }
+          })
+        })
+        loopForwards(position.x, position.x + range + 1, x => {
+          loopForwards(position.y, position.y + range + 1, y => {
+            val pos = Position(x, y)
+            if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
+              cellsInRangeList += ((pos.x, pos.y))
+            }
+          })
+        })
+        loopBackwards(position.x, position.x - range - 1, x => {
+          loopBackwards(position.y, position.y - range - 1, y => {
+            val pos = Position(x, y)
+            if (isInBound(pos) && pos != position && gameObjectAt(pos).isEmpty) {
+              cellsInRangeList += ((pos.x, pos.y))
+            }
+          })
+        })
       }
     }
     cellsInRangeList.toList
