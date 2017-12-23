@@ -10,6 +10,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   private var gameBoard = GameBoard(numRows, numCols, gameObjects)
   private var activePlayer = player(1)
   private var turnNumber = 1
+  private var lastExecutedAction = Option.empty[Action]
 
   override def reset: Unit = {
     gameBoard = GameBoard(numRows, numCols, gameObjects)
@@ -19,6 +20,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     })
     activePlayer = player(1)
     turnNumber = 1
+    lastExecutedAction = Option.empty[Action]
   }
 
   private def player(playerNumber: Int): PlayerObject = {
@@ -91,7 +93,16 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
         case WAIT => {}
       }
       activePlayer.currentActionPoints -= actionToExecute.actionPoints
+      lastExecutedAction = Option(actionToExecute)
       publish(ActivePlayerStatsChanged())
+    }
+  }
+
+  override def lastExecutedActionId: Option[Int] = {
+    if(lastExecutedAction.isDefined) {
+      Option(lastExecutedAction.get.id)
+    } else {
+      Option.empty[Int]
     }
   }
 
