@@ -8,7 +8,7 @@ import javax.swing.ImageIcon
 import de.htwg.se.msiwar.controller.Controller
 
 import scala.swing.event.ButtonClicked
-import scala.swing.{FlowPanel, Graphics2D, GridPanel, ToggleButton}
+import scala.swing.{Alignment, FlowPanel, Graphics2D, GridPanel, ToggleButton}
 
 class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   private val backgroundImage = ImageIO.read(new File(controller.actionbarBackgroundImagePath))
@@ -37,6 +37,9 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
         private val imagePath = controller.actionIconPath(actionId)
         if (imagePath.isDefined) {
           icon = new ImageIcon(imagePath.get)
+          text = actionId.toString
+          horizontalTextPosition = Alignment.Right
+          verticalTextPosition = Alignment.Bottom
         } else {
           icon = null
           text = "Action" + actionId
