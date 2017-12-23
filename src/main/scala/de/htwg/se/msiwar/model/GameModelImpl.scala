@@ -101,6 +101,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
         case WAIT => {}
       }
       activePlayer.currentActionPoints -= actionToExecute.actionPoints
+      publish(ActivePlayerStatsChanged())
     }
   }
 

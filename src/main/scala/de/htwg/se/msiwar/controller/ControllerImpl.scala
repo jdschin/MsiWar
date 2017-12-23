@@ -8,6 +8,7 @@ class ControllerImpl(model: GameModel) extends Controller {
   listenTo(model)
   reactions += {
     case e: GameBoardChanged => publish(CellChanged(e.rowColumnIndexes))
+    case e: ActivePlayerStatsChanged => publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
   }
 
   def updateTurn: Unit = {
