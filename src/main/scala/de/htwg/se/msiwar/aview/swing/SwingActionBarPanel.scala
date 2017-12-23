@@ -60,7 +60,7 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   }
 
   private def updateActionActiveStates(source: ToggleButton): Unit = {
-    if (source.enabled) {
+    if (source.selected) {
       val foundEntry = actionBarButtons.find(p => p._2 == source)
       if(foundEntry.isDefined){
         currentActionId = Option(foundEntry.get._1)
