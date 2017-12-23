@@ -43,16 +43,6 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     player(playerNumber).actions.map(_.id)
   }
 
-  override def actionHotKey(actionId: Int): String = {
-    val foundAction = actions.find(_.id == actionId)
-    if (foundAction.isDefined) {
-      // TODO create hotkey
-      foundAction.get.description
-    } else {
-      ""
-    }
-  }
-
   override def actionDescription(actionId: Int): String = {
     val foundAction = actions.find(_.id == actionId)
     if (foundAction.isDefined) {

@@ -10,7 +10,6 @@ case class ActivePlayerStatsChanged() extends Event
 
 trait GameModel extends Publisher {
   def actionIdsForPlayer(playerNumber: Int): List[Int]
-  def actionHotKey(actionId: Int): String
   def actionDescription(actionId: Int): String
   def actionIconPath(actionId: Int): Option[String]
   def actionDamage(actionId: Int) : Int

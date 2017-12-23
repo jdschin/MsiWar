@@ -26,7 +26,6 @@ trait Controller extends Publisher{
   def canExecuteAction(actionId: Int, direction:Direction) : Boolean
 
   def actionIds(playerNumber: Int) : List[Int]
-  def actionHotKey(actionId: Int) : String
   def actionDescription(actionId: Int) : String
   def actionIconPath(actionId: Int) : Option[String]
   def actionDamage(actionId: Int) : Int

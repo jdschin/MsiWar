@@ -50,10 +50,6 @@ class ControllerImpl(model: GameModel) extends Controller {
     model.actionIdsForPlayer(playerNumber)
   }
 
-  override def actionHotKey(actionId: Int): String = {
-    model.actionHotKey(actionId)
-  }
-
   override def actionDescription(actionId: Int): String = {
     model.actionDescription(actionId)
   }
