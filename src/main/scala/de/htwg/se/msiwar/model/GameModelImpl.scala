@@ -118,28 +118,28 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   }
 
   private def calculateDirection(rowIndex: Int, columnIndex: Int): Direction = {
-    val targetX = rowIndex
-    val targetY = columnIndex
+    val targetX = columnIndex
+    val targetY = rowIndex
 
     val currentPos = activePlayer.position
     if (currentPos.x > targetX) {
-      if (currentPos.y > targetY) {
+      if (currentPos.y < targetY) {
         return Direction.LEFT_DOWN
-      } else if (currentPos.y < targetY) {
+      } else if (currentPos.y > targetY) {
         return Direction.LEFT_UP
       } else {
         return Direction.LEFT
       }
     } else if (currentPos.x < targetX) {
-      if (currentPos.y > targetY) {
+      if (currentPos.y < targetY) {
         return Direction.RIGHT_DOWN
-      } else if (currentPos.y < targetY) {
+      } else if (currentPos.y > targetY) {
         return Direction.RIGHT_UP
       } else {
         return Direction.RIGHT
       }
     } else {
-      if (currentPos.y > targetY) {
+      if (currentPos.y < targetY) {
         return Direction.DOWN
       } else {
         return Direction.UP
