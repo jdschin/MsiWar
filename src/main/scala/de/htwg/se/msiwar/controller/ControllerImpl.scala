@@ -14,7 +14,7 @@ class ControllerImpl(model: GameModel) extends Controller {
   def updateTurn: Unit = {
     val winnerId = model.winnerId
     if (winnerId.isDefined) {
-      publish(PlayerWon(winnerId.get))
+      publish(PlayerWon(winnerId.get, model.wonImagePath))
     } else if (model.turnOver) {
       model.nextTurn
       publish(TurnStarted(model.activePlayerNumber))

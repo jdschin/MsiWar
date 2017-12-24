@@ -26,10 +26,6 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
     }
   }
 
-  add(menuBar, BorderPanel.Position.North)
-  add(gridPanel, BorderPanel.Position.Center)
-  add(actionPanel, BorderPanel.Position.South)
-
   listenTo(controller)
   reactions += {
     case e: CellChanged => {
@@ -47,10 +43,24 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       })
     }
     case e: PlayerWon => {
-      // TODO display game won message
+      _contents.clear()
+
+      add(menuBar, BorderPanel.Position.North)
+      _contents += new Label{
+        icon = new ImageIcon(e.wonImagePath)
+      }
+      revalidate()
+      repaint()
     }
   }
+  createContent
   fillBoard
+
+  private def createContent: Unit = {
+    add(menuBar, BorderPanel.Position.North)
+    add(gridPanel, BorderPanel.Position.Center)
+    add(actionPanel, BorderPanel.Position.South)
+  }
 
   private def fillBoard: Unit = {
     for (i <- 0 until gridPanel.rows) {

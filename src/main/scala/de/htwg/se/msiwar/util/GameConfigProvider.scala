@@ -18,14 +18,14 @@ class GameConfigProvider(configFilePath: String) {
   val colCount = 9
 
   // Setup actions
-  val moveAction = Action(1, "Panzer bewegen", "src/main/resources/images/move_action.png", "move.wav", 1, 1, MOVE, 0)
-  val shootAction = Action(2, "Schießen", "src/main/resources/images/attack_action.png", "shoot.wav", 1, 3, SHOOT, 2)
-  val waitAction = Action(3, "Warten", "src/main/resources/images/wait_action.png", "shoot.wav", 1, 1, WAIT, 2)
+  val moveAction = Action(1, "Panzer bewegen", "src/main/resources/images/action_move.png", "move.wav", 1, 1, MOVE, 0)
+  val shootAction = Action(2, "Schießen", "src/main/resources/images/action_attack.png", "shoot.wav", 1, 3, SHOOT, 2)
+  val waitAction = Action(3, "Warten", "src/main/resources/images/action_wait.png", "shoot.wav", 1, 1, WAIT, 2)
   val actions = List(moveAction, shootAction, waitAction)
 
   // Setup players
-  val player1 = PlayerObject("Spieler1", "src/main/resources/images/light_tank_red.png", Position(1, 2), 1, 3, 3, actions)
-  val player2 = PlayerObject("Spieler2", "src/main/resources/images/medium_tank_blue.png", Position(7, 6), 2, 3, 3, actions)
+  val player1 = PlayerObject("Spieler1", "src/main/resources/images/light_tank_red.png", Position(1, 2), 1, "src/main/resources/images/background_won_red.png", 3, 3, actions)
+  val player2 = PlayerObject("Spieler2", "src/main/resources/images/medium_tank_blue.png", Position(7, 6), 2, "src/main/resources/images/background_won_blue.png", 3, 3, actions)
 
   val wood1 = BlockObject("B", "src/main/resources/images/block_wood.png", Position(0, 0))
   val wood2 = BlockObject("B", "src/main/resources/images/block_wood.png", Position(0, 1))
