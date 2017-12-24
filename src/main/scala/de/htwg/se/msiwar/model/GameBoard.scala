@@ -1,5 +1,7 @@
 package de.htwg.se.msiwar.model
 
+import de.htwg.se.msiwar.model.ActionType.ActionType
+
 case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
   private val board = Array.ofDim[GameObject](rows, columns)
 
@@ -115,8 +117,28 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     Option.empty
   }
 
-  private def addPosToListIfValid(position: Position, basePosition: Position, cellList: List[(Int, Int)]): List[(Int, Int)] = {
-    if (isInBound(position) && position != basePosition && gameObjectAt(position).isEmpty) {
+  private def addPosToListIfValid(position: Position, basePosition: Position, cellList: List[(Int, Int)], actionType: ActionType): List[(Int, Int)] = {
+    var addToList = false
+    if (isInBound(position)) {
+      val gameObjectOpt = gameObjectAt(position)
+      actionType match {
+        case t: ActionType.SHOOT.type => {
+          var occupiedByPlayer = false
+          if (gameObjectOpt.isDefined && gameObjectOpt.get.isInstanceOf[PlayerObject]) {
+            occupiedByPlayer = true
+          }
+          if (position != basePosition && (gameObjectOpt.isEmpty || occupiedByPlayer)) {
+            addToList = true
+          }
+        }
+        case t: ActionType.MOVE.type => {
+          if (position != basePosition && gameObjectOpt.isEmpty) {
+            addToList = true
+          }
+        }
+      }
+    }
+    if (addToList) {
       ((position.x, position.y)) :: cellList
     } else {
       cellList
@@ -130,44 +152,45 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     action.actionType match {
       case a: ActionType.WAIT.type => cellsInRangeList = ((position.x, position.y)) :: cellsInRangeList
       case _ => {
+        // TODO: check if there is somwthing in the way
         loopForwards(position.x, position.x + range + 1, x => {
           val pos = Position(x, position.y)
-          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
+          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
         })
         loopForwards(position.y, position.y + range + 1, y => {
           val pos = Position(position.x, y)
-          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
+          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
         })
         loopBackwards(position.y, position.y - range - 1, y => {
           val pos = Position(position.x, y)
-          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
+          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
         })
         loopBackwards(position.x, position.x - range - 1, x => {
           val pos = Position(x, position.y)
-          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
+          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
         })
         loopForwards(position.x, position.x + range + 1, x => {
           loopBackwards(position.y, position.y - range - 1, y => {
             val pos = Position(x, y)
-            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
+            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
           })
         })
         loopForwards(position.y, position.y + range + 1, y => {
           loopBackwards(position.x, position.x - range - 1, x => {
             val pos = Position(x, y)
-            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
+            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
           })
         })
         loopForwards(position.x, position.x + range + 1, x => {
           loopForwards(position.y, position.y + range + 1, y => {
             val pos = Position(x, y)
-            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
+            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
           })
         })
         loopBackwards(position.x, position.x - range - 1, x => {
           loopBackwards(position.y, position.y - range - 1, y => {
             val pos = Position(x, y)
-            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList)
+            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
           })
         })
       }
