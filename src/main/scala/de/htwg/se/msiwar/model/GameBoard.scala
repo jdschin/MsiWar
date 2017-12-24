@@ -5,6 +5,16 @@ import de.htwg.se.msiwar.model.ActionType.ActionType
 case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
   private val board = Array.ofDim[GameObject](rows, columns)
 
+  private val incXandIncY = (x: Int, y: Int) => (x + 1, y + 1)
+  private val decXandDecY = (x: Int, y: Int) => (x - 1, y - 1)
+  private val incXandDecY = (x: Int, y: Int) => (x + 1, y - 1)
+  private val decXandIncY = (x: Int, y: Int) => (x - 1, y + 1)
+  private val incX = (x: Int, y: Int) => (x + 1, y)
+  private val incY = (x: Int, y: Int) => (x, y + 1)
+  private val decX = (x: Int, y: Int) => (x - 1, y)
+  private val decY = (x: Int, y: Int) => (x, y - 1)
+  private val changeNothing = (x: Int, y: Int) => (x, y)
+
   gameObjects.foreach(placeGameObject(_))
 
   def placeGameObject(gameObject: GameObject) = {
@@ -37,97 +47,76 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
   }
 
   def collisionObject(from: Position, to: Position): Option[GameObject] = {
-    // TODO: refactor
-    if (!isInBound(to) || !isInBound(from)) {
-      return Option.empty
+    var collisionObject: Option[GameObject] = Option.empty
+    if (isInBound(to) && isInBound(from)) {
+      var countFunction = changeNothing
+      var range = 0
+
+      if (rows >= columns) {
+        range = rows
+      } else {
+        range = columns
+      }
+
+      if (from.x < to.x && from.y < to.y) {
+        // RIGHT_UP
+        countFunction = incXandIncY
+      } else if (from.x < to.x && from.y > to.y) {
+        // RIGHT_DOWN
+        countFunction = incXandDecY
+      } else if (from.x > to.x && from.y < to.y) {
+        // LEFT_UP
+        countFunction = decXandIncY
+      } else if (from.x > to.x && from.y > to.y) {
+        // LEFT_DOWN
+        countFunction = decXandDecY
+      } else if (from.x < to.x) {
+        // RIGHT
+        countFunction = incX
+      } else if (from.x > to.x) {
+        // LEFT
+        countFunction = decX
+      } else if (from.y < to.y) {
+        // UP
+        countFunction = incY
+      } else if (from.y > to.y) {
+        // DOWN
+        countFunction = decY
+      }
+
+      loopRange(from, range, countFunction, (x, y) => {
+        val pos = Position(x, y)
+        if (isInBound(pos)) {
+          val gameObject = gameObjectAt(pos)
+          if (gameObject.isDefined) {
+            collisionObject = Option(gameObject.get)
+          }
+        }
+      }
+      )
     }
-    if (from.x < to.x && from.y < to.y) {
-      // RIGHT_UP
-      for (x <- from.x + 1 until to.x + 1) {
-        for (y <- from.y + 1 until to.y + 1) {
-          val gameObject = gameObjectAt(Position(x, y))
-          if (gameObject.isDefined) {
-            return Option(gameObject.get)
-          }
-        }
-      }
-    } else if (from.x < to.x && from.y > to.y) {
-      // RIGHT_DOWN
-      for (x <- from.x + 1 until to.x + 1) {
-        for (y <- from.y - 1 until to.y - 1 by -1) {
-          val gameObject = gameObjectAt(Position(x, y))
-          if (gameObject.isDefined) {
-            return Option(gameObject.get)
-          }
-        }
-      }
-    } else if (from.x > to.x && from.y < to.y) {
-      // LEFT_UP
-      for (x <- from.x - 1 until to.x - 1 by -1) {
-        for (y <- from.y + 1 until to.y + 1) {
-          val gameObject = gameObjectAt(Position(x, y))
-          if (gameObject.isDefined) {
-            return Option(gameObject.get)
-          }
-        }
-      }
-    } else if (from.x > to.x && from.y > to.y) {
-      // LEFT_DOWN
-      for (x <- from.x - 1 until to.x - 1 by -1) {
-        for (y <- from.y - 1 until to.y - 1 by -1) {
-          val gameObject = gameObjectAt(Position(x, y))
-          if (gameObject.isDefined) {
-            return Option(gameObject.get)
-          }
-        }
-      }
-    } else if (from.x < to.x) {
-      // RIGHT
-      for (x <- from.x + 1 until to.x + 1) {
-        val gameObject = gameObjectAt(Position(x, from.y))
-        if (gameObject.isDefined) {
-          return Option(gameObject.get)
-        }
-      }
-    } else if (from.x > to.x) {
-      // LEFT
-      for (x <- from.x - 1 until to.x - 1 by -1) {
-        val gameObject = gameObjectAt(Position(x, from.y))
-        if (gameObject.isDefined) {
-          return Option(gameObject.get)
-        }
-      }
-    } else if (from.y < to.y) {
-      // UP
-      for (y <- from.y + 1 until to.y + 1) {
-        val gameObject = gameObjectAt(Position(from.x, y))
-        if (gameObject.isDefined) {
-          return Option(gameObject.get)
-        }
-      }
-    } else if (from.y > to.y) {
-      // DOWN
-      for (y <- from.y - 1 until to.y - 1 by -1) {
-        val gameObject = gameObjectAt(Position(from.x, y))
-        if (gameObject.isDefined) {
-          return Option(gameObject.get)
-        }
-      }
-    }
-    Option.empty
+
+    collisionObject
   }
 
   private def addPosToListIfValid(position: Position, basePosition: Position, cellList: List[(Int, Int)], actionType: ActionType): List[(Int, Int)] = {
     var addToList = false
     if (isInBound(position)) {
       val gameObjectOpt = gameObjectAt(position)
+      val xOffSet = math.abs(position.x - basePosition.x)
+      val yOffSet = math.abs(position.y - basePosition.y)
+      var collisionObjectInBetween = false
+      if (xOffSet > 1 || yOffSet > 1) {
+        collisionObjectInBetween = collisionObject(basePosition, position).isDefined
+      }
+
       actionType match {
         case t: ActionType.SHOOT.type => {
           var occupiedByPlayer = false
           if (gameObjectOpt.isDefined && gameObjectOpt.get.isInstanceOf[PlayerObject]) {
             occupiedByPlayer = true
           }
-          if (position != basePosition && (gameObjectOpt.isEmpty || occupiedByPlayer)) {
+          if (position != basePosition && (gameObjectOpt.isEmpty || occupiedByPlayer) && !collisionObjectInBetween) {
             addToList = true
           }
         }
@@ -152,45 +141,11 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     action.actionType match {
       case a: ActionType.WAIT.type => cellsInRangeList = ((position.x, position.y)) :: cellsInRangeList
       case _ => {
-        // TODO: check if there is somwthing in the way
-        loopForwards(position.x, position.x + range + 1, x => {
-          val pos = Position(x, position.y)
-          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
-        })
-        loopForwards(position.y, position.y + range + 1, y => {
-          val pos = Position(position.x, y)
-          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
-        })
-        loopBackwards(position.y, position.y - range - 1, y => {
-          val pos = Position(position.x, y)
-          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
-        })
-        loopBackwards(position.x, position.x - range - 1, x => {
-          val pos = Position(x, position.y)
-          cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
-        })
-        loopForwards(position.x, position.x + range + 1, x => {
-          loopBackwards(position.y, position.y - range - 1, y => {
-            val pos = Position(x, y)
-            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
-          })
-        })
-        loopForwards(position.y, position.y + range + 1, y => {
-          loopBackwards(position.x, position.x - range - 1, x => {
-            val pos = Position(x, y)
-            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
-          })
-        })
-        loopForwards(position.x, position.x + range + 1, x => {
-          loopForwards(position.y, position.y + range + 1, y => {
-            val pos = Position(x, y)
-            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
-          })
-        })
-        loopBackwards(position.x, position.x - range - 1, x => {
-          loopBackwards(position.y, position.y - range - 1, y => {
-            val pos = Position(x, y)
-            cellsInRangeList = addPosToListIfValid(pos, position, cellsInRangeList, action.actionType)
+        val loopFunctions = incX :: incY :: decX :: decY :: incXandIncY :: decXandDecY :: incXandDecY :: decXandIncY :: Nil
+
+        loopFunctions.foreach(f => {
+          loopRange(position, range, f, (x, y) => {
+            cellsInRangeList = addPosToListIfValid(Position(x, y), position, cellsInRangeList, action.actionType)
           })
         })
       }
@@ -198,15 +153,14 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     cellsInRangeList
   }
 
-  private def loopBackwards(high: Int, low: Int, f: Int => Unit): Unit = {
-    for (x <- high until low by -1) {
-      f(x)
-    }
-  }
-
-  private def loopForwards(low: Int, high: Int, f: Int => Unit): Unit = {
-    for (x <- low until high) {
-      f(x)
+  private def loopRange(basePosition: Position, range: Int, count: (Int, Int) => (Int, Int), f: (Int, Int) => Unit): Unit = {
+    var x = basePosition.x
+    var y = basePosition.y
+    for (_ <- 0 until range) {
+      val countResult = count(x, y)
+      f(countResult._1, countResult._2)
+      x = countResult._1
+      y = countResult._2
     }
   }
 }
