@@ -31,11 +31,6 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     player(playerNumber).actions.map(_.id)
   }
 
-  private def player(playerNumber: Int): PlayerObject = {
-    val foundPlayer = gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == playerNumber)
-    foundPlayer.get
-  }
-
   override def actionDescription(actionId: Int): String = {
     val foundAction = actions.find(_.id == actionId)
     if (foundAction.isDefined) {
@@ -43,6 +38,11 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     } else {
       ""
     }
+  }
+
+  private def actions: List[Action] = {
+    val players = gameObjects.collect({ case s: PlayerObject => s })
+    players.flatMap(_.actions)
   }
 
   override def actionIconPath(actionId: Int): Option[String] = {
@@ -54,9 +54,8 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     }
   }
 
-  private def actions: List[Action] = {
-    val players = gameObjects.collect({ case s: PlayerObject => s })
-    players.flatMap(_.actions)
+  override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
+    executeAction(actionId, calculateDirection(rowIndex, columnIndex))
   }
 
   override def executeAction(actionId: Int, direction: Direction): Unit = {
@@ -103,12 +102,61 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     }
   }
 
+  def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int): Position = {
+    var newPosition: Option[Position] = None
+    direction match {
+      case Direction.UP => newPosition = Some(Position(oldPosition.x, oldPosition.y - range))
+      case Direction.DOWN => newPosition = Some(Position(oldPosition.x, oldPosition.y + range))
+      case Direction.LEFT => newPosition = Some(Position(oldPosition.x - range, oldPosition.y))
+      case Direction.RIGHT => newPosition = Some(Position(oldPosition.x + range, oldPosition.y))
+      case Direction.LEFT_UP => newPosition = Some(Position(oldPosition.x - range, oldPosition.y - range))
+      case Direction.LEFT_DOWN => newPosition = Some(Position(oldPosition.x - range, oldPosition.y + range))
+      case Direction.RIGHT_UP => newPosition = Some(Position(oldPosition.x + range, oldPosition.y - range))
+      case Direction.RIGHT_DOWN => newPosition = Some(Position(oldPosition.x + range, oldPosition.y + range))
+    }
+    newPosition.get
+  }
+
+  private def calculateDirection(rowIndex: Int, columnIndex: Int): Direction = {
+    val targetX = rowIndex
+    val targetY = columnIndex
+
+    val currentPos = activePlayer.position
+    if (currentPos.x > targetX) {
+      if (currentPos.y > targetY) {
+        return Direction.LEFT_DOWN
+      } else if (currentPos.y < targetY) {
+        return Direction.LEFT_UP
+      } else {
+        return Direction.LEFT
+      }
+    } else if (currentPos.x < targetX) {
+      if (currentPos.y > targetY) {
+        return Direction.RIGHT_DOWN
+      } else if (currentPos.y < targetY) {
+        return Direction.RIGHT_UP
+      } else {
+        return Direction.RIGHT
+      }
+    } else {
+      if (currentPos.y > targetY) {
+        return Direction.DOWN
+      } else {
+        return Direction.UP
+      }
+    }
+  }
+
   override def lastExecutedActionId: Option[Int] = {
     if (lastExecutedAction.isDefined) {
       Option(lastExecutedAction.get.id)
     } else {
       Option.empty[Int]
     }
+  }
+
+  override def canExecuteAction(actionId: Int, rowIndex: Int, columnIndex: Int): Boolean = {
+    canExecuteAction(actionId, calculateDirection(rowIndex, columnIndex))
   }
 
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
@@ -134,19 +182,13 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     result
   }
 
-  def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int): Position = {
-    var newPosition: Option[Position] = None
-    direction match {
-      case Direction.UP => newPosition = Some(Position(oldPosition.x, oldPosition.y - range))
-      case Direction.DOWN => newPosition = Some(Position(oldPosition.x, oldPosition.y + range))
-      case Direction.LEFT => newPosition = Some(Position(oldPosition.x - range, oldPosition.y))
-      case Direction.RIGHT => newPosition = Some(Position(oldPosition.x + range, oldPosition.y))
-      case Direction.LEFT_UP => newPosition = Some(Position(oldPosition.x - range, oldPosition.y - range))
-      case Direction.LEFT_DOWN => newPosition = Some(Position(oldPosition.x - range, oldPosition.y + range))
-      case Direction.RIGHT_UP => newPosition = Some(Position(oldPosition.x + range, oldPosition.y - range))
-      case Direction.RIGHT_DOWN => newPosition = Some(Position(oldPosition.x + range, oldPosition.y + range))
+  override def winnerId: Option[Int] = {
+    val playersAliveIds = gameObjects.collect({ case p: PlayerObject => p }).filter(_.hasHealthPointsLeft).map(_.playerNumber)
+    if (playersAliveIds.length == 1) {
+      Option(playersAliveIds(0))
+    } else {
+      Option.empty
     }
-    newPosition.get
   }
 
   override def nextTurn: Int = {
@@ -171,6 +213,11 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
       }
     }
     turnCounter
+  }
+
+  private def player(playerNumber: Int): PlayerObject = {
+    val foundPlayer = gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == playerNumber)
+    foundPlayer.get
   }
 
   override def activePlayerNumber: Int = {
@@ -241,16 +288,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   }
 
   override def wonImagePath: String = {
-   activePlayer.wonImagePath
-  }
-
-  override def winnerId: Option[Int] = {
-    val playersAliveIds = gameObjects.collect({ case p: PlayerObject => p }).filter(_.hasHealthPointsLeft).map(_.playerNumber)
-    if (playersAliveIds.length == 1) {
-      Option(playersAliveIds(0))
-    } else {
-      Option.empty
-    }
+    activePlayer.wonImagePath
   }
 
   override def activePlayerActionPoints: Int = {

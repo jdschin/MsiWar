@@ -23,7 +23,9 @@ trait Controller extends Publisher{
   def cellsInRange(actionId: Option[Int]) : Unit
 
   def executeAction(actionId: Int, direction:Direction) : Unit
+  def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int) : Unit
   def canExecuteAction(actionId: Int, direction:Direction) : Boolean
+  def canExecuteAction(actionId: Int, rowIndex: Int, columnIndex: Int) : Boolean
 
   def actionIds(playerNumber: Int) : List[Int]
   def actionDescription(actionId: Int) : String

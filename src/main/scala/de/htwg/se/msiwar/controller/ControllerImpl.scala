@@ -11,6 +11,26 @@ class ControllerImpl(model: GameModel) extends Controller {
     case e: ActivePlayerStatsChanged => publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
   }
 
+  override def cellContentToText(rowIndex: Int, columnIndex: Int) = {
+    model.cellContentToText(rowIndex, columnIndex)
+  }
+
+  override def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String] = {
+    model.cellContentImagePath(rowIndex, columnIndex)
+  }
+
+  override def executeAction(actionId: Int, direction: Direction) = {
+    model.executeAction(actionId, direction)
+    updateTurn
+    cellsInRange(model.lastExecutedActionId)
+  }
+
+  override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int) = {
+    model.executeAction(actionId, rowIndex, columnIndex)
+    updateTurn
+    cellsInRange(model.lastExecutedActionId)
+  }
+
   def updateTurn: Unit = {
     val winnerId = model.winnerId
     if (winnerId.isDefined) {
@@ -21,14 +41,6 @@ class ControllerImpl(model: GameModel) extends Controller {
     }
   }
 
-  override def cellContentToText(rowIndex: Int, columnIndex: Int) = {
-    model.cellContentToText(rowIndex, columnIndex)
-  }
-
-  override def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String] = {
-    model.cellContentImagePath(rowIndex, columnIndex)
-  }
-
   override def cellsInRange(actionId: Option[Int]): Unit = {
     publish(CellsInRange(convertToUiIndex(model.cellsInRange(actionId))))
   }
@@ -37,14 +49,12 @@ class ControllerImpl(model: GameModel) extends Controller {
     indexes.map((s) => s.swap)
   }
 
-  override def executeAction(actionId: Int, direction: Direction) = {
-    model.executeAction(actionId, direction)
-    updateTurn
-    cellsInRange(model.lastExecutedActionId)
-  }
-
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
     model.canExecuteAction(actionId, direction)
+  }
+
+  override def canExecuteAction(actionId: Int, rowIndex: Int, columnIndex: Int): Boolean = {
+    model.canExecuteAction(actionId, rowIndex, columnIndex)
   }
 
   override def actionIds(playerNumber: Int): List[Int] = {

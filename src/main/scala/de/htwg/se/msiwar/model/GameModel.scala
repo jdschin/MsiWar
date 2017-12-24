@@ -24,7 +24,9 @@ trait GameModel extends Publisher {
   def wonImagePath: String
 
   def executeAction(actionId: Int, direction:Direction): Unit
+  def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit
   def canExecuteAction(actionId: Int, direction: Direction) : Boolean
+  def canExecuteAction(actionId: Int, rowIndex: Int, columnIndex: Int) : Boolean
   def lastExecutedActionId: Option[Int]
 
   def activePlayerNumber: Int
