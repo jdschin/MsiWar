@@ -69,13 +69,13 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
       val actionToExecute = actionForId.get
       actionToExecute.actionType match {
         case MOVE => {
-          val newPosition = calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+          val newPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
           val oldPosition = activePlayer.position.copy()
           gameBoard.moveGameObject(activePlayer, newPosition)
           publish(GameBoardChanged(List((newPosition.y, newPosition.x), (oldPosition.y, oldPosition.x))))
         }
         case SHOOT => {
-          val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
+          val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
           if (collisionObjectOpt.isDefined) {
             val collisionObject = collisionObjectOpt.get
             if (collisionObject.isInstanceOf[PlayerObject]) {
@@ -89,7 +89,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
             }
             publish(AttackResult(collisionObject.position.y, collisionObject.position.x, hit = true, attackImagePath, attackSoundPath))
           } else {
-            val targetPosition = calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+            val targetPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
             publish(AttackResult(targetPosition.y, targetPosition.x, hit = false, attackImagePath, attackSoundPath))
           }
         }
@@ -110,20 +110,6 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     }
   }
 
-  def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int): Position = {
-    var newPosition: Option[Position] = None
-    direction match {
-      case Direction.UP => newPosition = Some(Position(oldPosition.x, oldPosition.y - range))
-      case Direction.DOWN => newPosition = Some(Position(oldPosition.x, oldPosition.y + range))
-      case Direction.LEFT => newPosition = Some(Position(oldPosition.x - range, oldPosition.y))
-      case Direction.RIGHT => newPosition = Some(Position(oldPosition.x + range, oldPosition.y))
-      case Direction.LEFT_UP => newPosition = Some(Position(oldPosition.x - range, oldPosition.y - range))
-      case Direction.LEFT_DOWN => newPosition = Some(Position(oldPosition.x - range, oldPosition.y + range))
-      case Direction.RIGHT_UP => newPosition = Some(Position(oldPosition.x + range, oldPosition.y - range))
-      case Direction.RIGHT_DOWN => newPosition = Some(Position(oldPosition.x + range, oldPosition.y + range))
-    }
-    newPosition.get
-  }
 
   private def calculateDirection(rowIndex: Int, columnIndex: Int): Direction = {
     val targetX = columnIndex
@@ -180,7 +166,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
       }
       actionToExecute.actionType match {
         case MOVE =>
-          val newPosition = calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+          val newPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
           result = gameBoard.isInBound(newPosition) &&
             gameBoard.gameObjectAt(newPosition).isEmpty
 
@@ -229,7 +215,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
 
   override def turnCounter: Int = turnNumber
 
-  override def turnOver : Boolean = {
+  override def turnOver: Boolean = {
     !activePlayer.hasActionPointsLeft
   }
 

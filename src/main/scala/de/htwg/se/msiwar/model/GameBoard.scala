@@ -1,19 +1,12 @@
 package de.htwg.se.msiwar.model
 
 import de.htwg.se.msiwar.model.ActionType.ActionType
+import de.htwg.se.msiwar.util.Direction
+import de.htwg.se.msiwar.util.Direction.Direction
+import de.htwg.se.msiwar.util.IterationFunction._
 
 case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
   private val board = Array.ofDim[GameObject](rows, columns)
-
-  private val incXandIncY = (x: Int, y: Int) => (x + 1, y + 1)
-  private val decXandDecY = (x: Int, y: Int) => (x - 1, y - 1)
-  private val incXandDecY = (x: Int, y: Int) => (x + 1, y - 1)
-  private val decXandIncY = (x: Int, y: Int) => (x - 1, y + 1)
-  private val incX = (x: Int, y: Int) => (x + 1, y)
-  private val incY = (x: Int, y: Int) => (x, y + 1)
-  private val decX = (x: Int, y: Int) => (x - 1, y)
-  private val decY = (x: Int, y: Int) => (x, y - 1)
-  private val changeNothing = (x: Int, y: Int) => (x, y)
 
   gameObjects.foreach(placeGameObject(_))
 
@@ -84,7 +77,7 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
         countFunction = decY
       }
 
-      loopRange(from, range, countFunction, (x, y) => {
+      performOnPositionNTimes((from.x, from.y), range, countFunction, (x, y) => {
         val pos = Position(x, y)
         if (isInBound(pos)) {
           val gameObject = gameObjectAt(pos)
@@ -144,7 +137,7 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
         val loopFunctions = incX :: incY :: decX :: decY :: incXandIncY :: decXandDecY :: incXandDecY :: decXandIncY :: Nil
 
         loopFunctions.foreach(f => {
-          loopRange(position, range, f, (x, y) => {
+          performOnPositionNTimes((position.x, position.y), range, f, (x, y) => {
             cellsInRangeList = addPosToListIfValid(Position(x, y), position, cellsInRangeList, action.actionType)
           })
         })
@@ -153,14 +146,27 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     cellsInRangeList
   }
 
-  private def loopRange(basePosition: Position, range: Int, count: (Int, Int) => (Int, Int), f: (Int, Int) => Unit): Unit = {
-    var x = basePosition.x
-    var y = basePosition.y
-    for (_ <- 0 until range) {
-      val countResult = count(x, y)
-      f(countResult._1, countResult._2)
-      x = countResult._1
-      y = countResult._2
+
+  def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int): Position = {
+    var newPosition: Option[Position] = None
+    var modifyPosition = changeNothing
+    direction match {
+      case Direction.UP => modifyPosition = decY
+      case Direction.DOWN => modifyPosition = incY
+      case Direction.LEFT => modifyPosition = decX
+      case Direction.RIGHT => modifyPosition = incX
+      case Direction.LEFT_UP => modifyPosition = decXandDecY
+      case Direction.LEFT_DOWN => modifyPosition = decXandIncY
+      case Direction.RIGHT_UP => modifyPosition = incXandDecY
+      case Direction.RIGHT_DOWN => modifyPosition = incXandIncY
     }
+    performOnPositionNTimes((oldPosition.x, oldPosition.y), range, modifyPosition, (x, y) => {
+      val pos = Position(x, y)
+      if (isInBound(pos)) {
+        // The last position which is in bound
+        newPosition = Option(pos)
+      }
+    })
+    newPosition.get
   }
 }
