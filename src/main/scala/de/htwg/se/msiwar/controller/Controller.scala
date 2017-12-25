@@ -10,6 +10,7 @@ case class CellsInRange(rowColumnIndexes: List[(Int, Int)]) extends Event
 case class TurnStarted(playerNumber: Int) extends Event
 case class PlayerWon(playerNumber: Int, wonImagePath: String) extends Event
 case class PlayerStatsChanged(playerNumber: Int, newActionPoints: Int) extends Event
+case class AttackActionResult(rowIndex: Int, columnIndex: Int, hit: Boolean, attackImagePath: String) extends Event
 
 trait Controller extends Publisher{
   def cellContentToText(rowIndex: Int, columnIndex: Int) : String

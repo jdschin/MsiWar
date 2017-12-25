@@ -3,16 +3,17 @@ package de.htwg.se.msiwar.aview.swing
 
 import java.awt.Dimension
 import java.io.File
+import java.util.concurrent.{ScheduledThreadPoolExecutor, TimeUnit}
 import javax.imageio.ImageIO
-import javax.swing.ImageIcon
+import javax.swing.{ImageIcon, SwingUtilities}
 
 import de.htwg.se.msiwar.controller.{Controller, _}
-import de.htwg.se.msiwar.util.Direction
 
 import scala.swing.event.MousePressed
 import scala.swing.{BorderPanel, Graphics2D, GridPanel, Label, Reactor}
 
 class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
+  private val poolExecutor = new ScheduledThreadPoolExecutor(1)
   private val backgroundImage = ImageIO.read(new File(controller.levelBackgroundImagePath))
   private val labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
   private val actionPanel = new SwingActionBarPanel(controller)
@@ -28,61 +29,74 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
 
   listenTo(controller)
   reactions += {
-    case e: CellChanged => {
+    case e: CellChanged =>
       e.rowColumnIndexes.foreach(t => {
         updateLabel(t._1, t._2)
       })
-    }
-    case e: TurnStarted => {
+    case e: TurnStarted =>
       actionPanel.updateActionBar(e.playerNumber)
-    }
-    case e: CellsInRange => {
-      clearCellsInRange
+
+    case e: CellsInRange =>
+      clearCellsInRange()
       e.rowColumnIndexes.foreach(t => {
         labels(t._1)(t._2).border = new javax.swing.border.LineBorder(java.awt.Color.GREEN, 4, true)
       })
-    }
-    case e: PlayerWon => {
+    case e: PlayerWon =>
       _contents.clear()
 
       add(menuBar, BorderPanel.Position.North)
-      _contents += new Label{
+      _contents += new Label {
         icon = new ImageIcon(e.wonImagePath)
       }
       revalidate()
       repaint()
-    }
-  }
-  createContent
-  fillBoard
 
-  private def createContent: Unit = {
+    case e: AttackActionResult =>
+      updateLabelTemporary(e.rowIndex, e.columnIndex, e.attackImagePath, 1)
+  }
+  createContent()
+  fillBoard()
+
+  private def createContent(): Unit = {
     add(menuBar, BorderPanel.Position.North)
     add(gridPanel, BorderPanel.Position.Center)
     add(actionPanel, BorderPanel.Position.South)
   }
 
-  private def fillBoard: Unit = {
+  private def fillBoard(): Unit = {
     for (i <- 0 until gridPanel.rows) {
       for (j <- 0 until gridPanel.columns) {
         labels(i)(j) = new Label {
           border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
           listenTo(mouse.clicks)
           reactions += {
-            case e: MousePressed => {
+            case e: MousePressed =>
               val activeActionId = actionPanel.activeActionId
               if (activeActionId.isDefined && controller.canExecuteAction(activeActionId.get, i, j)) {
                 controller.executeAction(actionPanel.activeActionId.get, i, j)
               } else {
                 // TODO play sound
               }
-            }
           }
         }
         gridPanel.contents += labels(i)(j)
         updateLabel(i, j)
       }
     }
+  }
+
+  private def updateLabelTemporary(rowIndex: Int, columnIndex: Int, pathOfImageToShow: String, seconds: Int): Unit = {
+    val oldIcon = labels(rowIndex)(columnIndex).icon
+    labels(rowIndex)(columnIndex).icon = new ImageIcon(pathOfImageToShow)
+    val task = new Runnable {
+      def run(): Unit = {
+        val uiTask = new Runnable {
+          def run(): Unit = labels(rowIndex)(columnIndex).icon = oldIcon
+        }
+        SwingUtilities.invokeLater(uiTask)
+      }
+    }
+    poolExecutor.schedule(task, seconds, TimeUnit.SECONDS)
   }
 
   private def updateLabel(rowIndex: Int, columnIndex: Int): Unit = {
@@ -96,7 +110,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
     label.repaint()
   }
 
-  private def clearCellsInRange: Unit = {
+  private def clearCellsInRange(): Unit = {
     for (i <- 0 until gridPanel.rows) {
       for (j <- 0 until gridPanel.columns) {
         labels(i)(j).border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)

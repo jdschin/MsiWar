@@ -6,7 +6,7 @@ import de.htwg.se.msiwar.util.Direction.Direction
 
 import scala.util.control.Breaks
 
-case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject], levelBackgroundImagePath: String, actionbarBackgroundImagePath: String) extends GameModel {
+case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject], levelBackgroundImagePath: String, actionbarBackgroundImagePath: String, attackImagePath: String) extends GameModel {
   private var gameBoard = GameBoard(numRows, numCols, gameObjects)
   private var activePlayer = player(1)
   private var turnNumber = 1
@@ -29,6 +29,11 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
 
   override def actionIdsForPlayer(playerNumber: Int): List[Int] = {
     player(playerNumber).actions.map(_.id)
+  }
+
+  private def player(playerNumber: Int): PlayerObject = {
+    val foundPlayer = gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == playerNumber)
+    foundPlayer.get
   }
 
   override def actionDescription(actionId: Int): String = {
@@ -62,30 +67,33 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     val actionForId = activePlayer.actions.find(_.id == actionId)
     if (actionForId.isDefined) {
       val actionToExecute = actionForId.get
-
       actionToExecute.actionType match {
         case MOVE => {
-          val newPosition = calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range);
+          val newPosition = calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
           val oldPosition = activePlayer.position.copy()
           gameBoard.moveGameObject(activePlayer, newPosition)
           publish(GameBoardChanged(List((newPosition.y, newPosition.x), (oldPosition.y, oldPosition.x))))
         }
         case SHOOT => {
           val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
+          if (collisionObjectOpt.isDefined) {
+            val collisionObject = collisionObjectOpt.get
+            if (collisionObject.isInstanceOf[PlayerObject]) {
+              val playerCollisionObject = collisionObject.asInstanceOf[PlayerObject]
+              playerCollisionObject.currentHealthPoints -= actionToExecute.damage
 
-          if (collisionObjectOpt.isDefined && collisionObjectOpt.get.isInstanceOf[PlayerObject]) {
-
-            val playerCollisionObject = collisionObjectOpt.get.asInstanceOf[PlayerObject]
-            playerCollisionObject.currentHealthPoints -= actionToExecute.damage
-
-            val playerRemoved = removePlayerIfDead(playerCollisionObject)
-
-            if (playerRemoved) {
-              publish(GameBoardChanged(List((playerCollisionObject.position.y, playerCollisionObject.position.x))))
+              val playerRemoved = removePlayerIfDead(playerCollisionObject)
+              if (playerRemoved) {
+                publish(GameBoardChanged(List((playerCollisionObject.position.y, playerCollisionObject.position.x))))
+              }
             }
+            publish(AttackResult(collisionObject.position.y, collisionObject.position.x, hit = true, attackImagePath))
+          } else {
+            val targetPosition = calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+            publish(AttackResult(targetPosition.y, targetPosition.x, hit = false, attackImagePath))
           }
         }
-        case WAIT => {}
+        case WAIT =>
       }
       activePlayer.currentActionPoints -= actionToExecute.actionPoints
       lastExecutedAction = Option(actionToExecute)
@@ -171,11 +179,11 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
         return false
       }
       actionToExecute.actionType match {
-        case MOVE => {
+        case MOVE =>
           val newPosition = calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
           result = gameBoard.isInBound(newPosition) &&
             gameBoard.gameObjectAt(newPosition).isEmpty
-        }
+
         case _ => result = true
       }
     }
@@ -185,7 +193,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   override def winnerId: Option[Int] = {
     val playersAliveIds = gameObjects.collect({ case p: PlayerObject => p }).filter(_.hasHealthPointsLeft).map(_.playerNumber)
     if (playersAliveIds.length == 1) {
-      Option(playersAliveIds(0))
+      Option(playersAliveIds.head)
     } else {
       Option.empty
     }
@@ -215,18 +223,13 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     turnCounter
   }
 
-  private def player(playerNumber: Int): PlayerObject = {
-    val foundPlayer = gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == playerNumber)
-    foundPlayer.get
-  }
-
   override def activePlayerNumber: Int = {
     activePlayer.playerNumber
   }
 
   override def turnCounter: Int = turnNumber
 
-  override def turnOver = {
+  override def turnOver : Boolean = {
     !activePlayer.hasActionPointsLeft
   }
 

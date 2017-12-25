@@ -12,6 +12,7 @@ class GameConfigProvider(configFilePath: String) {
 
   val levelBackgroundImagePath = "src/main/resources/images/background_woodlands.png"
   val actionbarBackgroundImagePath = "src/main/resources/images/background_actionbar.png"
+  val attackImagePath = "src/main/resources/images/hit.png"
 
   // Setup board
   val rowCount = 9

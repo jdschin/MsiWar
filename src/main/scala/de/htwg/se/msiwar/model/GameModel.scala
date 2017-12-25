@@ -7,6 +7,7 @@ import scala.swing.event.Event
 
 case class GameBoardChanged(rowColumnIndexes: List[(Int, Int)]) extends Event
 case class ActivePlayerStatsChanged() extends Event
+case class AttackResult(rowIndex: Int, columnIndex: Int, hit: Boolean, attackImagePath: String) extends Event
 
 trait GameModel extends Publisher {
   def actionIdsForPlayer(playerNumber: Int): List[Int]
