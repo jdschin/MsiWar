@@ -8,6 +8,7 @@ import javax.imageio.ImageIO
 import javax.swing.{ImageIcon, SwingUtilities}
 
 import de.htwg.se.msiwar.controller.{Controller, _}
+import de.htwg.se.msiwar.util.SoundPlayer
 
 import scala.swing.event.MousePressed
 import scala.swing.{BorderPanel, Graphics2D, GridPanel, Label, Reactor}
@@ -52,6 +53,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       repaint()
 
     case e: AttackActionResult =>
+      SoundPlayer.playWav(e.attackSoundPath)
       updateLabelTemporary(e.rowIndex, e.columnIndex, e.attackImagePath, 1)
   }
   createContent()

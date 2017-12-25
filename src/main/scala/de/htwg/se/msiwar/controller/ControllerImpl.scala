@@ -9,7 +9,7 @@ class ControllerImpl(model: GameModel) extends Controller {
   reactions += {
     case e: GameBoardChanged => publish(CellChanged(e.rowColumnIndexes))
     case e: ActivePlayerStatsChanged => publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
-    case e: AttackResult => publish(AttackActionResult(e.rowIndex, e.columnIndex, e.hit, e.attackImagePath))
+    case e: AttackResult => publish(AttackActionResult(e.rowIndex, e.columnIndex, e.hit, e.attackImagePath, e.attackSoundPath))
   }
 
   override def cellContentToText(rowIndex: Int, columnIndex: Int) : String = {

@@ -10,6 +10,10 @@ class GameConfigProvider(configFilePath: String) {
   //TODO: verify object positions by row and column count
   //TODO: generate levels
 
+  // Global sounds
+  val attackSoundPath = "src/main/resources/sounds/explosion.wav"
+
+  // Global images
   val levelBackgroundImagePath = "src/main/resources/images/background_woodlands.png"
   val actionbarBackgroundImagePath = "src/main/resources/images/background_actionbar.png"
   val attackImagePath = "src/main/resources/images/hit.png"

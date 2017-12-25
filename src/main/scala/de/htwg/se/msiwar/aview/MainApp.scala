@@ -11,7 +11,7 @@ object MainApp {
   def main(args: Array[String]): Unit = {
     val configProvider = new GameConfigProvider("config.txt")
 
-    val model = GameModelImpl(configProvider.rowCount, configProvider.colCount, configProvider.gameObjects, configProvider.levelBackgroundImagePath, configProvider.actionbarBackgroundImagePath, configProvider.attackImagePath)
+    val model = GameModelImpl(configProvider.rowCount, configProvider.colCount, configProvider.gameObjects, configProvider.levelBackgroundImagePath, configProvider.actionbarBackgroundImagePath, configProvider.attackImagePath, configProvider.attackSoundPath)
     val controller = new ControllerImpl(model)
 
     new SwingApp(controller).main(args)

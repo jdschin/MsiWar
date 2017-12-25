@@ -6,7 +6,7 @@ import de.htwg.se.msiwar.util.Direction.Direction
 
 import scala.util.control.Breaks
 
-case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject], levelBackgroundImagePath: String, actionbarBackgroundImagePath: String, attackImagePath: String) extends GameModel {
+case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject], levelBackgroundImagePath: String, actionbarBackgroundImagePath: String, attackImagePath: String, attackSoundPath: String) extends GameModel {
   private var gameBoard = GameBoard(numRows, numCols, gameObjects)
   private var activePlayer = player(1)
   private var turnNumber = 1
@@ -87,10 +87,10 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
                 publish(GameBoardChanged(List((playerCollisionObject.position.y, playerCollisionObject.position.x))))
               }
             }
-            publish(AttackResult(collisionObject.position.y, collisionObject.position.x, hit = true, attackImagePath))
+            publish(AttackResult(collisionObject.position.y, collisionObject.position.x, hit = true, attackImagePath, attackSoundPath))
           } else {
             val targetPosition = calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
-            publish(AttackResult(targetPosition.y, targetPosition.x, hit = false, attackImagePath))
+            publish(AttackResult(targetPosition.y, targetPosition.x, hit = false, attackImagePath, attackSoundPath))
           }
         }
         case WAIT =>
