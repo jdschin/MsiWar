@@ -52,10 +52,10 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
       var countFunction = changeNothing
       var range = 0
 
-      if (rows >= columns) {
-        range = rows
-      } else {
-        range = columns
+      if (from.x != to.x) {
+        range = math.abs(from.x - to.x)
+      } else if (from.y != to.y) {
+        range = math.abs(from.y - to.y)
       }
 
       if (from.x < to.x && from.y < to.y) {
