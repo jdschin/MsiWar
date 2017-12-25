@@ -71,7 +71,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
           reactions += {
             case e: MousePressed => {
               val activeActionId = actionPanel.activeActionId
-              if (activeActionId.isDefined && controller.canExecuteAction(activeActionId.get, Direction.UP)) {
+              if (activeActionId.isDefined && controller.canExecuteAction(activeActionId.get, i, j)) {
                 controller.executeAction(actionPanel.activeActionId.get, i, j)
               } else {
                 // TODO play sound
