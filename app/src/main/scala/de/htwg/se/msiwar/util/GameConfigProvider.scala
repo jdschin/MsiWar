@@ -29,8 +29,8 @@ class GameConfigProvider(configFilePath: String) {
   val actions = List(moveAction, shootAction, waitAction)
 
   // Setup players
-  val player1 = PlayerObject("Spieler1", "src/main/resources/images/light_tank_red.png", Position(1, 2), 1, "src/main/resources/images/background_won_red.png", 3, 3, actions)
-  val player2 = PlayerObject("Spieler2", "src/main/resources/images/medium_tank_blue.png", Position(7, 6), 2, "src/main/resources/images/background_won_blue.png", 3, 3, actions)
+  val player1 = PlayerObject("Spieler1", "src/main/resources/images/light_tank_red.png", Position(1, 2), Direction.DOWN, 1, "src/main/resources/images/background_won_red.png", 3, 3, actions)
+  val player2 = PlayerObject("Spieler2", "src/main/resources/images/medium_tank_blue.png", Position(7, 6), Direction.LEFT, 2, "src/main/resources/images/background_won_blue.png", 3, 3, actions)
 
   val wood1 = BlockObject("B", "src/main/resources/images/block_wood.png", Position(0, 0))
   val wood2 = BlockObject("B", "src/main/resources/images/block_wood.png", Position(0, 1))
