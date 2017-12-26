@@ -68,13 +68,13 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     if (actionForId.isDefined) {
       val actionToExecute = actionForId.get
       actionToExecute.actionType match {
-        case MOVE => {
+        case MOVE =>
           val newPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
           val oldPosition = activePlayer.position.copy()
           gameBoard.moveGameObject(activePlayer, newPosition)
           publish(GameBoardChanged(List((newPosition.y, newPosition.x), (oldPosition.y, oldPosition.x))))
-        }
-        case SHOOT => {
+
+        case SHOOT =>
           val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
           if (collisionObjectOpt.isDefined) {
             val collisionObject = collisionObjectOpt.get
@@ -92,8 +92,8 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
             val targetPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
             publish(AttackResult(targetPosition.y, targetPosition.x, hit = false, attackImagePath, attackSoundPath))
           }
-        }
-        case WAIT =>
+
+        case WAIT => // Do nothing
       }
       activePlayer.currentActionPoints -= actionToExecute.actionPoints
       lastExecutedAction = Option(actionToExecute)
@@ -118,25 +118,25 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     val currentPos = activePlayer.position
     if (currentPos.x > targetX) {
       if (currentPos.y < targetY) {
-        return Direction.LEFT_DOWN
+        Direction.LEFT_DOWN
       } else if (currentPos.y > targetY) {
-        return Direction.LEFT_UP
+        Direction.LEFT_UP
       } else {
-        return Direction.LEFT
+        Direction.LEFT
       }
     } else if (currentPos.x < targetX) {
       if (currentPos.y < targetY) {
-        return Direction.RIGHT_DOWN
+        Direction.RIGHT_DOWN
       } else if (currentPos.y > targetY) {
-        return Direction.RIGHT_UP
+        Direction.RIGHT_UP
       } else {
-        return Direction.RIGHT
+        Direction.RIGHT
       }
     } else {
       if (currentPos.y < targetY) {
-        return Direction.DOWN
+        Direction.DOWN
       } else {
-        return Direction.UP
+        Direction.UP
       }
     }
   }
