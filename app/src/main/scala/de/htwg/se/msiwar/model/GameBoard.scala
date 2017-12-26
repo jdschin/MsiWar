@@ -39,7 +39,7 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     board(gameObject.position.x)(gameObject.position.y) = null
   }
 
-  def collisionObject(from: Position, to: Position): Option[GameObject] = {
+  def collisionObject(from: Position, to: Position, ignoreLastPosition: Boolean): Option[GameObject] = {
     var collisionObject: Option[GameObject] = Option.empty
     if (isInBound(to) && isInBound(from)) {
       var countFunction = changeNothing
@@ -76,7 +76,9 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
         // DOWN
         countFunction = decY
       }
-
+      if (ignoreLastPosition) {
+        range -= 1
+      }
       performOnPositionNTimes((from.x, from.y), range, countFunction, (x, y) => {
         val pos = Position(x, y)
         if (isInBound(pos)) {
@@ -100,20 +102,16 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
       val yOffSet = math.abs(position.y - basePosition.y)
       var collisionObjectInBetween = false
       if (xOffSet > 1 || yOffSet > 1) {
-        collisionObjectInBetween = collisionObject(basePosition, position).isDefined
+        collisionObjectInBetween = collisionObject(basePosition, position, true).isDefined
       }
 
       actionType match {
-        case t: ActionType.SHOOT.type => {
-          var occupiedByPlayer = false
-          if (gameObjectOpt.isDefined && gameObjectOpt.get.isInstanceOf[PlayerObject]) {
-            occupiedByPlayer = true
-          }
-          if (position != basePosition && (gameObjectOpt.isEmpty || occupiedByPlayer) && !collisionObjectInBetween) {
+        case _: ActionType.SHOOT.type => {
+          if (position != basePosition && !collisionObjectInBetween) {
             addToList = true
           }
         }
-        case t: ActionType.MOVE.type => {
+        case _: ActionType.MOVE.type => {
           if (position != basePosition && gameObjectOpt.isEmpty) {
             addToList = true
           }

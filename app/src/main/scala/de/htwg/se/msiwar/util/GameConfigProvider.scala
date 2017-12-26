@@ -189,7 +189,7 @@ object GameConfigProvider {
         }
       })
     }
-    
+
     PlayerObject(name, imagePath, Position(x, y), viewDirectionOpt.get, playerNumber, wonImagePath, maxActionPoints, maxHealthPoints, actions)
   }
 }

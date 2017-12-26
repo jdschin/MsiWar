@@ -75,7 +75,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
           publish(GameBoardChanged(List((newPosition.y, newPosition.x), (oldPosition.y, oldPosition.x))))
 
         case SHOOT =>
-          val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range))
+          val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range), false)
           if (collisionObjectOpt.isDefined) {
             val collisionObject = collisionObjectOpt.get
             if (collisionObject.isInstanceOf[PlayerObject]) {
