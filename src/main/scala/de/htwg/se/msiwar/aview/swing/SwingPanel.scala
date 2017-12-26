@@ -10,7 +10,7 @@ import javax.swing.{ImageIcon, SwingUtilities}
 import de.htwg.se.msiwar.controller.{Controller, _}
 import de.htwg.se.msiwar.util.SoundPlayer
 
-import scala.swing.event.MousePressed
+import scala.swing.event.{KeyTyped, MousePressed}
 import scala.swing.{BorderPanel, Graphics2D, GridPanel, Label, Reactor}
 
 class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
@@ -28,7 +28,11 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
     }
   }
 
+  // set focusable to allow process of keyEvents
+  focusable = true
+
   listenTo(controller)
+  listenTo(keys)
   reactions += {
     case e: CellChanged =>
       e.rowColumnIndexes.foreach(t => {
@@ -51,11 +55,13 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       }
       revalidate()
       repaint()
-
     case e: AttackActionResult =>
       SoundPlayer.playWav(e.attackSoundPath)
       updateLabelTemporary(e.rowIndex, e.columnIndex, e.attackImagePath, 1)
+    case e: KeyTyped =>
+      actionPanel.activateActionId(e.char)
   }
+
   createContent()
   fillBoard()
 
