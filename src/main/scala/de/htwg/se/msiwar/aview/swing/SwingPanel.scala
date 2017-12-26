@@ -87,20 +87,6 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
     }
   }
 
-  private def updateLabelTemporary(rowIndex: Int, columnIndex: Int, pathOfImageToShow: String, seconds: Int): Unit = {
-    val oldIcon = labels(rowIndex)(columnIndex).icon
-    labels(rowIndex)(columnIndex).icon = new ImageIcon(pathOfImageToShow)
-    val task = new Runnable {
-      def run(): Unit = {
-        val uiTask = new Runnable {
-          def run(): Unit = labels(rowIndex)(columnIndex).icon = oldIcon
-        }
-        SwingUtilities.invokeLater(uiTask)
-      }
-    }
-    poolExecutor.schedule(task, seconds, TimeUnit.SECONDS)
-  }
-
   private def updateLabel(rowIndex: Int, columnIndex: Int): Unit = {
     val label = labels(rowIndex)(columnIndex)
     val imagePath = controller.cellContentImagePath(rowIndex, columnIndex)
@@ -110,6 +96,21 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       label.icon = null
     }
     label.repaint()
+  }
+
+  private def updateLabelTemporary(rowIndex: Int, columnIndex: Int, pathOfImageToShow: String, seconds: Int): Unit = {
+    // Temporary show set new icon, will be replaced with old one after configured delay
+    labels(rowIndex)(columnIndex).icon = new ImageIcon(pathOfImageToShow)
+    val task = new Runnable {
+      def run(): Unit = {
+        // Restore old icon after configured delay
+        val uiTask = new Runnable {
+          def run(): Unit = updateLabel(rowIndex,columnIndex)
+        }
+        SwingUtilities.invokeLater(uiTask)
+      }
+    }
+    poolExecutor.schedule(task, seconds, TimeUnit.SECONDS)
   }
 
   private def clearCellsInRange(): Unit = {
