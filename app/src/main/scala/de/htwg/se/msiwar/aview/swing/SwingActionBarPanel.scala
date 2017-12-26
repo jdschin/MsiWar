@@ -59,11 +59,11 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
     currentActionId
   }
 
-  def activateActionId(actionId: Char) : Unit = {
+  def activateActionId(actionId: Char): Unit = {
     actionId match {
       case actionId if '0' <= actionId && actionId <= '9' =>
         val foundActionBtn = actionBarButtons.find(p => p._1 == actionId.asDigit)
-        if(foundActionBtn.isDefined){
+        if (foundActionBtn.isDefined) {
           foundActionBtn.get._2.selected = true
           updateActionActiveStates(foundActionBtn.get._2)
         }
@@ -74,7 +74,7 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   private def updateActionActiveStates(source: ToggleButton): Unit = {
     if (source.selected) {
       val foundEntry = actionBarButtons.find(p => p._2 == source)
-      if(foundEntry.isDefined){
+      if (foundEntry.isDefined) {
         currentActionId = Option(foundEntry.get._1)
       } else {
         currentActionId = Option.empty

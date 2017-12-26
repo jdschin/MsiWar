@@ -12,7 +12,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   private var turnNumber = 1
   private var lastExecutedAction = Option.empty[Action]
 
-  override def reset: Unit = {
+  override def reset(): Unit = {
     gameBoard = GameBoard(numRows, numCols, gameObjects)
     gameObjects.collect({ case p: PlayerObject => p }).foreach(playerObject => {
       playerObject.resetActionPoints
@@ -75,17 +75,20 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
           publish(GameBoardChanged(List((newPosition.y, newPosition.x), (oldPosition.y, oldPosition.x))))
 
         case SHOOT =>
-          val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range), false)
+          val collisionObjectOpt = {
+            gameBoard.collisionObject(activePlayer.position, gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range), ignoreLastPosition = false)
+          }
           if (collisionObjectOpt.isDefined) {
             val collisionObject = collisionObjectOpt.get
-            if (collisionObject.isInstanceOf[PlayerObject]) {
-              val playerCollisionObject = collisionObject.asInstanceOf[PlayerObject]
-              playerCollisionObject.currentHealthPoints -= actionToExecute.damage
+            collisionObject match {
+              case playerCollisionObject: PlayerObject =>
+                playerCollisionObject.currentHealthPoints -= actionToExecute.damage
 
-              val playerRemoved = removePlayerIfDead(playerCollisionObject)
-              if (playerRemoved) {
-                publish(GameBoardChanged(List((playerCollisionObject.position.y, playerCollisionObject.position.x))))
-              }
+                val playerRemoved = removePlayerIfDead(playerCollisionObject)
+                if (playerRemoved) {
+                  publish(GameBoardChanged(List((playerCollisionObject.position.y, playerCollisionObject.position.x))))
+                }
+              case _ =>
             }
             publish(AttackResult(collisionObject.position.y, collisionObject.position.x, hit = true, attackImagePath, attackSoundPath))
           } else {
@@ -178,7 +181,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
 
   override def winnerId: Option[Int] = {
     val playersAliveIds = gameObjects.collect({ case p: PlayerObject => p }).filter(_.hasHealthPointsLeft).map(_.playerNumber)
-    if (playersAliveIds.length == 1) {
+    if (playersAliveIds.lengthCompare(1) == 0) {
       Option(playersAliveIds.head)
     } else {
       Option.empty

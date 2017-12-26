@@ -8,11 +8,11 @@ class ControllerImpl(model: GameModel) extends Controller {
   listenTo(model)
   reactions += {
     case e: GameBoardChanged => publish(CellChanged(e.rowColumnIndexes))
-    case e: ActivePlayerStatsChanged => publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
+    case _: ActivePlayerStatsChanged => publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
     case e: AttackResult => publish(AttackActionResult(e.rowIndex, e.columnIndex, e.hit, e.attackImagePath, e.attackSoundPath))
   }
 
-  override def cellContentToText(rowIndex: Int, columnIndex: Int) : String = {
+  override def cellContentToText(rowIndex: Int, columnIndex: Int): String = {
     model.cellContentToText(rowIndex, columnIndex)
   }
 
@@ -20,13 +20,13 @@ class ControllerImpl(model: GameModel) extends Controller {
     model.cellContentImagePath(rowIndex, columnIndex)
   }
 
-  override def executeAction(actionId: Int, direction: Direction) : Unit = {
+  override def executeAction(actionId: Int, direction: Direction): Unit = {
     model.executeAction(actionId, direction)
     updateTurn()
     cellsInRange(model.lastExecutedActionId)
   }
 
-  def updateTurn() : Unit = {
+  def updateTurn(): Unit = {
     val winnerId = model.winnerId
     if (winnerId.isDefined) {
       publish(PlayerWon(winnerId.get, model.wonImagePath))
@@ -36,45 +36,45 @@ class ControllerImpl(model: GameModel) extends Controller {
     }
   }
 
-  override def cellsInRange(actionId: Option[Int]) : Unit = {
+  override def cellsInRange(actionId: Option[Int]): Unit = {
     publish(CellsInRange(convertToUiIndex(model.cellsInRange(actionId))))
   }
 
-  private def convertToUiIndex(indexes: List[(Int, Int)]) : List[(Int, Int)] = {
+  private def convertToUiIndex(indexes: List[(Int, Int)]): List[(Int, Int)] = {
     indexes.map((s) => s.swap)
   }
 
-  override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int) : Unit = {
+  override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
     model.executeAction(actionId, rowIndex, columnIndex)
     updateTurn()
     cellsInRange(model.lastExecutedActionId)
   }
 
-  override def canExecuteAction(actionId: Int, direction: Direction) : Boolean = {
+  override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
     model.canExecuteAction(actionId, direction)
   }
 
-  override def canExecuteAction(actionId: Int, rowIndex: Int, columnIndex: Int) : Boolean = {
+  override def canExecuteAction(actionId: Int, rowIndex: Int, columnIndex: Int): Boolean = {
     model.canExecuteAction(actionId, rowIndex, columnIndex)
   }
 
-  override def actionIds(playerNumber: Int) : List[Int] = {
+  override def actionIds(playerNumber: Int): List[Int] = {
     model.actionIdsForPlayer(playerNumber)
   }
 
-  override def actionDescription(actionId: Int) : String = {
+  override def actionDescription(actionId: Int): String = {
     model.actionDescription(actionId)
   }
 
-  override def actionIconPath(actionId: Int) : Option[String] = {
+  override def actionIconPath(actionId: Int): Option[String] = {
     model.actionIconPath(actionId)
   }
 
-  override def rowCount : Int = {
+  override def rowCount: Int = {
     model.rowCount
   }
 
-  override def columnCount : Int = {
+  override def columnCount: Int = {
     model.columnCount
   }
 
@@ -86,21 +86,21 @@ class ControllerImpl(model: GameModel) extends Controller {
     model.actionbarBackgroundImagePath
   }
 
-  override def activePlayerNumber : Int = {
+  override def activePlayerNumber: Int = {
     model.activePlayerNumber
   }
 
-  override def playerName(playerNumber: Int) : String = {
+  override def playerName(playerNumber: Int): String = {
     model.activePlayerName
   }
 
-  override def reset : Unit = {
+  override def reset: Unit = {
     model.reset
     updateTurn()
     publish(TurnStarted(model.activePlayerNumber))
   }
 
-  override def turnCounter : Int = {
+  override def turnCounter: Int = {
     model.turnCounter
   }
 

@@ -8,6 +8,6 @@ object SoundPlayer {
     val audioIn = AudioSystem.getAudioInputStream(new File(soundFilePath))
     val clip = AudioSystem.getClip
     clip.open(audioIn)
-    clip.start
+    clip.start()
   }
 }

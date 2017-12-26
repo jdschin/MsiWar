@@ -8,27 +8,26 @@ import scala.swing.Reactor
 class Tui(controller: Controller) extends Reactor {
   listenTo(controller)
   reactions += {
-    case _: CellChanged => printBoard
-    case e: TurnStarted => {
+    case _: CellChanged => printBoard()
+    case e: TurnStarted =>
       println("Player" + e.playerNumber + " turn " + controller.turnCounter + " started\n")
-      printBoard
-    }
+      printBoard()
     case e: PlayerWon => println(Console.GREEN + "Player" + e.playerNumber + " wins!\n" + Console.WHITE)
   }
 
-  printWelcomeMessage
-  printHelp
+  printWelcomeMessage()
+  printHelp()
 
-  def printWelcomeMessage = {
+  def printWelcomeMessage(): Unit = {
     println(" _____ _          _   _______          _     __          __        \n|  __ (_)        | | |__   __|        | |    \\ \\        / /        \n| |__) |__  _____| |    | | __ _ _ __ | | __  \\ \\  /\\  / /_ _ _ __ \n|  ___/ \\ \\/ / _ \\ |    | |/ _` | '_ \\| |/ /   \\ \\/  \\/ / _` | '__|\n| |   | |>  <  __/ |    | | (_| | | | |   <     \\  /\\  / (_| | |   \n|_|   |_/_/\\_\\___|_|    |_|\\__,_|_| |_|_|\\_\\     \\/  \\/ \\__,_|_|\n\n\n")
   }
 
-  def printUserActions = {
+  def printUserActions(): Unit = {
     println("Available Actions: ")
     controller.actionIds(1).foreach(i => println("Action: id=" + i + ", desc=" + controller.actionDescription(i)))
   }
 
-  def printHelp = {
+  def printHelp(): Unit = {
     println("Help:")
     println("s | S => Start a new game")
     println("q | Q => Quit the game")
@@ -39,14 +38,14 @@ class Tui(controller: Controller) extends Reactor {
     println
   }
 
-  def printActivePlayer = {
+  def printActivePlayer(): Unit = {
     val playerNumber = controller.activePlayerNumber
     val playerName = controller.playerName(playerNumber)
     println("Player" + playerNumber + " '" + playerName + "' is at the turn")
 
   }
 
-  def printBoard = {
+  def printBoard(): Unit = {
     println
     for (i <- 0 until controller.rowCount) {
       print("| ")
@@ -57,23 +56,23 @@ class Tui(controller: Controller) extends Reactor {
     }
   }
 
-  def executeCommand(input: String) = {
+  def executeCommand(input: String): Boolean = {
     var continue = true
     val executeActionRe = "(\\d+)(lu|ld|ru|rd|l|r|u|d)".r
     input match {
-      case "s" | "s" => controller.reset
+      case "s" | "s" => controller.reset()
       case "q" | "Q" => continue = false
-      case "h" | "H" => printHelp
-      case "b" | "b" => printBoard
-      case "a" | "A" => printUserActions
-      case "t" | "T" => printActivePlayer
+      case "h" | "H" => printHelp()
+      case "b" | "b" => printBoard()
+      case "a" | "A" => printUserActions()
+      case "t" | "T" => printActivePlayer()
       case executeActionRe(actionId: String, direction: String) => executeAction(actionId.toInt, direction)
       case _ => println("Unknown Command")
     }
     continue
   }
 
-  def executeAction(actionId: Int, direction: String) = {
+  def executeAction(actionId: Int, direction: String): Unit = {
     val convertedDirection = convertToDirection(direction)
     if (convertedDirection.isDefined) {
       if (controller.canExecuteAction(actionId, convertedDirection.get)) {

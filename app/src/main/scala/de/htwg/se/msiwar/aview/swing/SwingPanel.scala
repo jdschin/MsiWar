@@ -78,7 +78,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
           border = new javax.swing.border.LineBorder(java.awt.Color.BLACK, 1, true)
           listenTo(mouse.clicks)
           reactions += {
-            case e: MousePressed =>
+            case _: MousePressed =>
               val activeActionId = actionPanel.activeActionId
               if (activeActionId.isDefined && controller.canExecuteAction(activeActionId.get, i, j)) {
                 controller.executeAction(actionPanel.activeActionId.get, i, j)
@@ -111,7 +111,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       def run(): Unit = {
         // Restore old icon after configured delay
         val uiTask = new Runnable {
-          def run(): Unit = updateLabel(rowIndex,columnIndex)
+          def run(): Unit = updateLabel(rowIndex, columnIndex)
         }
         SwingUtilities.invokeLater(uiTask)
       }

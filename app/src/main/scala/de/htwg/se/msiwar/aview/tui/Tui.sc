@@ -1,5 +1,5 @@
 import de.htwg.se.msiwar.aview.tui.Tui
-import de.htwg.se.msiwar.controller.{ControllerImpl}
+import de.htwg.se.msiwar.controller.ControllerImpl
 import de.htwg.se.msiwar.model.GameModelImpl
 
 var tui = new Tui(new ControllerImpl(new GameModelImpl))

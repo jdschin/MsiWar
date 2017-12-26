@@ -19,11 +19,11 @@ case class PlayerObject(override val name: String, override val imagePath: Strin
     currentHealthPoints > 0
   }
 
-  def resetActionPoints: Unit = {
+  def resetActionPoints(): Unit = {
     currentActionPoints = maxActionPoints
   }
 
-  def resetHealthPoints: Unit = {
+  def resetHealthPoints(): Unit = {
     currentHealthPoints = maxHealthPoints
   }
 }

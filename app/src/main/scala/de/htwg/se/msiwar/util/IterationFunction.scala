@@ -1,15 +1,23 @@
 package de.htwg.se.msiwar.util
 
 object IterationFunction {
-  val incXandIncY = (x: Int, y: Int) => (x + 1, y + 1)
-  val decXandDecY = (x: Int, y: Int) => (x - 1, y - 1)
-  val incXandDecY = (x: Int, y: Int) => (x + 1, y - 1)
-  val decXandIncY = (x: Int, y: Int) => (x - 1, y + 1)
-  val incX = (x: Int, y: Int) => (x + 1, y)
-  val incY = (x: Int, y: Int) => (x, y + 1)
-  val decX = (x: Int, y: Int) => (x - 1, y)
-  val decY = (x: Int, y: Int) => (x, y - 1)
-  val changeNothing = (x: Int, y: Int) => (x, y)
+  def incXIncY(x: Int, y: Int): (Int, Int) = (x + 1, y + 1)
+
+  def decXDecY(x: Int, y: Int): (Int, Int) = (x - 1, y - 1)
+
+  def incXDecY(x: Int, y: Int): (Int, Int) = (x + 1, y - 1)
+
+  def decXIncY(x: Int, y: Int): (Int, Int) = (x - 1, y + 1)
+
+  def incX(x: Int, y: Int): (Int, Int) = (x + 1, y)
+
+  def incY(x: Int, y: Int): (Int, Int) = (x, y + 1)
+
+  def decX(x: Int, y: Int): (Int, Int) = (x - 1, y)
+
+  def decY(x: Int, y: Int): (Int, Int) = (x, y - 1)
+
+  def changeNothing(x: Int, y: Int): (Int, Int) = (x, y)
 
   def performOnPositionNTimes(basePosition: (Int, Int), n: Int, count: (Int, Int) => (Int, Int), f: (Int, Int) => Unit): Unit = {
     var x = basePosition._1
