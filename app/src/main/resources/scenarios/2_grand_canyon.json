@@ -3,7 +3,7 @@
     "levelBackgroundImagePath": "src/main/resources/images/background_desert.png",
     "actionbarBackgroundImagePath": "src/main/resources/images/background_actionbar.png",
     "attackImagePath": "src/main/resources/images/hit.png",
-    "rowCount": 9,
+    "rowCount": 15,
     "colCount": 15,
     "blockObjects": [
         {

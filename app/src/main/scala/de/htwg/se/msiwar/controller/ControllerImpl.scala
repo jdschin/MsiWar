@@ -115,7 +115,7 @@ class ControllerImpl extends Controller {
       case e: JSONException => print(e.getMessage)
       case e: NoSuchElementException => print(e.getMessage)
     }
-    createModel
+    model = createModel
     listenTo(model)
 
     // Fire initial events
