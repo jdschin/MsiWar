@@ -12,7 +12,7 @@ object MainApp {
   def main(args: Array[String]): Unit = {
 
     try {
-      GameConfigProvider.loadFromFile("src/main/resources/config.json")
+      GameConfigProvider.loadFromFile("src/main/resources/scenarios/2_black_wood_battle.json")
     }
     catch {
       case e: FileNotFoundException => print(e.getMessage)
