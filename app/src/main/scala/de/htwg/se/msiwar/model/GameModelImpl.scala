@@ -31,11 +31,6 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     player(playerNumber).actions.map(_.id)
   }
 
-  private def player(playerNumber: Int): PlayerObject = {
-    val foundPlayer = gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == playerNumber)
-    foundPlayer.get
-  }
-
   override def actionDescription(actionId: Int): String = {
     val foundAction = actions.find(_.id == actionId)
     if (foundAction.isDefined) {
@@ -43,6 +38,11 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     } else {
       ""
     }
+  }
+
+  private def actions: List[Action] = {
+    val players = gameObjects.collect({ case s: PlayerObject => s })
+    players.flatMap(_.actions)
   }
 
   override def actionIconPath(actionId: Int): Option[String] = {
@@ -54,11 +54,6 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     }
   }
 
-  private def actions: List[Action] = {
-    val players = gameObjects.collect({ case s: PlayerObject => s })
-    players.flatMap(_.actions)
-  }
-
   override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
     executeAction(actionId, calculateDirection(rowIndex, columnIndex))
   }
@@ -66,13 +61,10 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   override def executeAction(actionId: Int, direction: Direction): Unit = {
     val actionForId = activePlayer.actions.find(_.id == actionId)
     if (actionForId.isDefined) {
-      val actionToExecute = actionForId.get
-
-      // Update active player states
+      // Update view direction first to ensure correct view direction on action execution
       activePlayer.viewDirection = direction
-      activePlayer.currentActionPoints -= actionToExecute.actionPoints
-      lastExecutedAction = Option(actionToExecute)
 
+      val actionToExecute = actionForId.get
       actionToExecute.actionType match {
         case MOVE =>
           val newPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
@@ -81,42 +73,44 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
           publish(GameBoardChanged(List((newPosition.y, newPosition.x), (oldPosition.y, oldPosition.x))))
 
         case SHOOT =>
-          val collisionObjectOpt = {
-            gameBoard.collisionObject(activePlayer.position, gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range), ignoreLastPosition = false)
-          }
+          val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range), ignoreLastPosition = false)
           if (collisionObjectOpt.isDefined) {
             val collisionObject = collisionObjectOpt.get
             collisionObject match {
               case playerCollisionObject: PlayerObject =>
                 playerCollisionObject.currentHealthPoints -= actionToExecute.damage
-
-                val playerRemoved = removePlayerIfDead(playerCollisionObject)
-                if (playerRemoved) {
-                  publish(GameBoardChanged(List((playerCollisionObject.position.y, playerCollisionObject.position.x))))
+                // Remove player if dead
+                if (playerCollisionObject.currentHealthPoints < 0) {
+                  gameBoard.removeGameObject(playerCollisionObject)
                 }
-              case _ =>
+                publish(GameBoardChanged(List((playerCollisionObject.position.y, playerCollisionObject.position.x), (activePlayer.position.y, activePlayer.position.x))))
+              case _ => publish(GameBoardChanged(List((activePlayer.position.y, activePlayer.position.x))))
             }
             publish(AttackResult(collisionObject.position.y, collisionObject.position.x, hit = true, attackImagePath, attackSoundPath))
           } else {
             val targetPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+            publish(GameBoardChanged(List((activePlayer.position.y, activePlayer.position.x))))
             publish(AttackResult(targetPosition.y, targetPosition.x, hit = false, attackImagePath, attackSoundPath))
           }
-
         case WAIT => // Do nothing
       }
+      activePlayer.currentActionPoints -= actionToExecute.actionPoints
+      lastExecutedAction = Option(actionToExecute)
       publish(ActivePlayerStatsChanged())
     }
   }
 
-  private def removePlayerIfDead(player: PlayerObject): Boolean = {
-    if (player.currentHealthPoints < 0) {
-      gameBoard.removeGameObject(player)
-      true
+  override def lastExecutedActionId: Option[Int] = {
+    if (lastExecutedAction.isDefined) {
+      Option(lastExecutedAction.get.id)
     } else {
-      false
+      Option.empty[Int]
     }
   }
 
+  override def canExecuteAction(actionId: Int, rowIndex: Int, columnIndex: Int): Boolean = {
+    canExecuteAction(actionId, calculateDirection(rowIndex, columnIndex))
+  }
 
   private def calculateDirection(rowIndex: Int, columnIndex: Int): Direction = {
     val targetX = columnIndex
@@ -146,18 +140,6 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
         Direction.UP
       }
     }
-  }
-
-  override def lastExecutedActionId: Option[Int] = {
-    if (lastExecutedAction.isDefined) {
-      Option(lastExecutedAction.get.id)
-    } else {
-      Option.empty[Int]
-    }
-  }
-
-  override def canExecuteAction(actionId: Int, rowIndex: Int, columnIndex: Int): Boolean = {
-    canExecuteAction(actionId, calculateDirection(rowIndex, columnIndex))
   }
 
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
@@ -216,6 +198,11 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     turnCounter
   }
 
+  private def player(playerNumber: Int): PlayerObject = {
+    val foundPlayer = gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == playerNumber)
+    foundPlayer.get
+  }
+
   override def activePlayerNumber: Int = {
     activePlayer.playerNumber
   }
@@ -230,7 +217,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     val objectAt = gameBoard.gameObjectAt(columnIndex, rowIndex)
     if (objectAt.isDefined) {
       objectAt.get match {
-        case playerObj: PlayerObject => Option(imagePathForViewDirection(playerObj.imagePath,playerObj.viewDirection))
+        case playerObj: PlayerObject => Option(imagePathForViewDirection(playerObj.imagePath, playerObj.viewDirection))
         case blockObj: BlockObject => Option(blockObj.imagePath)
       }
     } else {
@@ -238,7 +225,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     }
   }
 
-  private def imagePathForViewDirection(imagePath: String, viewDirection: Direction) : String = {
+  private def imagePathForViewDirection(imagePath: String, viewDirection: Direction): String = {
     val basePath = imagePath.substring(0, imagePath.lastIndexOf('.'))
     val imageExtension = imagePath.substring(imagePath.lastIndexOf('.'), imagePath.length)
 
