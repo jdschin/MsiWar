@@ -6,7 +6,7 @@ abstract class GameObject(val name: String, val imagePath: String, val position:
 
 case class BlockObject(override val name: String, override val imagePath: String, override val position: Position) extends GameObject(name, imagePath, position)
 
-case class PlayerObject(override val name: String, override val imagePath: String, override val position: Position, viewDirection: Direction, playerNumber: Int, wonImagePath: String, private val maxActionPoints: Int, private var maxHealthPoints: Int, actions: List[Action]) extends GameObject(name, imagePath, position) {
+case class PlayerObject(override val name: String, override val imagePath: String, override val position: Position, var viewDirection: Direction, playerNumber: Int, wonImagePath: String, private val maxActionPoints: Int, private var maxHealthPoints: Int, actions: List[Action]) extends GameObject(name, imagePath, position) {
 
   var currentActionPoints: Int = maxActionPoints
   var currentHealthPoints: Int = maxHealthPoints

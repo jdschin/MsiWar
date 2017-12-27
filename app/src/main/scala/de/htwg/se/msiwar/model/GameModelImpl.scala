@@ -15,8 +15,8 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   override def reset(): Unit = {
     gameBoard = GameBoard(numRows, numCols, gameObjects)
     gameObjects.collect({ case p: PlayerObject => p }).foreach(playerObject => {
-      playerObject.resetActionPoints
-      playerObject.resetHealthPoints
+      playerObject.resetActionPoints()
+      playerObject.resetHealthPoints()
     })
     activePlayer = player(1)
     turnNumber = 1
@@ -45,11 +45,6 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     }
   }
 
-  private def actions: List[Action] = {
-    val players = gameObjects.collect({ case s: PlayerObject => s })
-    players.flatMap(_.actions)
-  }
-
   override def actionIconPath(actionId: Int): Option[String] = {
     val foundAction = actions.find(_.id == actionId)
     if (foundAction.isDefined) {
@@ -57,6 +52,11 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     } else {
       Option.empty
     }
+  }
+
+  private def actions: List[Action] = {
+    val players = gameObjects.collect({ case s: PlayerObject => s })
+    players.flatMap(_.actions)
   }
 
   override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
@@ -67,6 +67,12 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     val actionForId = activePlayer.actions.find(_.id == actionId)
     if (actionForId.isDefined) {
       val actionToExecute = actionForId.get
+
+      // Update active player states
+      activePlayer.viewDirection = direction
+      activePlayer.currentActionPoints -= actionToExecute.actionPoints
+      lastExecutedAction = Option(actionToExecute)
+
       actionToExecute.actionType match {
         case MOVE =>
           val newPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
@@ -98,8 +104,6 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
 
         case WAIT => // Do nothing
       }
-      activePlayer.currentActionPoints -= actionToExecute.actionPoints
-      lastExecutedAction = Option(actionToExecute)
       publish(ActivePlayerStatsChanged())
     }
   }
@@ -206,7 +210,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
       turnNumber += 1
       // Reset action points of all players when new turn has started
       for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
-        playerObject.resetActionPoints
+        playerObject.resetActionPoints()
       }
     }
     turnCounter
@@ -225,10 +229,25 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   override def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String] = {
     val objectAt = gameBoard.gameObjectAt(columnIndex, rowIndex)
     if (objectAt.isDefined) {
-      Option(objectAt.get.imagePath)
+      objectAt.get match {
+        case playerObj: PlayerObject => Option(imagePathForViewDirection(playerObj.imagePath,playerObj.viewDirection))
+        case blockObj: BlockObject => Option(blockObj.imagePath)
+      }
     } else {
       Option.empty[String]
     }
+  }
+
+  private def imagePathForViewDirection(imagePath: String, viewDirection: Direction) : String = {
+    val basePath = imagePath.substring(0, imagePath.lastIndexOf('.'))
+    val imageExtension = imagePath.substring(imagePath.lastIndexOf('.'), imagePath.length)
+
+    val sb = StringBuilder.newBuilder
+    sb.append(basePath)
+    sb.append("_")
+    sb.append(Direction.toDegree(viewDirection))
+    sb.append(imageExtension)
+    sb.toString()
   }
 
   override def cellContentToText(rowIndex: Int, columnIndex: Int): String = {
