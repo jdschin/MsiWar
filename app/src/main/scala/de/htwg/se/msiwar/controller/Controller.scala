@@ -47,5 +47,5 @@ trait Controller extends Publisher{
 
   def turnCounter : Int
 
-  def reset : Unit
+  def reset() : Unit
 }

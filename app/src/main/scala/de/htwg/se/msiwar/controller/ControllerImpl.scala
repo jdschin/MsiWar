@@ -94,8 +94,8 @@ class ControllerImpl(model: GameModel) extends Controller {
     model.activePlayerName
   }
 
-  override def reset: Unit = {
-    model.reset
+  override def reset(): Unit = {
+    model.reset()
     updateTurn()
     publish(TurnStarted(model.activePlayerNumber))
   }

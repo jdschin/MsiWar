@@ -43,5 +43,5 @@ trait GameModel extends Publisher {
   def nextTurn: Int
   def winnerId: Option[Int]
 
-  def reset: Unit
+  def reset(): Unit
 }
