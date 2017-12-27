@@ -40,13 +40,8 @@ class ControllerImpl extends Controller {
   }
 
   override def cellsInRange(actionId: Option[Int]): Unit = {
-    publish(CellsInRange(convertToUiIndex(model.cellsInRange(actionId))))
+    publish(CellsInRange(model.cellsInRange(actionId)))
   }
-
-  private def convertToUiIndex(indexes: List[(Int, Int)]): List[(Int, Int)] = {
-    indexes.map((s) => s.swap)
-  }
-
   override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
     model.executeAction(actionId, rowIndex, columnIndex)
     updateTurn()

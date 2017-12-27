@@ -1,32 +1,32 @@
 package de.htwg.se.msiwar.util
 
 object IterationFunction {
-  def incXIncY(x: Int, y: Int): (Int, Int) = (x + 1, y + 1)
+  def incRowIdxIncColumnIdx(rowIdx: Int, columnIdx: Int): (Int, Int) = (rowIdx + 1, columnIdx + 1)
 
-  def decXDecY(x: Int, y: Int): (Int, Int) = (x - 1, y - 1)
+  def decRowIdxDecColumnIdx(rowIdx: Int, columnIdx: Int): (Int, Int) = (rowIdx - 1, columnIdx - 1)
 
-  def incXDecY(x: Int, y: Int): (Int, Int) = (x + 1, y - 1)
+  def incRowIdxDecColumnIdx(rowIdx: Int, columnIdx: Int): (Int, Int) = (rowIdx + 1, columnIdx - 1)
 
-  def decXIncY(x: Int, y: Int): (Int, Int) = (x - 1, y + 1)
+  def decRowIdxIncColumnIdx(rowIdx: Int, columnIdx: Int): (Int, Int) = (rowIdx - 1, columnIdx + 1)
 
-  def incX(x: Int, y: Int): (Int, Int) = (x + 1, y)
+  def incRowIdx(rowIdx: Int, columnIdx: Int): (Int, Int) = (rowIdx + 1, columnIdx)
 
-  def incY(x: Int, y: Int): (Int, Int) = (x, y + 1)
+  def incColumnIdx(rowIdx: Int, columnIdx: Int): (Int, Int) = (rowIdx, columnIdx + 1)
 
-  def decX(x: Int, y: Int): (Int, Int) = (x - 1, y)
+  def decRowIdx(rowIdx: Int, columnIdx: Int): (Int, Int) = (rowIdx - 1, columnIdx)
 
-  def decY(x: Int, y: Int): (Int, Int) = (x, y - 1)
+  def decColumnIdx(rowIdx: Int, columnIdx: Int): (Int, Int) = (rowIdx, columnIdx - 1)
 
-  def changeNothing(x: Int, y: Int): (Int, Int) = (x, y)
+  def changeNothing(rowIdx: Int, columnIdx: Int): (Int, Int) = (rowIdx, columnIdx)
 
   def performOnPositionNTimes(basePosition: (Int, Int), n: Int, count: (Int, Int) => (Int, Int), f: (Int, Int) => Unit): Unit = {
-    var x = basePosition._1
-    var y = basePosition._2
+    var rowIdx = basePosition._1
+    var columnIdx = basePosition._2
     for (_ <- 0 until n) {
-      val countResult = count(x, y)
+      val countResult = count(rowIdx, columnIdx)
       f(countResult._1, countResult._2)
-      x = countResult._1
-      y = countResult._2
+      rowIdx = countResult._1
+      columnIdx = countResult._2
     }
   }
 

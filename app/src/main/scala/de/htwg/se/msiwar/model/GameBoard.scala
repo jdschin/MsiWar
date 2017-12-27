@@ -2,7 +2,7 @@ package de.htwg.se.msiwar.model
 
 import de.htwg.se.msiwar.model.ActionType.ActionType
 import de.htwg.se.msiwar.util.Direction
-import de.htwg.se.msiwar.util.Direction.Direction
+import de.htwg.se.msiwar.util.Direction._
 import de.htwg.se.msiwar.util.IterationFunction._
 
 import scala.Option.empty
@@ -13,76 +13,53 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
   gameObjects.foreach(placeGameObject)
 
   def placeGameObject(gameObject: GameObject): Unit = {
-    board(gameObject.position.x)(gameObject.position.y) = gameObject
+    board(gameObject.position.rowIdx)(gameObject.position.columnIdx) = gameObject
   }
 
   def gameObjectAt(position: Position): Option[GameObject] = {
-    gameObjectAt(position.x, position.y)
+    gameObjectAt(position.rowIdx, position.columnIdx)
   }
 
   def isInBound(position: Position): Boolean = {
-    (position.x >= 0 && position.y >= 0) &&
-      (position.x < columns && position.y < rows)
+    (position.rowIdx >= 0 && position.columnIdx >= 0) &&
+      (position.rowIdx < rows && position.columnIdx < columns)
   }
 
-  def gameObjectAt(x: Int, y: Int): Option[GameObject] = {
-    val objectAt = board(x)(y)
+  def gameObjectAt(rowIndex: Int, columnIndex: Int): Option[GameObject] = {
+    val objectAt = board(rowIndex)(columnIndex)
     Option(objectAt)
   }
 
   def moveGameObject(gameObject: GameObject, newPosition: Position): Unit = {
     removeGameObject(gameObject)
-    gameObject.position.x = newPosition.x
-    gameObject.position.y = newPosition.y
+    gameObject.position.rowIdx = newPosition.rowIdx
+    gameObject.position.columnIdx = newPosition.columnIdx
     placeGameObject(gameObject)
   }
 
   def removeGameObject(gameObject: GameObject): Unit = {
-    board(gameObject.position.x)(gameObject.position.y) = null
+    board(gameObject.position.rowIdx)(gameObject.position.columnIdx) = null
   }
 
   def collisionObject(from: Position, to: Position, ignoreLastPosition: Boolean): Option[GameObject] = {
     var collisionObject: Option[GameObject] = empty
     if (isInBound(to) && isInBound(from)) {
-      var countFunction: (Int, Int) => (Int, Int) = changeNothing
+      var modifyPositionFunction: (Int, Int) => (Int, Int) = changeNothing
       var range = 0
 
-      if (from.x != to.x) {
-        range = math.abs(from.x - to.x)
-      } else if (from.y != to.y) {
-        range = math.abs(from.y - to.y)
+      if (from.rowIdx != to.rowIdx) {
+        range = math.abs(from.rowIdx - to.rowIdx)
+      } else if (from.columnIdx != to.columnIdx) {
+        range = math.abs(from.columnIdx - to.columnIdx)
       }
+      // TODO: statepattern
+      modifyPositionFunction = modifyPositionFunctionForDirection(calculateDirection(from, to))
 
-      if (from.x < to.x && from.y < to.y) {
-        // RIGHT_UP
-        countFunction = incXIncY
-      } else if (from.x < to.x && from.y > to.y) {
-        // RIGHT_DOWN
-        countFunction = incXDecY
-      } else if (from.x > to.x && from.y < to.y) {
-        // LEFT_UP
-        countFunction = decXIncY
-      } else if (from.x > to.x && from.y > to.y) {
-        // LEFT_DOWN
-        countFunction = decXDecY
-      } else if (from.x < to.x) {
-        // RIGHT
-        countFunction = incX
-      } else if (from.x > to.x) {
-        // LEFT
-        countFunction = decX
-      } else if (from.y < to.y) {
-        // UP
-        countFunction = incY
-      } else if (from.y > to.y) {
-        // DOWN
-        countFunction = decY
-      }
       if (ignoreLastPosition) {
         range -= 1
       }
-      performOnPositionNTimes((from.x, from.y), range, countFunction, (x, y) => {
-        val pos = Position(x, y)
+      performOnPositionNTimes((from.rowIdx, from.columnIdx), range, modifyPositionFunction, (rowIdx, columnIdx) => {
+        val pos = Position(rowIdx, columnIdx)
         if (isInBound(pos) && !collisionObject.isDefined) {
           val gameObject = gameObjectAt(pos)
           if (gameObject.isDefined) {
@@ -96,14 +73,27 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     collisionObject
   }
 
+  private def modifyPositionFunctionForDirection(direction: Direction): (Int, Int) => (Int, Int) = {
+    direction match {
+      case RIGHT => incColumnIdx
+      case RIGHT_UP => decRowIdxIncColumnIdx
+      case RIGHT_DOWN => incRowIdxIncColumnIdx
+      case LEFT => decColumnIdx
+      case LEFT_UP => decRowIdxDecColumnIdx
+      case LEFT_DOWN => incRowIdxDecColumnIdx
+      case UP => decRowIdx
+      case DOWN => incRowIdx
+    }
+  }
+
   private def addPosToListIfValid(position: Position, basePosition: Position, cellList: List[(Int, Int)], actionType: ActionType): List[(Int, Int)] = {
     var addToList = false
     if (isInBound(position)) {
       val gameObjectOpt = gameObjectAt(position)
-      val xOffSet = math.abs(position.x - basePosition.x)
-      val yOffSet = math.abs(position.y - basePosition.y)
+      val rowOffSet = math.abs(position.rowIdx - basePosition.rowIdx)
+      val columnOffSet = math.abs(position.columnIdx - basePosition.columnIdx)
       var collisionObjectInBetween = false
-      if (xOffSet > 1 || yOffSet > 1) {
+      if (rowOffSet > 1 || columnOffSet > 1) {
         collisionObjectInBetween = collisionObject(basePosition, position, ignoreLastPosition = true).isDefined
       }
 
@@ -119,7 +109,7 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
       }
     }
     if (addToList) {
-      (position.x, position.y) :: cellList
+      (position.rowIdx, position.columnIdx) :: cellList
     } else {
       cellList
     }
@@ -130,35 +120,52 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     val range = action.range
 
     action.actionType match {
-      case _: ActionType.WAIT.type => cellsInRangeList = (position.x, position.y) :: cellsInRangeList
+      case _: ActionType.WAIT.type => cellsInRangeList = (position.rowIdx, position.columnIdx) :: cellsInRangeList
       case _ =>
-        val loopFunctions = incX _ :: incY _ :: decX _ :: decY _ :: incXIncY _ :: decXDecY _ :: incXDecY _ :: decXIncY _ :: Nil
+        val loopFunctions = incRowIdx _ :: incColumnIdx _ :: decRowIdx _ :: decColumnIdx _ :: incRowIdxIncColumnIdx _ :: decRowIdxDecColumnIdx _ :: incRowIdxDecColumnIdx _ :: decRowIdxIncColumnIdx _ :: Nil
 
         loopFunctions.foreach(f => {
-          performOnPositionNTimes((position.x, position.y), range, f, (x, y) => {
-            cellsInRangeList = addPosToListIfValid(Position(x, y), position, cellsInRangeList, action.actionType)
+          performOnPositionNTimes((position.rowIdx, position.columnIdx), range, f, (rowIdx, columnIdx) => {
+            cellsInRangeList = addPosToListIfValid(Position(rowIdx, columnIdx), position, cellsInRangeList, action.actionType)
           })
         })
     }
     cellsInRangeList
   }
 
+  def calculateDirection(from: Position, to: Position): Direction = {
+    if (from.columnIdx > to.columnIdx) {
+      if (from.rowIdx < to.rowIdx) {
+        Direction.LEFT_DOWN
+      } else if (from.rowIdx > to.rowIdx) {
+        Direction.LEFT_UP
+      } else {
+        Direction.LEFT
+      }
+    } else if (from.columnIdx < to.columnIdx) {
+      if (from.rowIdx < to.rowIdx) {
+        Direction.RIGHT_DOWN
+      } else if (from.rowIdx > to.rowIdx) {
+        Direction.RIGHT_UP
+      } else {
+        RIGHT
+      }
+    } else {
+      if (from.rowIdx < to.rowIdx) {
+        Direction.DOWN
+      } else {
+        Direction.UP
+      }
+    }
+  }
 
   def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int): Position = {
     var newPosition: Option[Position] = empty
-    var modifyPosition: (Int, Int) => (Int, Int) = changeNothing
-    direction match {
-      case Direction.UP => modifyPosition = decY
-      case Direction.DOWN => modifyPosition = incY
-      case Direction.LEFT => modifyPosition = decX
-      case Direction.RIGHT => modifyPosition = incX
-      case Direction.LEFT_UP => modifyPosition = decXDecY
-      case Direction.LEFT_DOWN => modifyPosition = decXIncY
-      case Direction.RIGHT_UP => modifyPosition = incXDecY
-      case Direction.RIGHT_DOWN => modifyPosition = incXIncY
-    }
-    performOnPositionNTimes((oldPosition.x, oldPosition.y), range, modifyPosition, (x, y) => {
-      val pos = Position(x, y)
+    var modifyPositionFunction: (Int, Int) => (Int, Int) = changeNothing
+    //TODO: statepattern
+    modifyPositionFunction = modifyPositionFunctionForDirection(direction)
+    performOnPositionNTimes((oldPosition.rowIdx, oldPosition.columnIdx), range, modifyPositionFunction, (rowIdx, columnIdx) => {
+      val pos = Position(rowIdx, columnIdx)
       if (isInBound(pos)) {
         // The last position which is in bound
         newPosition = Option(pos)

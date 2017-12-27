@@ -152,10 +152,10 @@ object GameConfigProvider {
     val imagePath = blockMap("imagePath").asInstanceOf[String]
     val positionMap = blockMap("position").asInstanceOf[Map[String, Double]]
 
-    val x = positionMap("x").toInt
-    val y = positionMap("y").toInt
+    val rowIndex = positionMap("rowIndex").toInt
+    val columnIndex = positionMap("columnIndex").toInt
 
-    BlockObject(name, imagePath, Position(x, y))
+    BlockObject(name, imagePath, Position(rowIndex, columnIndex))
   }
 
   private def playerObjectFromMap(playerMap: Map[String, Any], allActions: List[Action]) = {
@@ -163,8 +163,8 @@ object GameConfigProvider {
     val name = playerMap("name").asInstanceOf[String]
     val imagePath = playerMap("imagePath").asInstanceOf[String]
     val positionMap = playerMap("position").asInstanceOf[Map[String, Any]]
-    val x = positionMap("x").asInstanceOf[Double].toInt
-    val y = positionMap("y").asInstanceOf[Double].toInt
+    val rowIndex = positionMap("rowIndex").asInstanceOf[Double].toInt
+    val columnIndex = positionMap("columnIndex").asInstanceOf[Double].toInt
 
     val viewDirectionId = playerMap("viewDirection").asInstanceOf[Double].toInt
     val viewDirectionOpt = Direction.values.toList.find(_.id == viewDirectionId)
@@ -186,6 +186,6 @@ object GameConfigProvider {
       })
     }
 
-    PlayerObject(name, imagePath, Position(x, y), viewDirectionOpt.get, playerNumber, wonImagePath, maxActionPoints, maxHealthPoints, actions)
+    PlayerObject(name, imagePath, Position(rowIndex, columnIndex), viewDirectionOpt.get, playerNumber, wonImagePath, maxActionPoints, maxHealthPoints, actions)
   }
 }

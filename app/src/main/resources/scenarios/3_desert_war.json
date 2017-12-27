@@ -10,184 +10,184 @@
             "name": "B",
             "imagePath": "src/main/resources/images/block_wood.png",
             "position": {
-                "x": 0,
-                "y": 0
+                "rowIndex": 0,
+                "columnIndex": 0
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_wood.png",
             "position": {
-                "x": 0,
-                "y": 1
+                "rowIndex": 0,
+                "columnIndex": 1
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_wood.png",
             "position": {
-                "x": 3,
-                "y": 7
+                "rowIndex": 3,
+                "columnIndex": 7
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_wood.png",
             "position": {
-                "x": 8,
-                "y": 8
+                "rowIndex": 8,
+                "columnIndex": 8
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_wood.png",
             "position": {
-                "x": 5,
-                "y": 4
+                "rowIndex": 5,
+                "columnIndex": 4
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_wood.png",
             "position": {
-                "x": 3,
-                "y": 2
+                "rowIndex": 3,
+                "columnIndex": 2
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_wood.png",
             "position": {
-                "x": 3,
-                "y": 3
+                "rowIndex": 3,
+                "columnIndex": 3
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_wood.png",
             "position": {
-                "x": 5,
-                "y": 0
+                "rowIndex": 5,
+                "columnIndex": 0
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_wood.png",
             "position": {
-                "x": 6,
-                "y": 0
+                "rowIndex": 6,
+                "columnIndex": 0
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_wood.png",
             "position": {
-                "x": 5,
-                "y": 8
+                "rowIndex": 5,
+                "columnIndex": 8
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_wood.png",
             "position": {
-                "x": 6,
-                "y": 8
+                "rowIndex": 6,
+                "columnIndex": 8
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_mountain.png",
             "position": {
-                "x": 7,
-                "y": 2
+                "rowIndex": 7,
+                "columnIndex": 2
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_mountain.png",
             "position": {
-                "x": 6,
-                "y": 6
+                "rowIndex": 6,
+                "columnIndex": 6
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_mountain.png",
             "position": {
-                "x": 5,
-                "y": 3
+                "rowIndex": 5,
+                "columnIndex": 3
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_mountain.png",
             "position": {
-                "x": 3,
-                "y": 1
+                "rowIndex": 3,
+                "columnIndex": 1
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_mountain.png",
             "position": {
-                "x": 6,
-                "y": 2
+                "rowIndex": 6,
+                "columnIndex": 2
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_mountain.png",
             "position": {
-                "x": 0,
-                "y": 8
+                "rowIndex": 0,
+                "columnIndex": 8
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_mountain.png",
             "position": {
-                "x": 1,
-                "y": 8
+                "rowIndex": 1,
+                "columnIndex": 8
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_mountain.png",
             "position": {
-                "x": 0,
-                "y": 3
+                "rowIndex": 0,
+                "columnIndex": 3
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_mountain.png",
             "position": {
-                "x": 0,
-                "y": 4
+                "rowIndex": 0,
+                "columnIndex": 4
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_lake.png",
             "position": {
-                "x": 1,
-                "y": 6
+                "rowIndex": 1,
+                "columnIndex": 6
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_lake.png",
             "position": {
-                "x": 8,
-                "y": 1
+                "rowIndex": 8,
+                "columnIndex": 1
             }
         },
         {
             "name": "B",
             "imagePath": "src/main/resources/images/block_city.png",
             "position": {
-                "x": 3,
-                "y": 5
+                "rowIndex": 3,
+                "columnIndex": 5
             }
         }
     ],
@@ -196,8 +196,8 @@
             "name": "Spieler 1",
             "imagePath": "src/main/resources/images/light_tank_red.png",
             "position": {
-                "x": 1,
-                "y": 2
+                "rowIndex": 1,
+                "columnIndex": 2
             },
             "viewDirection": 1,
             "playerNumber": 1,
@@ -220,8 +220,8 @@
             "name": "Spieler 2",
             "imagePath": "src/main/resources/images/medium_tank_blue.png",
             "position": {
-                "x": 7,
-                "y": 6
+                "rowIndex": 7,
+                "columnIndex": 6
             },
             "viewDirection": 2,
             "playerNumber": 2,
