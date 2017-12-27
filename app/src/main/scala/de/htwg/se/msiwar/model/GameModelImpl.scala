@@ -6,7 +6,7 @@ import de.htwg.se.msiwar.util.Direction.Direction
 
 import scala.util.control.Breaks
 
-case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject], levelBackgroundImagePath: String, actionbarBackgroundImagePath: String, attackImagePath: String, attackSoundPath: String) extends GameModel {
+case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject], levelBackgroundImagePath: String, actionbarBackgroundImagePath: String, attackImagePath: String, attackSoundPath: String, openingBackgroundImagePath: String) extends GameModel {
   private var gameBoard = GameBoard(numRows, numCols, gameObjects)
   private var activePlayer = player(1)
   private var turnNumber = 1

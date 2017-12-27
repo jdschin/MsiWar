@@ -5,6 +5,7 @@ import de.htwg.se.msiwar.util.Direction.Direction
 import scala.swing.Publisher
 import scala.swing.event.Event
 
+case class GameStarted() extends Event
 case class CellChanged(rowColumnIndexes: List[(Int, Int)]) extends Event
 case class CellsInRange(rowColumnIndexes: List[(Int, Int)]) extends Event
 case class TurnStarted(playerNumber: Int) extends Event
@@ -37,6 +38,7 @@ trait Controller extends Publisher{
   def columnCount : Int
   def rowCount : Int
 
+  def openingBackgroundImagePath : String
   def levelBackgroundImagePath : String
   def actionbarBackgroundImagePath : String
 
@@ -47,5 +49,5 @@ trait Controller extends Publisher{
 
   def turnCounter : Int
 
-  def reset() : Unit
+  def startGame(scenarioPath: String) : Unit
 }

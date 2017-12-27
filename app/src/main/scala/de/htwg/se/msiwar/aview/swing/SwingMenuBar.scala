@@ -17,23 +17,23 @@ class SwingMenuBar(controller: Controller) extends MenuBar {
     contents += new Separator()
 
     contents += new MenuItem(Action("Black Wood Battle (2P)") {
-      // TODO load and setup config
+      controller.startGame("src/main/resources/scenarios/2_black_wood_battle.json")
     })
 
     contents += new MenuItem(Action("Grand Canyon (2P)") {
-      // TODO load and setup config
+      controller.startGame("src/main/resources/scenarios/2_grand_canyon.json")
     })
 
     contents += new MenuItem(Action("Showdown in the Alps (3P)") {
-      // TODO load and setup config
+      controller.startGame("src/main/resources/scenarios/3_desert_war.json")
     })
 
     contents += new MenuItem(Action("Desert War (3P)") {
-      // TODO load and setup config
+      controller.startGame("src/main/resources/scenarios/3_showdown_in_the_alps.json")
     })
 
     contents += new MenuItem(Action("Black Hawk Down (4P)") {
-      // TODO load and setup config
+      controller.startGame("src/main/resources/scenarios/4_black_hawk_down.json")
     })
   }
 

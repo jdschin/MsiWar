@@ -11,15 +11,11 @@ import scala.util.parsing.json.JSON
 case class JSONException(private val message: String = "JSON parsing failed") extends Exception(message)
 
 object GameConfigProvider {
-  //TODO: sort players by number
-  //TODO: verify player numbers
-  //TODO: verify object positions by row and column count
-  //TODO: generate levels
-
   // Global sounds
   var attackSoundPath = "src/main/resources/sounds/explosion.wav"
 
   // Global images
+  var openingBackgroundImagePath = "src/main/resources/images/background_opening.png"
   var levelBackgroundImagePath = "src/main/resources/images/background_woodlands.png"
   var actionbarBackgroundImagePath = "src/main/resources/images/background_actionbar.png"
   var attackImagePath = "src/main/resources/images/hit.png"

@@ -60,7 +60,8 @@ class Tui(controller: Controller) extends Reactor {
     var continue = true
     val executeActionRe = "(\\d+)(lu|ld|ru|rd|l|r|u|d)".r
     input match {
-      case "s" | "s" => controller.reset
+        // TODO allow scenario selection
+      case "s" | "s" => controller.startGame("src/main/resources/scenarios/2_black_wood_battle.json")
       case "q" | "Q" => continue = false
       case "h" | "H" => printHelp()
       case "b" | "b" => printBoard()

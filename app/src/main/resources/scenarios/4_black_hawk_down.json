@@ -1,6 +1,6 @@
 {
     "attackSoundPath": "src/main/resources/sounds/explosion.wav",
-    "levelBackgroundImagePath": "src/main/resources/images/background_woodlands.png",
+    "levelBackgroundImagePath": "src/main/resources/images/background_desert.png",
     "actionbarBackgroundImagePath": "src/main/resources/images/background_actionbar.png",
     "attackImagePath": "src/main/resources/images/hit.png",
     "rowCount": 9,

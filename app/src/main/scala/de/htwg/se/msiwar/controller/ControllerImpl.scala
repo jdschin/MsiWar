@@ -1,11 +1,14 @@
 package de.htwg.se.msiwar.controller
 
+import java.io.FileNotFoundException
+
 import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.Direction.Direction
+import de.htwg.se.msiwar.util.{GameConfigProvider, JSONException}
 
-class ControllerImpl(model: GameModel) extends Controller {
+class ControllerImpl extends Controller {
+  var model: GameModel = createModel
 
-  listenTo(model)
   reactions += {
     case e: GameBoardChanged => publish(CellChanged(e.rowColumnIndexes))
     case _: ActivePlayerStatsChanged => publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
@@ -78,6 +81,10 @@ class ControllerImpl(model: GameModel) extends Controller {
     model.columnCount
   }
 
+  override def openingBackgroundImagePath : String = {
+    model.openingBackgroundImagePath
+  }
+
   override def levelBackgroundImagePath: String = {
     model.levelBackgroundImagePath
   }
@@ -94,8 +101,25 @@ class ControllerImpl(model: GameModel) extends Controller {
     model.activePlayerName
   }
 
-  override def reset(): Unit = {
-    model.reset()
+  private def createModel : GameModel = {
+    val createdModel = GameModelImpl(GameConfigProvider.rowCount, GameConfigProvider.colCount, GameConfigProvider.gameObjects, GameConfigProvider.levelBackgroundImagePath, GameConfigProvider.actionbarBackgroundImagePath, GameConfigProvider.attackImagePath, GameConfigProvider.attackSoundPath, GameConfigProvider.openingBackgroundImagePath)
+    createdModel
+  }
+
+  override def startGame(scenarioPath: String): Unit = {
+    try {
+      GameConfigProvider.loadFromFile(scenarioPath)
+    }
+    catch {
+      case e: FileNotFoundException => print(e.getMessage)
+      case e: JSONException => print(e.getMessage)
+      case e: NoSuchElementException => print(e.getMessage)
+    }
+    createModel
+    listenTo(model)
+
+    // Fire initial events
+    publish(GameStarted())
     updateTurn()
     publish(TurnStarted(model.activePlayerNumber))
   }

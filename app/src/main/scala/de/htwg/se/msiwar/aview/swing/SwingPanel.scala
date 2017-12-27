@@ -15,12 +15,14 @@ import scala.swing.{BorderPanel, Graphics2D, GridPanel, Label, Reactor}
 
 class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
   private val poolExecutor = new ScheduledThreadPoolExecutor(1)
-  private val backgroundImage = ImageIO.read(new File(controller.levelBackgroundImagePath))
-  private val labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
-  private val actionPanel = new SwingActionBarPanel(controller)
+
   private val menuBar = new SwingMenuBar(controller)
-  private val gridPanel = new GridPanel(controller.rowCount, controller.columnCount) {
-    preferredSize = new Dimension(controller.rowCount * 60, controller.columnCount * 60)
+  private val actionPanel = new SwingActionBarPanel(controller)
+  private var backgroundImage = ImageIO.read(new File(controller.openingBackgroundImagePath))
+
+  private var labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
+  private var gridPanel = new GridPanel(1, 1) {
+    preferredSize = new Dimension(600, 650)
 
     override protected def paintComponent(g: Graphics2D): Unit = {
       super.paintComponent(g)
@@ -30,6 +32,10 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
 
   // set focusable to allow process of keyEvents
   focusable = true
+
+  // initial content when no level has been loaded yet
+  add(menuBar, BorderPanel.Position.North)
+  add(gridPanel, BorderPanel.Position.Center)
 
   listenTo(controller)
   listenTo(keys)
@@ -60,15 +66,31 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       updateLabelTemporary(e.rowIndex, e.columnIndex, e.attackImagePath, 1)
     case e: KeyTyped =>
       actionPanel.activateActionId(e.char)
+    case _: GameStarted =>
+      createContent()
+      fillBoard()
   }
 
-  createContent()
-  fillBoard()
-
   private def createContent(): Unit = {
+    // Clear previous content
+    _contents.clear()
+    backgroundImage = ImageIO.read(new File(controller.levelBackgroundImagePath))
+    labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
+    gridPanel = new GridPanel(controller.rowCount, controller.columnCount) {
+      preferredSize = new Dimension(controller.rowCount * 60, controller.columnCount * 60)
+
+      override protected def paintComponent(g: Graphics2D): Unit = {
+        super.paintComponent(g)
+        g.drawImage(backgroundImage, null, 0, 0)
+      }
+    }
+
     add(menuBar, BorderPanel.Position.North)
     add(gridPanel, BorderPanel.Position.Center)
     add(actionPanel, BorderPanel.Position.South)
+
+    revalidate()
+    repaint()
   }
 
   private def fillBoard(): Unit = {

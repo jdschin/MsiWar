@@ -20,6 +20,7 @@ trait GameModel extends Publisher {
   def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String]
   def cellsInRange(actionId: Option[Int]): List[(Int, Int)]
 
+  def openingBackgroundImagePath: String
   def levelBackgroundImagePath: String
   def actionbarBackgroundImagePath: String
   def wonImagePath: String
