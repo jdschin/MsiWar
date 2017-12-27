@@ -59,8 +59,8 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
     currentActionId
   }
 
-  def activateActionId(actionId: Char): Unit = {
-    actionId match {
+  def activateActionId(actionInput: Char): Unit = {
+    actionInput match {
       case actionId if '0' <= actionId && actionId <= '9' =>
         val foundActionBtn = actionBarButtons.find(p => p._1 == actionId.asDigit)
         if (foundActionBtn.isDefined) {
