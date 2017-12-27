@@ -83,7 +83,7 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
       }
       performOnPositionNTimes((from.x, from.y), range, countFunction, (x, y) => {
         val pos = Position(x, y)
-        if (isInBound(pos)) {
+        if (isInBound(pos) && !collisionObject.isDefined) {
           val gameObject = gameObjectAt(pos)
           if (gameObject.isDefined) {
             collisionObject = Option(gameObject.get)
