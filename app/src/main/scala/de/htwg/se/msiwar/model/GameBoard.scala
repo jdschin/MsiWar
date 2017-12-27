@@ -52,7 +52,6 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
       } else if (from.columnIdx != to.columnIdx) {
         range = math.abs(from.columnIdx - to.columnIdx)
       }
-      // TODO: statepattern
       modifyPositionFunction = modifyPositionFunctionForDirection(calculateDirection(from, to))
 
       if (ignoreLastPosition) {
@@ -162,7 +161,7 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
   def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int): Position = {
     var newPosition: Option[Position] = empty
     var modifyPositionFunction: (Int, Int) => (Int, Int) = changeNothing
-    //TODO: statepattern
+
     modifyPositionFunction = modifyPositionFunctionForDirection(direction)
     performOnPositionNTimes((oldPosition.rowIdx, oldPosition.columnIdx), range, modifyPositionFunction, (rowIdx, columnIdx) => {
       val pos = Position(rowIdx, columnIdx)

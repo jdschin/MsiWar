@@ -42,6 +42,7 @@ class ControllerImpl extends Controller {
   override def cellsInRange(actionId: Option[Int]): Unit = {
     publish(CellsInRange(model.cellsInRange(actionId)))
   }
+
   override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
     model.executeAction(actionId, rowIndex, columnIndex)
     updateTurn()
@@ -76,7 +77,7 @@ class ControllerImpl extends Controller {
     model.columnCount
   }
 
-  override def openingBackgroundImagePath : String = {
+  override def openingBackgroundImagePath: String = {
     model.openingBackgroundImagePath
   }
 
@@ -96,7 +97,7 @@ class ControllerImpl extends Controller {
     model.activePlayerName
   }
 
-  private def createModel : GameModel = {
+  private def createModel: GameModel = {
     val createdModel = GameModelImpl(GameConfigProvider.rowCount, GameConfigProvider.colCount, GameConfigProvider.gameObjects, GameConfigProvider.levelBackgroundImagePath, GameConfigProvider.actionbarBackgroundImagePath, GameConfigProvider.attackImagePath, GameConfigProvider.attackSoundPath, GameConfigProvider.openingBackgroundImagePath)
     createdModel
   }
