@@ -6,7 +6,7 @@ import de.htwg.se.msiwar.util.Direction.Direction
 
 import scala.util.control.Breaks
 
-case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObject], levelBackgroundImagePath: String, actionbarBackgroundImagePath: String, attackImagePath: String, attackSoundPath: String, openingBackgroundImagePath: String) extends GameModel {
+case class GameModelImpl(numRows: Int, numCols: Int, var gameObjects: List[GameObject], levelBackgroundImagePath: String, actionbarBackgroundImagePath: String, attackImagePath: String, attackSoundPath: String, openingBackgroundImagePath: String) extends GameModel {
   private var gameBoard = GameBoard(numRows, numCols, gameObjects)
   private var activePlayer = player(1)
   private var turnNumber = 1
@@ -81,7 +81,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
                 playerCollisionObject.currentHealthPoints -= actionToExecute.damage
                 // Remove player if dead
                 if (playerCollisionObject.currentHealthPoints < 0) {
-                  gameBoard.removeGameObject(playerCollisionObject)
+                  removePlayerFromGame(playerCollisionObject)
                 }
                 publish(GameBoardChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
               case _ => publish(GameBoardChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
@@ -100,6 +100,16 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
     }
   }
 
+  private def removePlayerFromGame(playerObject: PlayerObject): Unit = {
+    gameBoard.removeGameObject(playerObject)
+    gameObjects = gameObjects.filter(gameObject => {
+      gameObject match {
+        case p: PlayerObject => p.playerNumber != playerObject.playerNumber
+        case _ => true
+      }
+    })
+  }
+
   override def lastExecutedActionId: Option[Int] = {
     if (lastExecutedAction.isDefined) {
       Option(lastExecutedAction.get.id)
@@ -111,37 +121,6 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   override def canExecuteAction(actionId: Int, rowIndex: Int, columnIndex: Int): Boolean = {
     canExecuteAction(actionId, gameBoard.calculateDirection(activePlayer.position, Position(rowIndex, columnIndex)))
   }
-
-  /* is in game board now
-  private def calculateDirection(rowIndex: Int, columnIndex: Int): Direction = {
-    val targetX = columnIndex
-    val targetY = rowIndex
-
-    val currentPos = activePlayer.position
-    if (currentPos.rowIdx > targetX) {
-      if (currentPos.columnIdx < targetY) {
-        Direction.LEFT_DOWN
-      } else if (currentPos.columnIdx > targetY) {
-        Direction.LEFT_UP
-      } else {
-        Direction.LEFT
-      }
-    } else if (currentPos.rowIdx < targetX) {
-      if (currentPos.columnIdx < targetY) {
-        Direction.RIGHT_DOWN
-      } else if (currentPos.columnIdx > targetY) {
-        Direction.RIGHT_UP
-      } else {
-        Direction.RIGHT
-      }
-    } else {
-      if (currentPos.columnIdx < targetY) {
-        Direction.DOWN
-      } else {
-        Direction.UP
-      }
-    }
-  }*/
 
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
     if (winnerId.isDefined) {
@@ -287,7 +266,7 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   }
 
   override def wonImagePath: String = {
-    if(winnerId.isDefined){
+    if (winnerId.isDefined) {
       player(winnerId.get).wonImagePath
     } else {
       ""
