@@ -6,8 +6,15 @@ import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.Direction.Direction
 import de.htwg.se.msiwar.util.{GameConfigProvider, JSONException}
 
+case class ScenarioNotFoundException(message: String) extends Exception
+
 class ControllerImpl extends Controller {
-  var model: GameModel = createModel
+  private var model: GameModel = createModel
+  private val scenariosById = new scala.collection.mutable.HashMap[Int, String]()
+  private val availableScenarios = GameConfigProvider.listScenarios
+  for (i <- availableScenarios.indices) {
+    scenariosById.put(i, availableScenarios(i))
+  }
 
   reactions += {
     case e: GameBoardChanged => publish(CellChanged(e.rowColumnIndexes))
@@ -29,6 +36,12 @@ class ControllerImpl extends Controller {
     cellsInRange(model.lastExecutedActionId)
   }
 
+  override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
+    model.executeAction(actionId, rowIndex, columnIndex)
+    updateTurn()
+    cellsInRange(model.lastExecutedActionId)
+  }
+
   def updateTurn(): Unit = {
     val winnerId = model.winnerId
     if (winnerId.isDefined) {
@@ -43,12 +56,6 @@ class ControllerImpl extends Controller {
     publish(CellsInRange(model.cellsInRange(actionId)))
   }
 
-  override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
-    model.executeAction(actionId, rowIndex, columnIndex)
-    updateTurn()
-    cellsInRange(model.lastExecutedActionId)
-  }
-
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {
     model.canExecuteAction(actionId, direction)
   }
@@ -57,7 +64,7 @@ class ControllerImpl extends Controller {
     model.canExecuteAction(actionId, rowIndex, columnIndex)
   }
 
-  override def actionIds(playerNumber: Int): List[Int] = {
+  override def actionIds(playerNumber: Int): Set[Int] = {
     model.actionIdsForPlayer(playerNumber)
   }
 
@@ -67,6 +74,20 @@ class ControllerImpl extends Controller {
 
   override def actionIconPath(actionId: Int): Option[String] = {
     model.actionIconPath(actionId)
+  }
+
+  override def scenarioIds: Set[Int] = {
+    scenariosById.keys.toSet
+  }
+
+  override def scenarioName(scenarioId: Int): Option[String] = {
+    val scenarioNameOpt = scenariosById.get(scenarioId)
+    if(scenarioNameOpt.isDefined) {
+      val scenarioName = scenarioNameOpt.get
+      Option(scenarioName.substring(0, scenarioName.lastIndexOf('.')).replace('_', ' '))
+    } else {
+      scenarioNameOpt
+    }
   }
 
   override def rowCount: Int = {
@@ -97,14 +118,14 @@ class ControllerImpl extends Controller {
     model.activePlayerName
   }
 
-  private def createModel: GameModel = {
-    val createdModel = GameModelImpl(GameConfigProvider.rowCount, GameConfigProvider.colCount, GameConfigProvider.gameObjects, GameConfigProvider.levelBackgroundImagePath, GameConfigProvider.actionbarBackgroundImagePath, GameConfigProvider.attackImagePath, GameConfigProvider.attackSoundPath, GameConfigProvider.openingBackgroundImagePath)
-    createdModel
-  }
-
-  override def startGame(scenarioPath: String): Unit = {
+  override def startGame(scenarioId: Int): Unit = {
     try {
-      GameConfigProvider.loadFromFile(scenarioPath)
+      val scenarioName = scenariosById.get(scenarioId)
+      if(scenariosById.get(scenarioId).isDefined) {
+        GameConfigProvider.loadFromFile("src/main/resources/scenarios/" +scenarioName.get)
+      } else {
+        throw ScenarioNotFoundException("Found no scenario for id" + scenarioId)
+      }
     }
     catch {
       case e: FileNotFoundException => print(e.getMessage)
@@ -118,6 +139,11 @@ class ControllerImpl extends Controller {
     publish(GameStarted())
     updateTurn()
     publish(TurnStarted(model.activePlayerNumber))
+  }
+
+  private def createModel: GameModel = {
+    val createdModel = GameModelImpl(GameConfigProvider.rowCount, GameConfigProvider.colCount, GameConfigProvider.gameObjects, GameConfigProvider.levelBackgroundImagePath, GameConfigProvider.actionbarBackgroundImagePath, GameConfigProvider.attackImagePath, GameConfigProvider.attackSoundPath, GameConfigProvider.openingBackgroundImagePath)
+    createdModel
   }
 
   override def turnCounter: Int = {

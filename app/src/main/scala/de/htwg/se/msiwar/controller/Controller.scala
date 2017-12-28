@@ -29,11 +29,14 @@ trait Controller extends Publisher{
   def canExecuteAction(actionId: Int, direction:Direction) : Boolean
   def canExecuteAction(actionId: Int, rowIndex: Int, columnIndex: Int) : Boolean
 
-  def actionIds(playerNumber: Int) : List[Int]
+  def actionIds(playerNumber: Int) : Set[Int]
   def actionDescription(actionId: Int) : String
   def actionIconPath(actionId: Int) : Option[String]
   def actionDamage(actionId: Int) : Int
   def actionRange(actionId: Int) : Int
+
+  def scenarioIds : Set[Int]
+  def scenarioName(scenarioId: Int) : Option[String]
 
   def columnCount : Int
   def rowCount : Int
@@ -49,5 +52,5 @@ trait Controller extends Publisher{
 
   def turnCounter : Int
 
-  def startGame(scenarioPath: String) : Unit
+  def startGame(scenarioId: Int) : Unit
 }

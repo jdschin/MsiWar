@@ -10,7 +10,7 @@ case class ActivePlayerStatsChanged() extends Event
 case class AttackResult(rowIndex: Int, columnIndex: Int, hit: Boolean, attackImagePath: String, attackSoundPath: String) extends Event
 
 trait GameModel extends Publisher {
-  def actionIdsForPlayer(playerNumber: Int): List[Int]
+  def actionIdsForPlayer(playerNumber: Int): Set[Int]
   def actionDescription(actionId: Int): String
   def actionIconPath(actionId: Int): Option[String]
   def actionDamage(actionId: Int) : Int

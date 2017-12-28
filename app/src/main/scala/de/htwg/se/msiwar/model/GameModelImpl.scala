@@ -27,8 +27,8 @@ case class GameModelImpl(numRows: Int, numCols: Int, var gameObjects: List[GameO
     activePlayer.name
   }
 
-  override def actionIdsForPlayer(playerNumber: Int): List[Int] = {
-    player(playerNumber).actions.map(_.id)
+  override def actionIdsForPlayer(playerNumber: Int): Set[Int] = {
+    player(playerNumber).actions.map(_.id).toSet
   }
 
   override def actionDescription(actionId: Int): String = {
@@ -40,9 +40,9 @@ case class GameModelImpl(numRows: Int, numCols: Int, var gameObjects: List[GameO
     }
   }
 
-  private def actions: List[Action] = {
+  private def actions: Set[Action] = {
     val players = gameObjects.collect({ case s: PlayerObject => s })
-    players.flatMap(_.actions)
+    players.flatMap(_.actions).toSet
   }
 
   override def actionIconPath(actionId: Int): Option[String] = {

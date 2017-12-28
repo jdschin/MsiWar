@@ -1,6 +1,6 @@
 package de.htwg.se.msiwar.util
 
-import java.io.FileNotFoundException
+import java.io.{File, FileNotFoundException}
 
 import de.htwg.se.msiwar.model.ActionType._
 import de.htwg.se.msiwar.model._
@@ -62,6 +62,15 @@ object GameConfigProvider {
   private val city1 = BlockObject("B", "src/main/resources/images/block_city.png", Position(3, 5))
 
   var gameObjects: List[GameObject] = List(player1, player2, wood1, wood2, wood3, wood4, wood5, wood6, wood7, wood8, wood9, wood10, wood11, mountain1, mountain2, mountain3, mountain4, mountain5, mountain6, mountain7, mountain8, mountain9, lake1, lake2, city1)
+
+  def listScenarios: List[String] = {
+    val directory = new File("src/main/resources/scenarios/")
+    if (directory.exists && directory.isDirectory) {
+      directory.list().toList
+    } else {
+      List[String]()
+    }
+  }
 
   @throws(classOf[FileNotFoundException])
   @throws(classOf[JSONException])

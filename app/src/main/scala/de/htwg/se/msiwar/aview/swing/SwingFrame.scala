@@ -8,7 +8,7 @@ class SwingFrame(controller: Controller) extends Frame {
   private val contentPanel = new SwingPanel(controller)
 
   title = "Pixel Tank War"
-  resizable = true
+  resizable = false
   contents = contentPanel
   packAndCenter
 
