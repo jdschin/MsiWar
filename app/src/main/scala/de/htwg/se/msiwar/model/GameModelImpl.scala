@@ -287,7 +287,11 @@ case class GameModelImpl(numRows: Int, numCols: Int, gameObjects: List[GameObjec
   }
 
   override def wonImagePath: String = {
-    activePlayer.wonImagePath
+    if(winnerId.isDefined){
+      player(winnerId.get).wonImagePath
+    } else {
+      ""
+    }
   }
 
   override def activePlayerActionPoints: Int = {
