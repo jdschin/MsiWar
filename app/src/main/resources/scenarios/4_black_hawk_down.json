@@ -10,176 +10,64 @@
       "name": "B",
       "imagePath": "src/main/resources/images/block_wood.png",
       "position": {
-        "rowIndex": 0,
-        "columnIndex": 0
+        "rowIndex": 1,
+        "columnIndex": 10
       }
     },
     {
       "name": "B",
       "imagePath": "src/main/resources/images/block_wood.png",
       "position": {
-        "rowIndex": 0,
-        "columnIndex": 1
+        "rowIndex": 2,
+        "columnIndex": 3
       }
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_city.png",
       "position": {
-        "rowIndex": 3,
-        "columnIndex": 7
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
-        "rowIndex": 8,
-        "columnIndex": 8
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
-        "rowIndex": 5,
+        "rowIndex": 2,
         "columnIndex": 4
       }
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_city.png",
       "position": {
-        "rowIndex": 3,
-        "columnIndex": 2
+        "rowIndex": 2,
+        "columnIndex": 5
       }
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_city.png",
       "position": {
-        "rowIndex": 3,
-        "columnIndex": 3
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
-        "rowIndex": 5,
-        "columnIndex": 0
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
-        "rowIndex": 6,
-        "columnIndex": 0
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
-        "rowIndex": 5,
-        "columnIndex": 8
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
-        "rowIndex": 6,
-        "columnIndex": 8
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
-      "position": {
-        "rowIndex": 7,
-        "columnIndex": 2
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
-      "position": {
-        "rowIndex": 6,
+        "rowIndex": 2,
         "columnIndex": 6
       }
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
+      "imagePath": "src/main/resources/images/block_city.png",
       "position": {
-        "rowIndex": 5,
-        "columnIndex": 3
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
-      "position": {
-        "rowIndex": 3,
-        "columnIndex": 1
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
-      "position": {
-        "rowIndex": 6,
-        "columnIndex": 2
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
-      "position": {
-        "rowIndex": 0,
+        "rowIndex": 2,
         "columnIndex": 8
       }
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
+      "imagePath": "src/main/resources/images/block_city.png",
       "position": {
-        "rowIndex": 1,
-        "columnIndex": 8
+        "rowIndex": 2,
+        "columnIndex": 9
       }
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
+      "imagePath": "src/main/resources/images/block_city.png",
       "position": {
-        "rowIndex": 0,
-        "columnIndex": 3
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
-      "position": {
-        "rowIndex": 0,
-        "columnIndex": 4
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_lake.png",
-      "position": {
-        "rowIndex": 1,
-        "columnIndex": 6
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_lake.png",
-      "position": {
-        "rowIndex": 8,
-        "columnIndex": 1
+        "rowIndex": 2,
+        "columnIndex": 10
       }
     },
     {
@@ -187,19 +75,299 @@
       "imagePath": "src/main/resources/images/block_city.png",
       "position": {
         "rowIndex": 3,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 3,
+        "columnIndex": 4
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 3,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 3,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 7
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 8
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 5,
         "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 5,
+        "columnIndex": 7
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 6,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_lake.png",
+      "position": {
+        "rowIndex": 6,
+        "columnIndex": 6
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 6,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 7,
+        "columnIndex": 1
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 7,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 7,
+        "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 7,
+        "columnIndex": 7
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 7,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 8,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 8,
+        "columnIndex": 7
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 9,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 9,
+        "columnIndex": 7
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 9,
+        "columnIndex": 8
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 9,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 9,
+        "columnIndex": 12
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 4
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 7
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 8
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 9
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_city.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 12,
+        "columnIndex": 2
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 12,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 13,
+        "columnIndex": 8
       }
     }
   ],
   "playerObjects": [
     {
       "name": "Spieler 1",
-      "imagePath": "src/main/resources/images/light_tank_red.png",
+      "imagePath": "src/main/resources/images/medium_tank_red.png",
       "position": {
-        "rowIndex": 1,
-        "columnIndex": 2
+        "rowIndex": 0,
+        "columnIndex": 0
       },
-      "viewDirection": 1,
+      "viewDirection": 7,
       "playerNumber": 1,
       "wonImagePath": "src/main/resources/images/background_won_red.png",
       "maxActionPoints": 3,
@@ -218,14 +386,62 @@
     },
     {
       "name": "Spieler 2",
-      "imagePath": "src/main/resources/images/medium_tank_blue.png",
+      "imagePath": "src/main/resources/images/light_tank_blue.png",
       "position": {
-        "rowIndex": 7,
-        "columnIndex": 6
+        "rowIndex": 0,
+        "columnIndex": 14
       },
-      "viewDirection": 2,
+      "viewDirection": 5,
       "playerNumber": 2,
       "wonImagePath": "src/main/resources/images/background_won_blue.png",
+      "maxActionPoints": 3,
+      "maxHealthPoints": 3,
+      "actions": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        },
+        {
+          "id": 3
+        }
+      ]
+    },
+    {
+      "name": "Spieler 3",
+      "imagePath": "src/main/resources/images/light_tank_purple.png",
+      "position": {
+        "rowIndex": 14,
+        "columnIndex": 0
+      },
+      "viewDirection": 6,
+      "playerNumber": 3,
+      "wonImagePath": "src/main/resources/images/background_won_purple.png",
+      "maxActionPoints": 3,
+      "maxHealthPoints": 3,
+      "actions": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        },
+        {
+          "id": 3
+        }
+      ]
+    },
+    {
+      "name": "Spieler 4",
+      "imagePath": "src/main/resources/images/medium_tank_brown.png",
+      "position": {
+        "rowIndex": 14,
+        "columnIndex": 14
+      },
+      "viewDirection": 4,
+      "playerNumber": 4,
+      "wonImagePath": "src/main/resources/images/background_won_brown.png",
       "maxActionPoints": 3,
       "maxHealthPoints": 3,
       "actions": [
