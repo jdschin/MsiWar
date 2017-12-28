@@ -8,9 +8,17 @@
   "blockObjects": [
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_mountain.png",
       "position": {
         "rowIndex": 0,
+        "columnIndex": 11
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 1,
         "columnIndex": 0
       }
     },
@@ -18,15 +26,15 @@
       "name": "B",
       "imagePath": "src/main/resources/images/block_wood.png",
       "position": {
-        "rowIndex": 0,
-        "columnIndex": 1
+        "rowIndex": 1,
+        "columnIndex": 3
       }
     },
     {
       "name": "B",
       "imagePath": "src/main/resources/images/block_wood.png",
       "position": {
-        "rowIndex": 3,
+        "rowIndex": 1,
         "columnIndex": 7
       }
     },
@@ -34,71 +42,39 @@
       "name": "B",
       "imagePath": "src/main/resources/images/block_wood.png",
       "position": {
-        "rowIndex": 8,
-        "columnIndex": 8
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
-        "rowIndex": 5,
-        "columnIndex": 4
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
         "rowIndex": 3,
+        "columnIndex": 9
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 1
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 4,
         "columnIndex": 2
       }
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_mountain.png",
       "position": {
-        "rowIndex": 3,
+        "rowIndex": 4,
         "columnIndex": 3
       }
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
-        "rowIndex": 5,
-        "columnIndex": 0
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
-        "rowIndex": 6,
-        "columnIndex": 0
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
-        "rowIndex": 5,
-        "columnIndex": 8
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
-      "position": {
-        "rowIndex": 6,
-        "columnIndex": 8
-      }
-    },
-    {
-      "name": "B",
       "imagePath": "src/main/resources/images/block_mountain.png",
       "position": {
-        "rowIndex": 7,
+        "rowIndex": 5,
         "columnIndex": 2
       }
     },
@@ -106,7 +82,7 @@
       "name": "B",
       "imagePath": "src/main/resources/images/block_mountain.png",
       "position": {
-        "rowIndex": 6,
+        "rowIndex": 5,
         "columnIndex": 6
       }
     },
@@ -115,89 +91,73 @@
       "imagePath": "src/main/resources/images/block_mountain.png",
       "position": {
         "rowIndex": 5,
-        "columnIndex": 3
+        "columnIndex": 7
       }
     },
     {
       "name": "B",
       "imagePath": "src/main/resources/images/block_mountain.png",
       "position": {
-        "rowIndex": 3,
-        "columnIndex": 1
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
-      "position": {
-        "rowIndex": 6,
-        "columnIndex": 2
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
-      "position": {
-        "rowIndex": 0,
-        "columnIndex": 8
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
-      "position": {
-        "rowIndex": 1,
-        "columnIndex": 8
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
-      "position": {
-        "rowIndex": 0,
-        "columnIndex": 3
-      }
-    },
-    {
-      "name": "B",
-      "imagePath": "src/main/resources/images/block_mountain.png",
-      "position": {
-        "rowIndex": 0,
+        "rowIndex": 8,
         "columnIndex": 4
       }
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_lake.png",
+      "imagePath": "src/main/resources/images/block_wood.png",
       "position": {
-        "rowIndex": 1,
-        "columnIndex": 6
+        "rowIndex": 8,
+        "columnIndex": 7
       }
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_lake.png",
+      "imagePath": "src/main/resources/images/block_wood.png",
       "position": {
-        "rowIndex": 8,
+        "rowIndex": 9,
         "columnIndex": 1
       }
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_mountain.png",
       "position": {
-        "rowIndex": 3,
+        "rowIndex": 9,
+        "columnIndex": 4
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 9,
         "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 0
       }
     }
   ],
   "playerObjects": [
     {
       "name": "Spieler 1",
-      "imagePath": "src/main/resources/images/light_tank_red.png",
+      "imagePath": "src/main/resources/images/heavy_tank_red.png",
       "position": {
         "rowIndex": 1,
-        "columnIndex": 2
+        "columnIndex": 5
       },
       "viewDirection": 1,
       "playerNumber": 1,
@@ -218,14 +178,38 @@
     },
     {
       "name": "Spieler 2",
-      "imagePath": "src/main/resources/images/medium_tank_blue.png",
+      "imagePath": "src/main/resources/images/light_tank_blue.png",
       "position": {
         "rowIndex": 7,
-        "columnIndex": 6
+        "columnIndex": 11
       },
       "viewDirection": 2,
       "playerNumber": 2,
       "wonImagePath": "src/main/resources/images/background_won_blue.png",
+      "maxActionPoints": 3,
+      "maxHealthPoints": 3,
+      "actions": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        },
+        {
+          "id": 3
+        }
+      ]
+    },
+    {
+      "name": "Spieler 3",
+      "imagePath": "src/main/resources/images/medium_tank_purple.png",
+      "position": {
+        "rowIndex": 7,
+        "columnIndex": 0
+      },
+      "viewDirection": 3,
+      "playerNumber": 3,
+      "wonImagePath": "src/main/resources/images/background_won_purple.png",
       "maxActionPoints": 3,
       "maxHealthPoints": 3,
       "actions": [
