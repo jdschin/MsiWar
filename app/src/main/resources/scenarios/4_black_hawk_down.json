@@ -8,7 +8,7 @@
   "blockObjects": [
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_palm.png",
       "position": {
         "rowIndex": 1,
         "columnIndex": 10
@@ -16,7 +16,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_palm.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 3
@@ -24,7 +24,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 4
@@ -32,7 +32,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 5
@@ -40,7 +40,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 6
@@ -48,7 +48,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 8
@@ -56,7 +56,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 9
@@ -64,7 +64,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 10
@@ -72,7 +72,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 3,
         "columnIndex": 3
@@ -80,7 +80,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 3,
         "columnIndex": 4
@@ -88,7 +88,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 3,
         "columnIndex": 10
@@ -96,7 +96,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_palm.png",
       "position": {
         "rowIndex": 3,
         "columnIndex": 13
@@ -104,7 +104,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 3
@@ -112,7 +112,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 7
@@ -120,7 +120,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 8
@@ -128,7 +128,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 10
@@ -136,7 +136,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 5
@@ -144,7 +144,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 7
@@ -152,7 +152,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 3
@@ -160,7 +160,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_lake.png",
+      "imagePath": "src/main/resources/images/block_helicopter_destroyed.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 6
@@ -168,7 +168,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 10
@@ -176,7 +176,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_palm.png",
       "position": {
         "rowIndex": 7,
         "columnIndex": 1
@@ -184,7 +184,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 7,
         "columnIndex": 3
@@ -192,7 +192,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 7,
         "columnIndex": 5
@@ -200,7 +200,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 7,
         "columnIndex": 7
@@ -208,7 +208,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 7,
         "columnIndex": 10
@@ -216,7 +216,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 8,
         "columnIndex": 3
@@ -224,7 +224,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 8,
         "columnIndex": 7
@@ -232,7 +232,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 9,
         "columnIndex": 3
@@ -240,7 +240,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 9,
         "columnIndex": 7
@@ -248,7 +248,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 9,
         "columnIndex": 8
@@ -256,7 +256,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 9,
         "columnIndex": 10
@@ -264,7 +264,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_palm.png",
       "position": {
         "rowIndex": 9,
         "columnIndex": 12
@@ -272,7 +272,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 10,
         "columnIndex": 3
@@ -280,7 +280,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 10,
         "columnIndex": 4
@@ -288,7 +288,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 10,
         "columnIndex": 5
@@ -296,7 +296,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 10,
         "columnIndex": 10
@@ -304,7 +304,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 11,
         "columnIndex": 7
@@ -312,7 +312,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 11,
         "columnIndex": 8
@@ -320,7 +320,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 11,
         "columnIndex": 9
@@ -328,7 +328,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_city.png",
+      "imagePath": "src/main/resources/images/block_desert_city.png",
       "position": {
         "rowIndex": 11,
         "columnIndex": 10
@@ -336,7 +336,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_palm.png",
       "position": {
         "rowIndex": 12,
         "columnIndex": 2
@@ -344,7 +344,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_palm.png",
       "position": {
         "rowIndex": 12,
         "columnIndex": 13
@@ -352,7 +352,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_wood.png",
+      "imagePath": "src/main/resources/images/block_palm.png",
       "position": {
         "rowIndex": 13,
         "columnIndex": 8
