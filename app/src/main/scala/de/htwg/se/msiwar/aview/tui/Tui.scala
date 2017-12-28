@@ -36,12 +36,14 @@ class Tui(controller: Controller) extends Reactor {
 
   def printHelp(): Unit = {
     println("Help:")
-    println("s | S => Start a new game")
-    println("q | Q => Quit the game")
-    println("b | B => Print the current board")
-    println("h | H => Show help")
-    println("a | A => Print available user actions")
-    println("t | T => Print the active player")
+    println("n  |  N => Start a new game (random map)")
+    println("nX | NX => Start a scenario (X = scenario Number)")
+    println("s  |  S => Print scenario list")
+    println("q  |  Q => Quit the game")
+    println("b  |  B => Print the current board")
+    println("h  |  H => Show help")
+    println("a  |  A => Print available user actions (active player)")
+    println("t  |  T => Print the active player")
     println
   }
 
@@ -50,6 +52,14 @@ class Tui(controller: Controller) extends Reactor {
     val playerName = controller.playerName(playerNumber)
     println("Player" + playerNumber + " '" + playerName + "' is at the turn")
 
+  }
+
+  def printScenarioList(): Unit = {
+    println("1 - Black wood battle (2 Players)")
+    println("2 - Grand canyon (2 Players)")
+    println("3 - Desert war (3 Players)")
+    println("4 - Showdown in the alps (4 Players)")
+    println("5 - Black hawk down (4 Players)")
   }
 
   def printBoard(): Unit = {
@@ -64,10 +74,13 @@ class Tui(controller: Controller) extends Reactor {
 
   def executeCommand(input: String): Boolean = {
     var continue = true
+    val scenarioRe = "[s|S]{1}\\d{1}".r
     val executeActionRe = "(\\d+)(lu|ld|ru|rd|l|r|u|d)".r
     input match {
         // TODO allow scenario selection
-      case "s" | "s" => controller.startGame("src/main/resources/scenarios/2_black_wood_battle.json")
+      case "n" | "N" => controller.startGame("src/main/resources/scenarios/2_black_wood_battle.json")
+      case scenarioRe(scenarioId: String) => println("playing " + scenarioId)
+      case "s" | "S" => printScenarioList()
       case "q" | "Q" => continue = false
       case "h" | "H" => printHelp()
       case "b" | "b" => printBoard()
