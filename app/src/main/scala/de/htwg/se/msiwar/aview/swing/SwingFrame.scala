@@ -5,9 +5,11 @@ import de.htwg.se.msiwar.controller.{Controller, GameStarted, PlayerWon}
 import scala.swing._
 
 class SwingFrame(controller: Controller) extends Frame {
+  private val contentPanel = new SwingPanel(controller)
+
   title = "Pixel Tank War"
   resizable = true
-  contents = new SwingPanel(controller)
+  contents = contentPanel
   packAndCenter
 
   listenTo(controller)
@@ -18,6 +20,7 @@ class SwingFrame(controller: Controller) extends Frame {
 
   private def packAndCenter : Unit = {
     pack()
+    contentPanel.resize(peer.getWidth, peer.getHeight)
     // Center on monitor
     peer.setLocationRelativeTo(null)
   }

@@ -6,23 +6,19 @@ import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 
 import de.htwg.se.msiwar.controller.Controller
+import de.htwg.se.msiwar.util.ImageTransformer
 
 import scala.swing.event.ButtonClicked
 import scala.swing.{Alignment, FlowPanel, Graphics2D, GridPanel, ToggleButton}
 
 class SwingActionBarPanel(controller: Controller) extends FlowPanel {
-  private val backgroundImage = ImageIO.read(new File(controller.actionbarBackgroundImagePath))
   private val actionBarButtons = scala.collection.mutable.Map[Int, ToggleButton]()
+  private var backgroundImage = ImageIO.read(new File(controller.actionbarBackgroundImagePath))
   private var currentActionId: Option[Int] = Option.empty
 
   preferredSize = new Dimension(50, 50)
   reactions += {
     case e: ButtonClicked => updateActionActiveStates(e.source.asInstanceOf[ToggleButton])
-  }
-
-  override protected def paintComponent(g: Graphics2D): Unit = {
-    super.paintComponent(g)
-    g.drawImage(backgroundImage, null, 0, 0)
   }
 
   def updateActionBar(playerNumber: Int): Unit = {
@@ -53,6 +49,11 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
 
     _contents += actionBar
     revalidate()
+  }
+
+  def resize(width: Int, height: Int): Unit = {
+    backgroundImage = ImageTransformer.scale(backgroundImage, width, height)
+    repaint()
   }
 
   def activeActionId: Option[Int] = {
@@ -87,5 +88,10 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
         }
       })
     }
+  }
+
+  override protected def paintComponent(g: Graphics2D): Unit = {
+    super.paintComponent(g)
+    g.drawImage(backgroundImage, null, 0, 0)
   }
 }

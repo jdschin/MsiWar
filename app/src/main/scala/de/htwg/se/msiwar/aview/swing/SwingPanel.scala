@@ -8,12 +8,13 @@ import javax.imageio.ImageIO
 import javax.swing.{ImageIcon, SwingUtilities}
 
 import de.htwg.se.msiwar.controller.{Controller, _}
-import de.htwg.se.msiwar.util.SoundPlayer
+import de.htwg.se.msiwar.util.{ImageTransformer, SoundPlayer}
 
 import scala.swing.event.{KeyTyped, MousePressed}
 import scala.swing.{BorderPanel, Graphics2D, GridPanel, Label, Reactor}
 
 class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
+  private val grid_size_factor = 60
   private val poolExecutor = new ScheduledThreadPoolExecutor(1)
 
   private val menuBar = new SwingMenuBar(controller)
@@ -71,13 +72,19 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       fillBoard()
   }
 
+  def resize(width: Int, height: Int): Unit = {
+    backgroundImage = ImageTransformer.scale(backgroundImage,width,height)
+    actionPanel.resize(width,height)
+    repaint()
+  }
+
   private def createContent(): Unit = {
     // Clear previous content
     _contents.clear()
     backgroundImage = ImageIO.read(new File(controller.levelBackgroundImagePath))
     labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
     gridPanel = new GridPanel(controller.rowCount, controller.columnCount) {
-      preferredSize = new Dimension(controller.rowCount * 60, controller.columnCount * 60)
+      preferredSize = new Dimension(controller.columnCount * grid_size_factor, controller.rowCount * grid_size_factor)
 
       override protected def paintComponent(g: Graphics2D): Unit = {
         super.paintComponent(g)
