@@ -1,6 +1,6 @@
 package de.htwg.se.msiwar.aview.tui
 
-import de.htwg.se.msiwar.controller.{CellChanged, Controller, PlayerWon, TurnStarted}
+import de.htwg.se.msiwar.controller._
 import de.htwg.se.msiwar.util.Direction._
 
 import scala.swing.Reactor
@@ -10,9 +10,16 @@ class Tui(controller: Controller) extends Reactor {
   reactions += {
     case _: CellChanged => printBoard()
     case e: TurnStarted =>
-      println("Player" + e.playerNumber + " turn " + controller.turnCounter + " started\n")
+      println(Console.GREEN + "\nPlayer" + e.playerNumber + " turn " + controller.turnCounter + " started\n" + Console.WHITE)
       printBoard()
-    case e: PlayerWon => println(Console.GREEN + "Player" + e.playerNumber + " wins!\n" + Console.WHITE)
+    case e: PlayerWon => println(Console.GREEN + "\nPlayer" + e.playerNumber + " wins!\n" + Console.WHITE)
+    case _: GameStarted =>  println(Console.GREEN + "\nNew Game started!\n" + Console.WHITE)
+    case e: AttackActionResult =>
+      if(e.hit) {
+        println(Console.GREEN + "\nAttack hits\n" + Console.WHITE)
+      } else {
+        println(Console.GREEN + "\nAttack misses\n" + Console.WHITE)
+      }
   }
 
   printWelcomeMessage()
@@ -46,7 +53,6 @@ class Tui(controller: Controller) extends Reactor {
   }
 
   def printBoard(): Unit = {
-    println
     for (i <- 0 until controller.rowCount) {
       print("| ")
       for (j <- 0 until controller.columnCount) {
