@@ -24,12 +24,12 @@ class SwingMenuBar(controller: Controller) extends MenuBar {
       controller.startGame("src/main/resources/scenarios/2_grand_canyon.json")
     })
 
-    contents += new MenuItem(Action("Showdown in the Alps (3P)") {
-      controller.startGame("src/main/resources/scenarios/3_showdown_in_the_alps.json")
-    })
-
     contents += new MenuItem(Action("Desert War (3P)") {
       controller.startGame("src/main/resources/scenarios/3_desert_war.json")
+    })
+
+    contents += new MenuItem(Action("Showdown in the Alps (4P)") {
+      controller.startGame("src/main/resources/scenarios/4_showdown_in_the_alps.json")
     })
 
     contents += new MenuItem(Action("Black Hawk Down (4P)") {

@@ -1,0 +1,876 @@
+{
+  "attackSoundPath": "src/main/resources/sounds/explosion.wav",
+  "levelBackgroundImagePath": "src/main/resources/images/background_woodlands.png",
+  "actionbarBackgroundImagePath": "src/main/resources/images/background_actionbar.png",
+  "attackImagePath": "src/main/resources/images/hit.png",
+  "rowCount": 15,
+  "colCount": 15,
+  "blockObjects": [
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 0,
+        "columnIndex": 0
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 0,
+        "columnIndex": 1
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 0,
+        "columnIndex": 2
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 0,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 0,
+        "columnIndex": 4
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 0,
+        "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 0,
+        "columnIndex": 12
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 0,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 0,
+        "columnIndex": 14
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 1,
+        "columnIndex": 0
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 1,
+        "columnIndex": 1
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 1,
+        "columnIndex": 2
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 1,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 1,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 1,
+        "columnIndex": 12
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 1,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 1,
+        "columnIndex": 14
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 2,
+        "columnIndex": 0
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 2,
+        "columnIndex": 1
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 2,
+        "columnIndex": 2
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 2,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 2,
+        "columnIndex": 4
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 2,
+        "columnIndex": 9
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 2,
+        "columnIndex": 11
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 2,
+        "columnIndex": 12
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 2,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 2,
+        "columnIndex": 14
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 3,
+        "columnIndex": 0
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 3,
+        "columnIndex": 4
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 3,
+        "columnIndex": 12
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 3,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 3,
+        "columnIndex": 14
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 0
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 4
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 11
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 12
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 4,
+        "columnIndex": 14
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 5,
+        "columnIndex": 1
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 5,
+        "columnIndex": 2
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 5,
+        "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 5,
+        "columnIndex": 8
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 5,
+        "columnIndex": 9
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 5,
+        "columnIndex": 9
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 5,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 5,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 5,
+        "columnIndex": 14
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 6,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 7,
+        "columnIndex": 7
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 8,
+        "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 8,
+        "columnIndex": 9
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_lake.png",
+      "position": {
+        "rowIndex": 8,
+        "columnIndex": 12
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_lake.png",
+      "position": {
+        "rowIndex": 9,
+        "columnIndex": 0
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 9,
+        "columnIndex": 1
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 9,
+        "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 9,
+        "columnIndex": 9
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 9,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 0
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 4
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 11
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 12
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 10,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 2
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 4
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 6
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 12
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 11,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 12,
+        "columnIndex": 2
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 12,
+        "columnIndex": 3
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 12,
+        "columnIndex": 4
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 12,
+        "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 12,
+        "columnIndex": 8
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 12,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 12,
+        "columnIndex": 14
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 13,
+        "columnIndex": 0
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 13,
+        "columnIndex": 1
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 13,
+        "columnIndex": 2
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 13,
+        "columnIndex": 9
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 13,
+        "columnIndex": 10
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 13,
+        "columnIndex": 13
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 13,
+        "columnIndex": 14
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 14,
+        "columnIndex": 0
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 14,
+        "columnIndex": 1
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 14,
+        "columnIndex": 2
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_wood.png",
+      "position": {
+        "rowIndex": 14,
+        "columnIndex": 5
+      }
+    },
+    {
+      "name": "B",
+      "imagePath": "src/main/resources/images/block_mountain.png",
+      "position": {
+        "rowIndex": 14,
+        "columnIndex": 14
+      }
+    }
+  ],
+  "playerObjects": [
+    {
+      "name": "Spieler 1",
+      "imagePath": "src/main/resources/images/light_tank_red.png",
+      "position": {
+        "rowIndex": 0,
+        "columnIndex": 7
+      },
+      "viewDirection": 1,
+      "playerNumber": 1,
+      "wonImagePath": "src/main/resources/images/background_won_red.png",
+      "maxActionPoints": 3,
+      "maxHealthPoints": 3,
+      "actions": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        },
+        {
+          "id": 3
+        }
+      ]
+    },
+    {
+      "name": "Spieler 2",
+      "imagePath": "src/main/resources/images/light_tank_blue.png",
+      "position": {
+        "rowIndex": 7,
+        "columnIndex": 14
+      },
+      "viewDirection": 2,
+      "playerNumber": 2,
+      "wonImagePath": "src/main/resources/images/background_won_blue.png",
+      "maxActionPoints": 3,
+      "maxHealthPoints": 3,
+      "actions": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        },
+        {
+          "id": 3
+        }
+      ]
+    },
+    {
+      "name": "Spieler 3",
+      "imagePath": "src/main/resources/images/light_tank_purple.png",
+      "position": {
+        "rowIndex": 14,
+        "columnIndex": 7
+      },
+      "viewDirection": 0,
+      "playerNumber": 3,
+      "wonImagePath": "src/main/resources/images/background_won_purple.png",
+      "maxActionPoints": 3,
+      "maxHealthPoints": 3,
+      "actions": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        },
+        {
+          "id": 3
+        }
+      ]
+    },
+    {
+      "name": "Spieler 4",
+      "imagePath": "src/main/resources/images/light_tank_brown.png",
+      "position": {
+        "rowIndex": 7,
+        "columnIndex": 0
+      },
+      "viewDirection": 3,
+      "playerNumber": 4,
+      "wonImagePath": "src/main/resources/images/background_won_brown.png",
+      "maxActionPoints": 3,
+      "maxHealthPoints": 3,
+      "actions": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        },
+        {
+          "id": 3
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Panzer bewegen",
+      "imagePath": "src/main/resources/images/action_move.png",
+      "soundPath": "move.wav",
+      "actionPoints": 1,
+      "range": 1,
+      "actionType": 1,
+      "damage": 0
+    },
+    {
+      "id": 2,
+      "description": "Schießen",
+      "imagePath": "src/main/resources/images/action_attack.png",
+      "soundPath": "shoot.wav",
+      "actionPoints": 1,
+      "range": 3,
+      "actionType": 0,
+      "damage": 2
+    },
+    {
+      "id": 3,
+      "description": "Warten",
+      "imagePath": "src/main/resources/images/action_wait.png",
+      "soundPath": "wait.wav",
+      "actionPoints": 1,
+      "range": 1,
+      "actionType": 2,
+      "damage": 0
+    }
+  ]
+}
