@@ -1,5 +1,7 @@
 package de.htwg.se.msiwar.aview.swing
 
+import javax.swing.WindowConstants
+
 import de.htwg.se.msiwar.controller.{Controller, GameStarted, PlayerWon}
 
 import scala.swing._
@@ -11,6 +13,7 @@ class SwingFrame(controller: Controller) extends Frame {
   resizable = false
   contents = contentPanel
   packAndCenter()
+  peer.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
 
   listenTo(controller)
   reactions += {
