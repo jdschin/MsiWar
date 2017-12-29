@@ -19,7 +19,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
 
   private val menuBar = new SwingMenuBar(controller)
   private val actionPanel = new SwingActionBarPanel(controller)
-  private var backgroundImage = ImageIO.read(new File(controller.openingBackgroundImagePath))
+  private var backgroundImage = ImageIO.read(new File(getClass.getClassLoader.getResource(controller.openingBackgroundImagePath).getPath))
 
   private var labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
   private var gridPanel = new GridPanel(1, 1) {
@@ -81,7 +81,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
   private def createContent(): Unit = {
     // Clear previous content
     _contents.clear()
-    backgroundImage = ImageIO.read(new File(controller.levelBackgroundImagePath))
+    backgroundImage = ImageIO.read(new File(getClass.getClassLoader.getResource(controller.levelBackgroundImagePath).getPath))
     labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
     gridPanel = new GridPanel(controller.rowCount, controller.columnCount) {
       preferredSize = new Dimension(controller.columnCount * grid_size_factor, controller.rowCount * grid_size_factor)

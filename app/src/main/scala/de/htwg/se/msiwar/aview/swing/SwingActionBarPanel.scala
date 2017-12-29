@@ -13,7 +13,7 @@ import scala.swing.{Alignment, FlowPanel, Graphics2D, GridPanel, ToggleButton}
 
 class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   private val actionBarButtons = scala.collection.mutable.Map[Int, ToggleButton]()
-  private var backgroundImage = ImageIO.read(new File(controller.actionbarBackgroundImagePath))
+  private var backgroundImage = ImageIO.read(new File(getClass.getClassLoader.getResource(controller.actionbarBackgroundImagePath).getPath))
   private var currentActionId: Option[Int] = Option.empty
 
   preferredSize = new Dimension(50, 50)
@@ -32,7 +32,7 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
       val actionBtn = new ToggleButton() {
         private val imagePath = controller.actionIconPath(actionId)
         if (imagePath.isDefined) {
-          icon = new ImageIcon(imagePath.get)
+          icon = new ImageIcon(getClass.getClassLoader.getResource(imagePath.get).getPath)
           text = actionId.toString
           horizontalTextPosition = Alignment.Right
           verticalTextPosition = Alignment.Bottom

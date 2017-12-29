@@ -1,14 +1,14 @@
 {
-  "attackSoundPath": "src/main/resources/sounds/explosion.wav",
-  "levelBackgroundImagePath": "src/main/resources/images/background_desert.png",
-  "actionbarBackgroundImagePath": "src/main/resources/images/background_actionbar.png",
-  "attackImagePath": "src/main/resources/images/hit.png",
+  "attackSoundPath": "sounds/explosion.wav",
+  "levelBackgroundImagePath": "images/background_desert.png",
+  "actionbarBackgroundImagePath": "images/background_actionbar.png",
+  "attackImagePath": "images/hit.png",
   "rowCount": 15,
   "colCount": 15,
   "blockObjects": [
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 1,
         "columnIndex": 10
@@ -16,7 +16,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 3
@@ -24,7 +24,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 4
@@ -32,7 +32,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 5
@@ -40,7 +40,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 6
@@ -48,7 +48,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 8
@@ -56,7 +56,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 9
@@ -64,7 +64,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 10
@@ -72,7 +72,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 3,
         "columnIndex": 3
@@ -80,7 +80,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 3,
         "columnIndex": 4
@@ -88,7 +88,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 3,
         "columnIndex": 10
@@ -96,7 +96,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 3,
         "columnIndex": 13
@@ -104,7 +104,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 3
@@ -112,7 +112,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 7
@@ -120,7 +120,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 8
@@ -128,7 +128,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 10
@@ -136,7 +136,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 5
@@ -144,7 +144,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 7
@@ -152,7 +152,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 3
@@ -160,7 +160,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_helicopter_destroyed.png",
+      "imagePath": "images/block_helicopter_destroyed.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 6
@@ -168,7 +168,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 10
@@ -176,7 +176,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 7,
         "columnIndex": 1
@@ -184,7 +184,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 7,
         "columnIndex": 3
@@ -192,7 +192,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 7,
         "columnIndex": 5
@@ -200,7 +200,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 7,
         "columnIndex": 7
@@ -208,7 +208,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 7,
         "columnIndex": 10
@@ -216,7 +216,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 8,
         "columnIndex": 3
@@ -224,7 +224,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 8,
         "columnIndex": 7
@@ -232,7 +232,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 9,
         "columnIndex": 3
@@ -240,7 +240,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 9,
         "columnIndex": 7
@@ -248,7 +248,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 9,
         "columnIndex": 8
@@ -256,7 +256,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 9,
         "columnIndex": 10
@@ -264,7 +264,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 9,
         "columnIndex": 12
@@ -272,7 +272,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 10,
         "columnIndex": 3
@@ -280,7 +280,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 10,
         "columnIndex": 4
@@ -288,7 +288,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 10,
         "columnIndex": 5
@@ -296,7 +296,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 10,
         "columnIndex": 10
@@ -304,7 +304,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 11,
         "columnIndex": 7
@@ -312,7 +312,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 11,
         "columnIndex": 8
@@ -320,7 +320,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 11,
         "columnIndex": 9
@@ -328,7 +328,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_desert_city.png",
+      "imagePath": "images/block_desert_city.png",
       "position": {
         "rowIndex": 11,
         "columnIndex": 10
@@ -336,7 +336,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 12,
         "columnIndex": 2
@@ -344,7 +344,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 12,
         "columnIndex": 13
@@ -352,7 +352,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 13,
         "columnIndex": 8
@@ -362,14 +362,14 @@
   "playerObjects": [
     {
       "name": "Spieler 1",
-      "imagePath": "src/main/resources/images/medium_tank_red.png",
+      "imagePath": "images/medium_tank_red.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 0
       },
       "viewDirection": 7,
       "playerNumber": 1,
-      "wonImagePath": "src/main/resources/images/background_won_red.png",
+      "wonImagePath": "images/background_won_red.png",
       "maxActionPoints": 3,
       "maxHealthPoints": 3,
       "actions": [
@@ -386,14 +386,14 @@
     },
     {
       "name": "Spieler 2",
-      "imagePath": "src/main/resources/images/light_tank_blue.png",
+      "imagePath": "images/light_tank_blue.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 14
       },
       "viewDirection": 5,
       "playerNumber": 2,
-      "wonImagePath": "src/main/resources/images/background_won_blue.png",
+      "wonImagePath": "images/background_won_blue.png",
       "maxActionPoints": 3,
       "maxHealthPoints": 3,
       "actions": [
@@ -410,14 +410,14 @@
     },
     {
       "name": "Spieler 3",
-      "imagePath": "src/main/resources/images/light_tank_purple.png",
+      "imagePath": "images/light_tank_purple.png",
       "position": {
         "rowIndex": 14,
         "columnIndex": 0
       },
       "viewDirection": 6,
       "playerNumber": 3,
-      "wonImagePath": "src/main/resources/images/background_won_purple.png",
+      "wonImagePath": "images/background_won_purple.png",
       "maxActionPoints": 3,
       "maxHealthPoints": 3,
       "actions": [
@@ -434,14 +434,14 @@
     },
     {
       "name": "Spieler 4",
-      "imagePath": "src/main/resources/images/medium_tank_brown.png",
+      "imagePath": "images/medium_tank_brown.png",
       "position": {
         "rowIndex": 14,
         "columnIndex": 14
       },
       "viewDirection": 4,
       "playerNumber": 4,
-      "wonImagePath": "src/main/resources/images/background_won_brown.png",
+      "wonImagePath": "images/background_won_brown.png",
       "maxActionPoints": 3,
       "maxHealthPoints": 3,
       "actions": [
@@ -461,7 +461,7 @@
     {
       "id": 1,
       "description": "Panzer bewegen",
-      "imagePath": "src/main/resources/images/action_move.png",
+      "imagePath": "images/action_move.png",
       "soundPath": "move.wav",
       "actionPoints": 1,
       "range": 1,
@@ -471,7 +471,7 @@
     {
       "id": 2,
       "description": "Schießen",
-      "imagePath": "src/main/resources/images/action_attack.png",
+      "imagePath": "images/action_attack.png",
       "soundPath": "shoot.wav",
       "actionPoints": 1,
       "range": 3,
@@ -481,7 +481,7 @@
     {
       "id": 3,
       "description": "Warten",
-      "imagePath": "src/main/resources/images/action_wait.png",
+      "imagePath": "images/action_wait.png",
       "soundPath": "wait.wav",
       "actionPoints": 1,
       "range": 1,

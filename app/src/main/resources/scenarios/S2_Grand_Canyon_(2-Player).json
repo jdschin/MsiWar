@@ -1,14 +1,14 @@
 {
-  "attackSoundPath": "src/main/resources/sounds/explosion.wav",
-  "levelBackgroundImagePath": "src/main/resources/images/background_desert.png",
-  "actionbarBackgroundImagePath": "src/main/resources/images/background_actionbar.png",
-  "attackImagePath": "src/main/resources/images/hit.png",
+  "attackSoundPath": "sounds/explosion.wav",
+  "levelBackgroundImagePath": "images/background_desert.png",
+  "actionbarBackgroundImagePath": "images/background_actionbar.png",
+  "attackImagePath": "images/hit.png",
   "rowCount": 7,
   "colCount": 15,
   "blockObjects": [
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 0
@@ -16,7 +16,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 1
@@ -24,7 +24,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 2
@@ -32,7 +32,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 3
@@ -40,7 +40,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 4
@@ -48,7 +48,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 5
@@ -56,7 +56,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 6
@@ -64,7 +64,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 7
@@ -72,7 +72,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 8
@@ -80,7 +80,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 9
@@ -88,7 +88,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 10
@@ -96,7 +96,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 11
@@ -104,7 +104,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 12
@@ -112,7 +112,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 13
@@ -120,7 +120,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 0,
         "columnIndex": 14
@@ -128,7 +128,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 1,
         "columnIndex": 1
@@ -136,7 +136,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 1,
         "columnIndex": 3
@@ -144,7 +144,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 1,
         "columnIndex": 5
@@ -152,7 +152,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 1,
         "columnIndex": 6
@@ -160,7 +160,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 1,
         "columnIndex": 7
@@ -168,7 +168,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 1,
         "columnIndex": 9
@@ -176,7 +176,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 1,
         "columnIndex": 10
@@ -184,7 +184,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 3
@@ -192,7 +192,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 2,
         "columnIndex": 13
@@ -200,7 +200,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 3,
         "columnIndex": 8
@@ -208,7 +208,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 0
@@ -216,7 +216,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 3
@@ -224,7 +224,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 4
@@ -232,7 +232,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_palm.png",
+      "imagePath": "images/block_palm.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 6
@@ -240,7 +240,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 7
@@ -248,7 +248,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 8
@@ -256,7 +256,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 4,
         "columnIndex": 10
@@ -264,7 +264,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 2
@@ -272,7 +272,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 3
@@ -280,7 +280,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 4
@@ -288,7 +288,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 6
@@ -296,7 +296,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 7
@@ -304,7 +304,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 8
@@ -312,7 +312,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 9
@@ -320,7 +320,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 10
@@ -328,7 +328,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 5,
         "columnIndex": 11
@@ -336,7 +336,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 0
@@ -344,7 +344,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 1
@@ -352,7 +352,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 2
@@ -360,7 +360,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 3
@@ -368,7 +368,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 4
@@ -376,7 +376,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 5
@@ -384,7 +384,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 6
@@ -392,7 +392,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 7
@@ -400,7 +400,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 8
@@ -408,7 +408,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 9
@@ -416,7 +416,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 10
@@ -424,7 +424,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 11
@@ -432,7 +432,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 12
@@ -440,7 +440,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 13
@@ -448,7 +448,7 @@
     },
     {
       "name": "B",
-      "imagePath": "src/main/resources/images/block_dune.png",
+      "imagePath": "images/block_dune.png",
       "position": {
         "rowIndex": 6,
         "columnIndex": 14
@@ -458,14 +458,14 @@
   "playerObjects": [
     {
       "name": "Spieler 1",
-      "imagePath": "src/main/resources/images/heavy_tank_red.png",
+      "imagePath": "images/heavy_tank_red.png",
       "position": {
         "rowIndex": 3,
         "columnIndex": 0
       },
       "viewDirection": 3,
       "playerNumber": 1,
-      "wonImagePath": "src/main/resources/images/background_won_red.png",
+      "wonImagePath": "images/background_won_red.png",
       "maxActionPoints": 3,
       "maxHealthPoints": 3,
       "actions": [
@@ -482,14 +482,14 @@
     },
     {
       "name": "Spieler 2",
-      "imagePath": "src/main/resources/images/medium_tank_blue.png",
+      "imagePath": "images/medium_tank_blue.png",
       "position": {
         "rowIndex": 3,
         "columnIndex": 14
       },
       "viewDirection": 2,
       "playerNumber": 2,
-      "wonImagePath": "src/main/resources/images/background_won_blue.png",
+      "wonImagePath": "images/background_won_blue.png",
       "maxActionPoints": 3,
       "maxHealthPoints": 3,
       "actions": [
@@ -509,7 +509,7 @@
     {
       "id": 1,
       "description": "Panzer bewegen",
-      "imagePath": "src/main/resources/images/action_move.png",
+      "imagePath": "images/action_move.png",
       "soundPath": "move.wav",
       "actionPoints": 1,
       "range": 1,
@@ -519,7 +519,7 @@
     {
       "id": 2,
       "description": "Schießen",
-      "imagePath": "src/main/resources/images/action_attack.png",
+      "imagePath": "images/action_attack.png",
       "soundPath": "shoot.wav",
       "actionPoints": 1,
       "range": 3,
@@ -529,7 +529,7 @@
     {
       "id": 3,
       "description": "Warten",
-      "imagePath": "src/main/resources/images/action_wait.png",
+      "imagePath": "images/action_wait.png",
       "soundPath": "wait.wav",
       "actionPoints": 1,
       "range": 1,
