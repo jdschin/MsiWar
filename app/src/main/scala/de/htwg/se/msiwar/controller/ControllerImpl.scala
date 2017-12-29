@@ -4,13 +4,13 @@ import java.io.FileNotFoundException
 
 import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.Direction.Direction
-import de.htwg.se.msiwar.util.{GameConfigProvider, JSONException}
+import de.htwg.se.msiwar.util.{FileRepresentation, GameConfigProvider, JSONException}
 
 case class ScenarioNotFoundException(message: String) extends Exception
 
 class ControllerImpl extends Controller {
   private var model: GameModel = createModel
-  private val scenariosById = new scala.collection.mutable.HashMap[Int, String]()
+  private val scenariosById = new scala.collection.mutable.HashMap[Int, FileRepresentation]()
   private val availableScenarios = GameConfigProvider.listScenarios
   for (i <- availableScenarios.indices) {
     scenariosById.put(i, availableScenarios(i))
@@ -82,11 +82,11 @@ class ControllerImpl extends Controller {
 
   override def scenarioName(scenarioId: Int): Option[String] = {
     val scenarioNameOpt = scenariosById.get(scenarioId)
-    if(scenarioNameOpt.isDefined) {
+    if (scenarioNameOpt.isDefined) {
       val scenarioName = scenarioNameOpt.get
-      Option(scenarioName.substring(0, scenarioName.lastIndexOf('.')).replace('_', ' '))
+      Option(scenarioName.fileName.substring(0, scenarioName.fileName.lastIndexOf('.')).replace('_', ' '))
     } else {
-      scenarioNameOpt
+      Option.empty
     }
   }
 
@@ -121,8 +121,8 @@ class ControllerImpl extends Controller {
   override def startGame(scenarioId: Int): Unit = {
     try {
       val scenarioName = scenariosById.get(scenarioId)
-      if(scenariosById.get(scenarioId).isDefined) {
-        GameConfigProvider.loadFromFile("src/main/resources/scenarios/" +scenarioName.get)
+      if (scenariosById.get(scenarioId).isDefined) {
+        GameConfigProvider.loadFromFile(scenarioName.get.filePath)
       } else {
         throw ScenarioNotFoundException("Found no scenario for id" + scenarioId)
       }

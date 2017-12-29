@@ -1,6 +1,6 @@
 package de.htwg.se.msiwar.util
 
-import java.io.{File, FileNotFoundException}
+import java.io.FileNotFoundException
 
 import de.htwg.se.msiwar.model.ActionType._
 import de.htwg.se.msiwar.model._
@@ -63,13 +63,8 @@ object GameConfigProvider {
 
   var gameObjects: List[GameObject] = List(player1, player2, wood1, wood2, wood3, wood4, wood5, wood6, wood7, wood8, wood9, wood10, wood11, mountain1, mountain2, mountain3, mountain4, mountain5, mountain6, mountain7, mountain8, mountain9, lake1, lake2, city1)
 
-  def listScenarios: List[String] = {
-    val directory = new File(getClass.getClassLoader.getResource("scenarios/").getPath)
-    if (directory.exists && directory.isDirectory) {
-      directory.list().toList
-    } else {
-      List[String]()
-    }
+  def listScenarios: List[FileRepresentation] = {
+    FileLoader.loadFilesFromDirPath("/scenarios")
   }
 
   @throws(classOf[FileNotFoundException])
@@ -186,11 +181,12 @@ object GameConfigProvider {
     var actions: List[Action] = List[Action]()
     playerMap("actions") match {
       case listOfMaps: List[Map[String, Double]] => listOfMaps.foreach(map => {
-        map.foreach { case (_, id) =>
-          val action: Option[Action] = allActions.find(a => a.id == id)
-          if (action.isDefined) {
-            actions = actions ::: List(action.get)
-          }
+        map.foreach {
+          case (_, id) =>
+            val action: Option[Action] = allActions.find(a => a.id == id)
+            if (action.isDefined) {
+              actions = actions ::: List(action.get)
+            }
         }
       })
     }
