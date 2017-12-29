@@ -1,14 +1,13 @@
 package de.htwg.se.msiwar.util
 
+import java.io.File
 import java.nio.file.{FileSystems, Files, Path, Paths}
 import java.util.Collections
 
-case class FileRepresentation(fileName: String, filePath: String)
-
 object FileLoader {
 
-  def loadFilesFromDirPath(dirPath: String): List[FileRepresentation] = {
-    var pathList = List[FileRepresentation]()
+  def loadFilesFromDirPath(dirPath: String): List[String] = {
+    var pathList = List[String]()
     val uri = classOf[Nothing].getResource(dirPath).toURI
     var myPath: Option[Path] = Option.empty
 
@@ -23,11 +22,11 @@ object FileLoader {
     val it = walk.iterator
     while (it.hasNext) {
       val path = it.next().toString
-      val indexOfLastSlash = path.lastIndexOf("/")
+      val indexOfLastSlash = path.lastIndexOf(File.separator)
       var fileName = path.substring(indexOfLastSlash, path.length)
-      if (fileName != dirPath) {
+      if (!fileName.contains("scenario")) {
         fileName = fileName.substring(1)
-        pathList = pathList ::: List(FileRepresentation(fileName, path.toString))
+        pathList = pathList ::: List(fileName)
       }
     }
     pathList

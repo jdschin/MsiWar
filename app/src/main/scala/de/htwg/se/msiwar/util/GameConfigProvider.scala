@@ -1,6 +1,6 @@
 package de.htwg.se.msiwar.util
 
-import java.io.FileNotFoundException
+import java.io.{File, FileNotFoundException}
 
 import de.htwg.se.msiwar.model.ActionType._
 import de.htwg.se.msiwar.model._
@@ -63,7 +63,7 @@ object GameConfigProvider {
 
   var gameObjects: List[GameObject] = List(player1, player2, wood1, wood2, wood3, wood4, wood5, wood6, wood7, wood8, wood9, wood10, wood11, mountain1, mountain2, mountain3, mountain4, mountain5, mountain6, mountain7, mountain8, mountain9, lake1, lake2, city1)
 
-  def listScenarios: List[FileRepresentation] = {
+  def listScenarios: List[String] = {
     FileLoader.loadFilesFromDirPath("/scenarios")
   }
 
@@ -71,11 +71,8 @@ object GameConfigProvider {
   @throws(classOf[JSONException])
   @throws(classOf[NoSuchElementException])
   def loadFromFile(configFilePath: String): Unit = {
-    val json = Source.fromFile(configFilePath).getLines.mkString
-
-    val parsed = JSON.parseFull(json)
-
-    parsed match {
+    val json = Source.fromInputStream(getClass.getClassLoader.getResourceAsStream("scenarios" + File.separator + configFilePath)).getLines.mkString
+    JSON.parseFull(json) match {
       case Some(jsonMap: Map[String, Any]) =>
         gameObjects = List[GameObject]()
         actions = List[Action]()
