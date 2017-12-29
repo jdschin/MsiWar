@@ -10,15 +10,15 @@ class SwingFrame(controller: Controller) extends Frame {
   title = "Pixel Tank War"
   resizable = false
   contents = contentPanel
-  packAndCenter
+  packAndCenter()
 
   listenTo(controller)
   reactions += {
-    case _: GameStarted => packAndCenter
-    case _: PlayerWon => packAndCenter
+    case _: GameStarted => packAndCenter()
+    case _: PlayerWon => packAndCenter()
   }
 
-  private def packAndCenter : Unit = {
+  private def packAndCenter() : Unit = {
     pack()
     contentPanel.resize(peer.getWidth, peer.getHeight)
     // Center on monitor

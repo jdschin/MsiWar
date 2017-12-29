@@ -32,16 +32,11 @@ object ImageUtils {
   }
 
   def loadImageIcon(imagePath: String): Option[ImageIcon] = {
-    var image = Option.empty[ImageIcon]
-    var is: InputStream = null
-    try {
-      is = getClass.getClassLoader.getResourceAsStream(imagePath)
-      image = Option[ImageIcon](new ImageIcon(ImageIO.read(is)))
-    } finally {
-      if (is != null) {
-        is.close()
-      }
+   var imageIcon = Option.empty[ImageIcon]
+   val imageOpt = loadImage(imagePath)
+    if(imageOpt.isDefined){
+      imageIcon = Option(new ImageIcon(imageOpt.get))
     }
-    image
+    imageIcon
   }
 }
