@@ -1,19 +1,17 @@
 package de.htwg.se.msiwar.aview.swing
 
 import java.awt.Dimension
-import java.io.File
-import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 
 import de.htwg.se.msiwar.controller.Controller
-import de.htwg.se.msiwar.util.ImageTransformer
+import de.htwg.se.msiwar.util.ImageUtils
 
 import scala.swing.event.ButtonClicked
 import scala.swing.{Alignment, FlowPanel, Graphics2D, GridPanel, ToggleButton}
 
 class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   private val actionBarButtons = scala.collection.mutable.Map[Int, ToggleButton]()
-  private var backgroundImage = ImageIO.read(new File(getClass.getClassLoader.getResource(controller.actionbarBackgroundImagePath).getPath))
+  private var backgroundImage = ImageUtils.loadImage(controller.actionbarBackgroundImagePath)
   private var currentActionId: Option[Int] = Option.empty
 
   preferredSize = new Dimension(50, 50)
@@ -32,7 +30,7 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
       val actionBtn = new ToggleButton() {
         private val imagePath = controller.actionIconPath(actionId)
         if (imagePath.isDefined) {
-          icon = new ImageIcon(getClass.getClassLoader.getResource(imagePath.get).getPath)
+          icon = new ImageIcon(getClass.getClassLoader.getResourceAsStream(imagePath.get))
           text = actionId.toString
           horizontalTextPosition = Alignment.Right
           verticalTextPosition = Alignment.Bottom
@@ -52,7 +50,9 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   }
 
   def resize(width: Int, height: Int): Unit = {
-    backgroundImage = ImageTransformer.scale(backgroundImage, width, height)
+    if (backgroundImage.isDefined) {
+      backgroundImage = ImageUtils.scale(backgroundImage.get, width, height)
+    }
     repaint()
   }
 
@@ -92,6 +92,8 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
 
   override protected def paintComponent(g: Graphics2D): Unit = {
     super.paintComponent(g)
-    g.drawImage(backgroundImage, null, 0, 0)
+    if (backgroundImage.isDefined) {
+      g.drawImage(backgroundImage.get, null, 0, 0)
+    }
   }
 }

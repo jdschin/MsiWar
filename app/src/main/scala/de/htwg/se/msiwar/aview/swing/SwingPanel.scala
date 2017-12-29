@@ -2,13 +2,11 @@ package de.htwg.se.msiwar.aview.swing
 
 
 import java.awt.Dimension
-import java.io.File
 import java.util.concurrent.{ScheduledThreadPoolExecutor, TimeUnit}
-import javax.imageio.ImageIO
 import javax.swing.{ImageIcon, SwingUtilities}
 
 import de.htwg.se.msiwar.controller.{Controller, _}
-import de.htwg.se.msiwar.util.{ImageTransformer, SoundPlayer}
+import de.htwg.se.msiwar.util.{ImageUtils, SoundPlayer}
 
 import scala.swing.event.{KeyTyped, MousePressed}
 import scala.swing.{BorderPanel, Graphics2D, GridPanel, Label, Reactor}
@@ -19,7 +17,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
 
   private val menuBar = new SwingMenuBar(controller)
   private val actionPanel = new SwingActionBarPanel(controller)
-  private var backgroundImage = ImageIO.read(new File(getClass.getClassLoader.getResource(controller.openingBackgroundImagePath).getPath))
+  private var backgroundImage = ImageUtils.loadImage(controller.openingBackgroundImagePath)
 
   private var labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
   private var gridPanel = new GridPanel(1, 1) {
@@ -27,7 +25,9 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
 
     override protected def paintComponent(g: Graphics2D): Unit = {
       super.paintComponent(g)
-      g.drawImage(backgroundImage, null, 0, 0)
+      if (backgroundImage.isDefined) {
+        g.drawImage(backgroundImage.get, null, 0, 0)
+      }
     }
   }
 
@@ -73,22 +73,24 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
   }
 
   def resize(width: Int, height: Int): Unit = {
-    backgroundImage = ImageTransformer.scale(backgroundImage,width,height)
-    actionPanel.resize(width,height)
+    backgroundImage = ImageUtils.scale(backgroundImage.get, width, height)
+    actionPanel.resize(width, height)
     repaint()
   }
 
   private def createContent(): Unit = {
     // Clear previous content
     _contents.clear()
-    backgroundImage = ImageIO.read(new File(getClass.getClassLoader.getResource(controller.levelBackgroundImagePath).getPath))
+    backgroundImage = ImageUtils.loadImage(controller.levelBackgroundImagePath)
     labels = Array.ofDim[Label](controller.rowCount, controller.columnCount)
     gridPanel = new GridPanel(controller.rowCount, controller.columnCount) {
       preferredSize = new Dimension(controller.columnCount * grid_size_factor, controller.rowCount * grid_size_factor)
 
       override protected def paintComponent(g: Graphics2D): Unit = {
         super.paintComponent(g)
-        g.drawImage(backgroundImage, null, 0, 0)
+        if (backgroundImage.isDefined) {
+          g.drawImage(backgroundImage.get, null, 0, 0)
+        }
       }
     }
 
@@ -122,17 +124,6 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
     }
   }
 
-  private def updateLabel(rowIndex: Int, columnIndex: Int): Unit = {
-    val label = labels(rowIndex)(columnIndex)
-    val imagePath = controller.cellContentImagePath(rowIndex, columnIndex)
-    if (imagePath.isDefined) {
-      label.icon = new ImageIcon(imagePath.get)
-    } else {
-      label.icon = null
-    }
-    label.repaint()
-  }
-
   private def updateLabelTemporary(rowIndex: Int, columnIndex: Int, pathOfImageToShow: String, seconds: Int): Unit = {
     // Temporary show set new icon, will be replaced with old one after configured delay
     labels(rowIndex)(columnIndex).icon = new ImageIcon(pathOfImageToShow)
@@ -146,6 +137,17 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       }
     }
     poolExecutor.schedule(task, seconds, TimeUnit.SECONDS)
+  }
+
+  private def updateLabel(rowIndex: Int, columnIndex: Int): Unit = {
+    val label = labels(rowIndex)(columnIndex)
+    val imagePath = controller.cellContentImagePath(rowIndex, columnIndex)
+    if (imagePath.isDefined) {
+      label.icon = new ImageIcon(imagePath.get)
+    } else {
+      label.icon = null
+    }
+    label.repaint()
   }
 
   private def clearCellsInRange(): Unit = {
