@@ -4,6 +4,7 @@ import java.awt.RenderingHints
 import java.awt.image.BufferedImage
 import java.io.InputStream
 import javax.imageio.ImageIO
+import javax.swing.ImageIcon
 
 
 object ImageUtils {
@@ -22,6 +23,20 @@ object ImageUtils {
     try {
       is = getClass.getClassLoader.getResourceAsStream(imagePath)
       image = Option[BufferedImage](ImageIO.read(is))
+    } finally {
+      if (is != null) {
+        is.close()
+      }
+    }
+    image
+  }
+
+  def loadImageIcon(imagePath: String): Option[ImageIcon] = {
+    var image = Option.empty[ImageIcon]
+    var is: InputStream = null
+    try {
+      is = getClass.getClassLoader.getResourceAsStream(imagePath)
+      image = Option[ImageIcon](new ImageIcon(ImageIO.read(is)))
     } finally {
       if (is != null) {
         is.close()

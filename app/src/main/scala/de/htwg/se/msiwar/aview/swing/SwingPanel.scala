@@ -3,7 +3,7 @@ package de.htwg.se.msiwar.aview.swing
 
 import java.awt.Dimension
 import java.util.concurrent.{ScheduledThreadPoolExecutor, TimeUnit}
-import javax.swing.{ImageIcon, SwingUtilities}
+import javax.swing.SwingUtilities
 
 import de.htwg.se.msiwar.controller.{Controller, _}
 import de.htwg.se.msiwar.util.{ImageUtils, SoundPlayer}
@@ -58,7 +58,12 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
 
       add(menuBar, BorderPanel.Position.North)
       _contents += new Label {
-        icon = new ImageIcon(e.wonImagePath)
+        private val imagePathOpt = ImageUtils.loadImageIcon(e.wonImagePath)
+        if (imagePathOpt.isDefined) {
+          icon = ImageUtils.loadImageIcon(e.wonImagePath).get
+        } else {
+          icon = null
+        }
       }
       revalidate()
       repaint()
@@ -125,25 +130,33 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
   }
 
   private def updateLabelTemporary(rowIndex: Int, columnIndex: Int, pathOfImageToShow: String, seconds: Int): Unit = {
-    // Temporary show set new icon, will be replaced with old one after configured delay
-    labels(rowIndex)(columnIndex).icon = new ImageIcon(pathOfImageToShow)
-    val task = new Runnable {
-      def run(): Unit = {
-        // Restore old icon after configured delay
-        val uiTask = new Runnable {
-          def run(): Unit = updateLabel(rowIndex, columnIndex)
+    val imageOpt = ImageUtils.loadImageIcon(pathOfImageToShow)
+    if (imageOpt.isDefined) {
+      // Temporary show set new icon, will be replaced with old one after configured delay
+      labels(rowIndex)(columnIndex).icon = imageOpt.get
+      val task = new Runnable {
+        def run(): Unit = {
+          // Restore old icon after configured delay
+          val uiTask = new Runnable {
+            def run(): Unit = updateLabel(rowIndex, columnIndex)
+          }
+          SwingUtilities.invokeLater(uiTask)
         }
-        SwingUtilities.invokeLater(uiTask)
       }
+      poolExecutor.schedule(task, seconds, TimeUnit.SECONDS)
     }
-    poolExecutor.schedule(task, seconds, TimeUnit.SECONDS)
   }
 
   private def updateLabel(rowIndex: Int, columnIndex: Int): Unit = {
     val label = labels(rowIndex)(columnIndex)
     val imagePath = controller.cellContentImagePath(rowIndex, columnIndex)
     if (imagePath.isDefined) {
-      label.icon = new ImageIcon(imagePath.get)
+      val imageOpt = ImageUtils.loadImageIcon(imagePath.get)
+      if (imageOpt.isDefined) {
+        label.icon = imageOpt.get
+      } else {
+        label.icon = null
+      }
     } else {
       label.icon = null
     }

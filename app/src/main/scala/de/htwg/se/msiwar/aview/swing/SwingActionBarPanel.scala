@@ -1,7 +1,6 @@
 package de.htwg.se.msiwar.aview.swing
 
 import java.awt.Dimension
-import javax.swing.ImageIcon
 
 import de.htwg.se.msiwar.controller.Controller
 import de.htwg.se.msiwar.util.ImageUtils
@@ -30,7 +29,12 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
       val actionBtn = new ToggleButton() {
         private val imagePath = controller.actionIconPath(actionId)
         if (imagePath.isDefined) {
-          icon = new ImageIcon(getClass.getClassLoader.getResourceAsStream(imagePath.get))
+          val imagePathOpt = ImageUtils.loadImageIcon(imagePath.get)
+          if(imagePathOpt.isDefined){
+            icon = imagePathOpt.get
+          } else {
+            icon = null
+          }
           text = actionId.toString
           horizontalTextPosition = Alignment.Right
           verticalTextPosition = Alignment.Bottom
