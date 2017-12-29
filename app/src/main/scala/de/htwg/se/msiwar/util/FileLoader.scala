@@ -22,7 +22,11 @@ object FileLoader {
     val it = walk.iterator
     while (it.hasNext) {
       val path = it.next().toString
-      val indexOfLastSlash = path.lastIndexOf(File.separator)
+      var indexOfLastSlash = path.lastIndexOf(File.separator)
+      if(indexOfLastSlash < 0){
+        indexOfLastSlash = path.lastIndexOf("/")
+      }
+
       var fileName = path.substring(indexOfLastSlash, path.length)
       if (!fileName.contains("scenario")) {
         fileName = fileName.substring(1)

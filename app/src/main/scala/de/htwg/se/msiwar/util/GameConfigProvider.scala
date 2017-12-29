@@ -71,7 +71,7 @@ object GameConfigProvider {
   @throws(classOf[JSONException])
   @throws(classOf[NoSuchElementException])
   def loadFromFile(configFilePath: String): Unit = {
-    val json = Source.fromInputStream(getClass.getClassLoader.getResourceAsStream("scenarios" + File.separator + configFilePath)).getLines.mkString
+    val json = Source.fromInputStream(getClass.getClassLoader.getResourceAsStream("scenarios/" + configFilePath)).getLines.mkString
     JSON.parseFull(json) match {
       case Some(jsonMap: Map[String, Any]) =>
         gameObjects = List[GameObject]()
