@@ -163,7 +163,7 @@
       "playerNumber": 1,
       "wonImagePath": "images/background_won_red.png",
       "maxActionPoints": 3,
-      "maxHealthPoints": 3,
+      "maxHealthPoints": 8,
       "actions": [
         {
           "id": 1
@@ -172,7 +172,7 @@
           "id": 2
         },
         {
-          "id": 3
+          "id": 4
         }
       ]
     },
@@ -186,7 +186,7 @@
       "viewDirection": 2,
       "playerNumber": 2,
       "wonImagePath": "images/background_won_blue.png",
-      "maxActionPoints": 3,
+      "maxActionPoints": 6,
       "maxHealthPoints": 3,
       "actions": [
         {
@@ -196,7 +196,7 @@
           "id": 2
         },
         {
-          "id": 3
+          "id": 4
         }
       ]
     },
@@ -210,8 +210,8 @@
       "viewDirection": 3,
       "playerNumber": 3,
       "wonImagePath": "images/background_won_purple.png",
-      "maxActionPoints": 3,
-      "maxHealthPoints": 3,
+      "maxActionPoints": 4,
+      "maxHealthPoints": 4,
       "actions": [
         {
           "id": 1
@@ -221,6 +221,9 @@
         },
         {
           "id": 3
+        },
+        {
+          "id": 4
         }
       ]
     }
@@ -248,6 +251,16 @@
     },
     {
       "id": 3,
+      "description": "Rakete abschießen",
+      "imagePath": "images/action_rocket_attack.png",
+      "soundPath": "rocket.wav",
+      "actionPoints": 2,
+      "range": 5,
+      "actionType": 0,
+      "damage": 3
+    },
+    {
+      "id": 4,
       "description": "Warten",
       "imagePath": "images/action_wait.png",
       "soundPath": "wait.wav",
