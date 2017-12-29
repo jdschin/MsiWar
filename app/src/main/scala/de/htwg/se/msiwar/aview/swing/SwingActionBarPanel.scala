@@ -51,6 +51,7 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
 
     _contents += actionBar
     revalidate()
+    repaint()
   }
 
   def resize(width: Int, height: Int): Unit = {
