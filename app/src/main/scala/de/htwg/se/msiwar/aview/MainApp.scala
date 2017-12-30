@@ -5,12 +5,13 @@ import de.htwg.se.msiwar.aview.tui.Tui
 import de.htwg.se.msiwar.controller.ControllerImpl
 
 object MainApp {
+  val controller = new ControllerImpl
+  private val swingFrame = new SwingFrame(controller)
+  swingFrame.visible = true
+
+  private val tui = new Tui(controller)
+
   def main(args: Array[String]): Unit = {
-    val controller = new ControllerImpl
-
-    new SwingFrame(controller).visible = true
-    val tui = new Tui(controller)
-
     while (tui.executeCommand(readLine())) {}
   }
 }
