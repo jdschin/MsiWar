@@ -64,7 +64,7 @@ object GameConfigProvider {
   var gameObjects: List[GameObject] = List(player1, player2, wood1, wood2, wood3, wood4, wood5, wood6, wood7, wood8, wood9, wood10, wood11, mountain1, mountain2, mountain3, mountain4, mountain5, mountain6, mountain7, mountain8, mountain9, lake1, lake2, city1)
 
   def listScenarios: List[String] = {
-    FileLoader.loadFilesFromDirPath("/scenarios")
+    FileLoader.loadFilesFromDirPath("/scenarios").sorted
   }
 
   @throws(classOf[FileNotFoundException])
