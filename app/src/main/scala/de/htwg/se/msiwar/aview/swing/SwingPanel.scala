@@ -53,28 +53,11 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       e.rowColumnIndexes.foreach(t => {
         labels(t._1)(t._2).border = new javax.swing.border.LineBorder(java.awt.Color.GREEN, 4, true)
       })
-    case e: PlayerWon =>
-      _contents.clear()
-
-      add(menuBar, BorderPanel.Position.North)
-      _contents += new Label {
-        private val imagePathOpt = ImageUtils.loadImageIcon(e.wonImagePath)
-        if (imagePathOpt.isDefined) {
-          icon = ImageUtils.loadImageIcon(e.wonImagePath).get
-        } else {
-          icon = null
-        }
-      }
-      revalidate()
-      repaint()
     case e: AttackActionResult =>
       SoundPlayer.playWav(e.attackSoundPath)
       updateLabelTemporary(e.rowIndex, e.columnIndex, e.attackImagePath, 1)
     case e: KeyTyped =>
       actionPanel.activateActionId(e.char)
-    case _: GameStarted =>
-      createContent()
-      fillBoard()
   }
 
   def resize(width: Int, height: Int): Unit = {
@@ -83,6 +66,27 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
     }
     actionPanel.resize(width, height)
     repaint()
+  }
+
+  def showPlayerWon(e: PlayerWon): Unit = {
+    _contents.clear()
+
+    add(menuBar, BorderPanel.Position.North)
+    _contents += new Label {
+      private val imagePathOpt = ImageUtils.loadImageIcon(e.wonImagePath)
+      if (imagePathOpt.isDefined) {
+        icon = ImageUtils.loadImageIcon(e.wonImagePath).get
+      } else {
+        icon = null
+      }
+    }
+    revalidate()
+    repaint()
+  }
+
+  def rebuild(): Unit = {
+    createContent()
+    fillBoard()
   }
 
   private def createContent(): Unit = {

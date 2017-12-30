@@ -17,8 +17,12 @@ class SwingFrame(controller: Controller) extends Frame {
 
   listenTo(controller)
   reactions += {
-    case _: GameStarted => packAndCenter()
-    case _: PlayerWon => packAndCenter()
+    case _: GameStarted =>
+      contentPanel.rebuild
+      packAndCenter()
+    case e: PlayerWon =>
+      contentPanel.showPlayerWon(e)
+      packAndCenter()
   }
 
   private def packAndCenter() : Unit = {
