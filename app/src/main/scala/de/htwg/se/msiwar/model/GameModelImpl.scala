@@ -166,9 +166,9 @@ case class GameModelImpl(numRows: Int, numCols: Int, var gameObjects: List[GameO
       }
     )
 
-    // If every player did his turn, start the next turn with player 1
+    // If every player did his turn, start the next turn with first player alive
     if (!foundNextPlayer) {
-      activePlayer = player(1)
+      activePlayer = firstPlayerAlive()
       turnNumber += 1
       // Reset action points of all players when new turn has started
       for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
@@ -176,6 +176,10 @@ case class GameModelImpl(numRows: Int, numCols: Int, var gameObjects: List[GameO
       }
     }
     turnCounter
+  }
+
+  private def firstPlayerAlive(): PlayerObject = {
+    gameObjects.collect({ case s: PlayerObject => s }).reduceLeft((a, b) => if (a.playerNumber < b.playerNumber) a else b)
   }
 
   private def player(playerNumber: Int): PlayerObject = {
