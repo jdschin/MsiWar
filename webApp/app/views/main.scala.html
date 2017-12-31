@@ -1,22 +1,32 @@
 @*
- * This template is called from the `index` template. This template
- * handles the rendering of the page header and body tags. It takes
- * two arguments, a `String` for the title of the page and an `Html`
- * object to insert into the body of the page.
- *@
-@(title: String)(content: Html)
+* This template is called from the `index` template. This template
+* handles the rendering of the page header and body tags. It takes
+* two arguments, a `String` for the title of the page and an `Html`
+* object to insert into the body of the page.
+*@
+@(webSocketUrl: String, controller: AppController)(implicit webJarsUtil: org.webjars.play.WebJarsUtil)
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         @* Here's where we render the page title `String`. *@
-        <title>@title</title>
+        <title>Pixel Tank War</title>
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/heavy_tank_blue_0.png")">
     </head>
     <body>
         @* And here's where we render the `Html` object containing
-         * the page content. *@
-        @content
+        * the page content. *@
+        <div align="center">
+            <h1>Pixel Tank War</h1>
+            <img id="openingImage" src="@routes.Assets.versioned(controller.openingBackgroundImagePath)">
+
+            <table id="grid"></table>
+        </div>
+
+        @Html(webJarsUtil.script("jquery.min.js"))
+        @Html(webJarsUtil.script("jquery.flot.min.js"))
+        <script type='text/javascript' src='@routes.Assets.versioned("javascripts/modernizr-3.5.0.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.versioned("javascripts/app.js")' data-url='@webSocketUrl'></script>
     </body>
 </html>
