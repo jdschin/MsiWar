@@ -1,20 +1,12 @@
 package de.htwg.se.msiwar.controller
 
-import java.io.FileNotFoundException
-
 import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.Direction.Direction
-import de.htwg.se.msiwar.util.{GameConfigProvider, JSONException}
 
 case class ScenarioNotFoundException(message: String) extends Exception
 
-class ControllerImpl extends Controller {
-  private var model: GameModel = createModel
-  private val scenariosById = new scala.collection.mutable.HashMap[Int, String]()
-  private val availableScenarios = GameConfigProvider.listScenarios
-  for (i <- availableScenarios.indices) {
-    scenariosById.put(i, availableScenarios(i))
-  }
+class ControllerImpl(var model: GameModel) extends Controller {
+  listenTo(model)
 
   reactions += {
     case e: GameBoardChanged => publish(CellChanged(e.rowColumnIndexes))
@@ -77,17 +69,11 @@ class ControllerImpl extends Controller {
   }
 
   override def scenarioIds: Set[Int] = {
-    scenariosById.keys.toSet
+    model.scenarioIds
   }
 
   override def scenarioName(scenarioId: Int): Option[String] = {
-    val scenarioNameOpt = scenariosById.get(scenarioId)
-    if (scenarioNameOpt.isDefined) {
-      val scenarioName = scenarioNameOpt.get
-      Option(scenarioName.substring(0, scenarioName.lastIndexOf('.')).replace('_', ' '))
-    } else {
-      Option.empty
-    }
+    model.scenarioName(scenarioId)
   }
 
   override def rowCount: Int = {
@@ -119,29 +105,12 @@ class ControllerImpl extends Controller {
   }
 
   override def startGame(scenarioId: Int): Unit = {
-    try {
-      val scenarioNameOpt = scenariosById.get(scenarioId)
-      if (scenariosById.get(scenarioId).isDefined) {
-        GameConfigProvider.loadFromFile(scenarioNameOpt.get)
-      }
-    }
-    catch {
-      case e: FileNotFoundException => print(e.getMessage)
-      case e: JSONException => print(e.getMessage)
-      case e: NoSuchElementException => print(e.getMessage)
-    }
-    model = createModel
-    listenTo(model)
+    model.startGame(scenarioId)
 
     // Fire initial events
     publish(GameStarted())
     updateTurn()
     publish(TurnStarted(model.activePlayerNumber))
-  }
-
-  private def createModel: GameModel = {
-    val createdModel = GameModelImpl(GameConfigProvider.rowCount, GameConfigProvider.colCount, GameConfigProvider.gameObjects, GameConfigProvider.levelBackgroundImagePath, GameConfigProvider.actionbarBackgroundImagePath, GameConfigProvider.attackImagePath, GameConfigProvider.attackSoundPath, GameConfigProvider.openingBackgroundImagePath)
-    createdModel
   }
 
   override def turnCounter: Int = {

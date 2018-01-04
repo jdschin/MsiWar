@@ -1,26 +1,50 @@
 package de.htwg.se.msiwar.model
 
+import java.io.FileNotFoundException
+
 import de.htwg.se.msiwar.model.ActionType._
-import de.htwg.se.msiwar.util.Direction
 import de.htwg.se.msiwar.util.Direction.Direction
+import de.htwg.se.msiwar.util.{Direction, GameConfigProvider, JSONException}
 
 import scala.util.control.Breaks
 
-case class GameModelImpl(numRows: Int, numCols: Int, var gameObjects: List[GameObject], levelBackgroundImagePath: String, actionbarBackgroundImagePath: String, attackImagePath: String, attackSoundPath: String, openingBackgroundImagePath: String) extends GameModel {
-  private var gameBoard = GameBoard(numRows, numCols, gameObjects)
+case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameModel {
+  private var attackImagePath = gameConfigProvider.attackImagePath
+  private var attackSoundPath = gameConfigProvider.attackSoundPath
+  private var gameObjects = gameConfigProvider.gameObjects
+  private var gameBoard = GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects)
   private var activePlayer = player(1)
   private var turnNumber = 1
   private var lastExecutedAction = Option.empty[Action]
+  private val scenariosById = new scala.collection.mutable.HashMap[Int, String]()
+  private val availableScenarios = gameConfigProvider.listScenarios
+  for (i <- availableScenarios.indices) {
+    scenariosById.put(i, availableScenarios(i))
+  }
 
-  override def reset(): Unit = {
-    gameBoard = GameBoard(numRows, numCols, gameObjects)
-    gameObjects.collect({ case p: PlayerObject => p }).foreach(playerObject => {
-      playerObject.resetActionPoints()
-      playerObject.resetHealthPoints()
-    })
+  private def reset(): Unit = {
+    attackImagePath = gameConfigProvider.attackImagePath
+    attackSoundPath = gameConfigProvider.attackSoundPath
+    gameObjects = gameConfigProvider.gameObjects
+    gameBoard = GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects)
     activePlayer = player(1)
     turnNumber = 1
     lastExecutedAction = Option.empty[Action]
+  }
+
+  override def startGame(scenarioId: Int): Unit = {
+    try {
+      val scenarioNameOpt = scenariosById.get(scenarioId)
+      if (scenariosById.get(scenarioId).isDefined) {
+        gameConfigProvider.loadFromFile(scenarioNameOpt.get)
+      }
+    }
+    catch {
+      case e: FileNotFoundException => print(e.getMessage)
+      case e: JSONException => print(e.getMessage)
+      case e: NoSuchElementException => print(e.getMessage)
+    }
+    reset()
   }
 
   override def activePlayerName: String = {
@@ -277,11 +301,37 @@ case class GameModelImpl(numRows: Int, numCols: Int, var gameObjects: List[GameO
     }
   }
 
+  override def scenarioIds: Set[Int] = {
+    scenariosById.keys.toSet
+  }
+
+  override def scenarioName(scenarioId: Int): Option[String] = {
+    val scenarioNameOpt = scenariosById.get(scenarioId)
+    if (scenarioNameOpt.isDefined) {
+      val scenarioName = scenarioNameOpt.get
+      Option(scenarioName.substring(0, scenarioName.lastIndexOf('.')).replace('_', ' '))
+    } else {
+      Option.empty
+    }
+  }
+
   override def activePlayerActionPoints: Int = {
     activePlayer.currentActionPoints
   }
 
   override def activePlayerHealthPoints: Int = {
     activePlayer.currentHealthPoints
+  }
+
+  override def openingBackgroundImagePath: String = {
+    gameConfigProvider.openingBackgroundImagePath
+  }
+
+  override def levelBackgroundImagePath:String = {
+    gameConfigProvider.levelBackgroundImagePath
+  }
+
+  override def actionbarBackgroundImagePath:String = {
+    gameConfigProvider.actionbarBackgroundImagePath
   }
 }

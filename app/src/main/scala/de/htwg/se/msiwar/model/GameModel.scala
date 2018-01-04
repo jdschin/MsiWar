@@ -36,6 +36,10 @@ trait GameModel extends Publisher {
   def activePlayerActionPoints: Int
   def activePlayerHealthPoints: Int
 
+  def scenarioIds: Set[Int]
+  def scenarioName(scenarioId: Int): Option[String]
+  def startGame(scenarioId: Int) : Unit
+
   def rowCount: Int
   def columnCount: Int
 
@@ -43,6 +47,4 @@ trait GameModel extends Publisher {
   def turnOver: Boolean
   def nextTurn: Int
   def winnerId: Option[Int]
-
-  def reset(): Unit
 }
