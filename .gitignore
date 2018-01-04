@@ -9,6 +9,7 @@ bin/
 # Intellij
 .idea/
 target/
+main.iml
 
 # Maven
 log/
@@ -44,3 +45,5 @@ project/.sbtserver
 
 # Application
 yourgame.log
+app.jar
+MANIFEST.MF
