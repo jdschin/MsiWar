@@ -95,6 +95,7 @@ class Tui(controller: Controller) extends Reactor {
       }
       println
     }
+    println
   }
 
   private def executeAction(actionId: Int, direction: String): Unit = {
