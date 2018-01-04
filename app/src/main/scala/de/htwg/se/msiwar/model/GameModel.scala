@@ -24,6 +24,7 @@ trait GameModel extends Publisher {
   def levelBackgroundImagePath: String
   def actionbarBackgroundImagePath: String
   def wonImagePath: String
+  def appIconImagePath: String
 
   def executeAction(actionId: Int, direction:Direction): Unit
   def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit

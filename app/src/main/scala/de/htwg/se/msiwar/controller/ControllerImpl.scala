@@ -132,4 +132,8 @@ class ControllerImpl(var model: GameModel) extends Controller {
   override def activePlayerHealthPoints: Int = {
     model.activePlayerHealthPoints
   }
+
+  override def appIconImagePath: String = {
+    model.appIconImagePath
+  }
 }

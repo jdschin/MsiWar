@@ -12,16 +12,12 @@
         @* Here's where we render the page title `String`. *@
         <title>Pixel Tank War</title>
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/heavy_tank_blue_0.png")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned(controller.appIconImagePath)">
     </head>
     <body>
-        @* And here's where we render the `Html` object containing
-        * the page content. *@
-        <div align="center">
+        <div id="content" align="center">
             <h1>Pixel Tank War</h1>
             <img id="openingImage" src="@routes.Assets.versioned(controller.openingBackgroundImagePath)">
-
-            <table id="grid"></table>
         </div>
 
         @Html(webJarsUtil.script("jquery.min.js"))

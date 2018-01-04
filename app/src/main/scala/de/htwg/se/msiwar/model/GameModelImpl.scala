@@ -322,6 +322,10 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     }
   }
 
+  override def appIconImagePath: String = {
+    "images/app_icon.png"
+  }
+
   override def activePlayerActionPoints: Int = {
     activePlayer.currentActionPoints
   }

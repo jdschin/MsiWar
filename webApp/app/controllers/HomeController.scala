@@ -9,8 +9,8 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.{BroadcastHub, Flow, Keep, MergeHub, Sink, Source}
 import akka.{Done, NotUsed}
 import de.htwg.se.msiwar.aview.MainApp._
-import de.htwg.se.msiwar.controller.{CellChanged, GameStarted}
-import play.api.libs.json.{JsArray, JsValue, Json}
+import de.htwg.se.msiwar.controller.{AttackActionResult, CellChanged, GameStarted, PlayerWon}
+import play.api.libs.json.{JsArray, JsObject, JsValue, Json}
 import play.api.mvc._
 
 import scala.Option.empty
@@ -29,18 +29,109 @@ class HomeController @Inject()(cc: ControllerComponents)
   extends AbstractController(cc) with Reactor {
 
   private var webSocketUrlOpt: Option[String] = empty
+  private val assetsPreFix = "/assets/"
 
   listenTo(controller)
 
   reactions += {
-    case _: CellChanged => sendJsonToClient()
-    case _: GameStarted => sendJsonToClient()
+    case e: CellChanged => sendCellChangedJsonToClient(e.rowColumnIndexes)
+    case _: GameStarted => sendGameStartedJsonToClient()
+    case e: AttackActionResult => sendAttackActionResultJsonToClient(e.rowIndex, e.columnIndex, e.attackImagePath)
+    case e: PlayerWon => sendPlayerWonJsonToClient(e.wonImagePath)
   }
 
 
   private type WSMessage = String
 
-  private def sendJsonToClient(): Unit = {
+  private def sendPlayerWonJsonToClient(wonImagePath: String): Unit = {
+    val config = Json.obj(
+      "event" -> "PlayerWon",
+      "wonImagePath" -> assetsPreFix.concat(wonImagePath)
+    )
+    sendJsonToClient(config)
+  }
+
+  private def sendAttackActionResultJsonToClient(rowIndex: Int, columnIndex: Int, attackImagePath: String): Unit = {
+
+    val pathOp = controller.cellContentImagePath(rowIndex, columnIndex)
+    var cellContentImagePath = Option.empty[String]
+
+    if (pathOp.isDefined) {
+      cellContentImagePath = Option(assetsPreFix.concat(pathOp.get))
+    } else {
+      cellContentImagePath = Option("undefined")
+    }
+    val config = Json.obj(
+      "event" -> "AttackActionResult",
+      "cellContentImagePath" -> cellContentImagePath.get,
+      "rowIndex" -> rowIndex,
+      "columnIndex" -> columnIndex,
+      "attackImagePath" -> assetsPreFix.concat(attackImagePath)
+    )
+    sendJsonToClient(config)
+  }
+
+  private def sendCellChangedJsonToClient(rowColumnIndexes: List[(Int, Int)]): Unit = {
+
+    var cells = List[JsValue]()
+
+    rowColumnIndexes.foreach {
+      case (rowIndex, columnIndex) =>
+        val pathOp = controller.cellContentImagePath(rowIndex, columnIndex)
+        var cellContentImagePath = Option.empty[String]
+        if (pathOp.isDefined) {
+          cellContentImagePath = Option(assetsPreFix.concat(pathOp.get))
+        } else {
+          cellContentImagePath = Option("undefined")
+        }
+        val json = Json.obj(
+          "rowIndex" -> rowIndex,
+          "columnIndex" -> columnIndex,
+          "cellContentImagePath" -> cellContentImagePath.get)
+        cells = cells ::: List(json)
+
+    }
+
+    val config = Json.obj(
+      "event" -> "CellChanged",
+      "cells" -> JsArray(cells)
+    )
+    sendJsonToClient(config)
+  }
+
+  private def sendGameStartedJsonToClient(): Unit = {
+
+    val backgroundPath = assetsPreFix.concat(appController.levelBackgroundImagePath)
+    val openingPath = assetsPreFix.concat(appController.openingBackgroundImagePath)
+
+    var rows = List[JsValue]()
+    for (row <- 0 until appController.rowCount) {
+      var columns = List[JsValue]()
+      for (column <- 0 until appController.columnCount) {
+        val pathOp = appController.cellContentImagePath(row, column)
+        var json: Option[JsValue] = Option.empty
+        if (pathOp.isDefined) {
+
+          json = Option(Json.obj("cellContentImagePath" -> assetsPreFix.concat(pathOp.get)))
+
+        } else {
+          json = Option(Json.obj("cellContentImagePath" -> "undefined"))
+        }
+        columns = columns ::: List(json.get)
+      }
+      rows = rows ::: List(JsArray(columns))
+    }
+
+    val config = Json.obj(
+      "event" -> "GameStarted",
+      "levelBackgroundImagePath" -> backgroundPath,
+      "openingBackgroundImagePath" -> openingPath,
+      "rows" -> JsArray(rows)
+    )
+    sendJsonToClient(config)
+  }
+
+  private def sendJsonToClient(json: JsObject): Unit = {
     if (webSocketUrlOpt.isDefined) {
 
       val printSink: Sink[Message, Future[Done]] =
@@ -49,36 +140,8 @@ class HomeController @Inject()(cc: ControllerComponents)
             println(message.text)
         }
 
-      val assetsPreFix = "/assets/"
-      val backgroundPath = assetsPreFix.concat(appController.levelBackgroundImagePath)
-      val openingPath = assetsPreFix.concat(appController.openingBackgroundImagePath)
-
-      var rows = List[JsValue]()
-      for (row <- 0 until appController.rowCount) {
-        var columns = List[JsValue]()
-        for (column <- 0 until appController.columnCount) {
-          val pathOp = appController.cellContentImagePath(row, column)
-          var json: Option[JsValue] = Option.empty
-          if (pathOp.isDefined) {
-
-            json = Option(Json.obj("path" -> assetsPreFix.concat(pathOp.get)))
-
-          } else {
-            json = Option(Json.obj("path" -> "undefined"))
-          }
-          columns = columns ::: List(json.get)
-        }
-        rows = rows ::: List(JsArray(columns))
-      }
-
-      val config = Json.obj(
-        "levelBackgroundImagePath" -> backgroundPath,
-        "openingBackgroundImagePath" -> openingPath,
-        "rows" -> JsArray(rows)
-      )
-
       val jsonSource: Source[Message, NotUsed] =
-        Source.single(TextMessage(config.toString()))
+        Source.single(TextMessage(json.toString()))
 
       val flow: Flow[Message, Message, Future[Done]] =
         Flow.fromSinkAndSourceMat(printSink, jsonSource)(Keep.left)
@@ -106,11 +169,11 @@ class HomeController @Inject()(cc: ControllerComponents)
 
   def socket(): WebSocket = {
     WebSocket.acceptOrResult[WSMessage, WSMessage] {
-      case _ =>
+      _ =>
         Future.successful(userFlow).map { flow =>
           Right(flow)
         }.recover {
-          case e: Exception =>
+          case _: Exception =>
             val msg = "Cannot create websocket"
             val result = InternalServerError(msg)
             Left(result)

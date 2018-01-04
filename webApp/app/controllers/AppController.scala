@@ -28,4 +28,8 @@ class AppController @Inject()(cc: ControllerComponents) extends AbstractControll
     controller.levelBackgroundImagePath
   }
 
+  def appIconImagePath: String = {
+    controller.appIconImagePath
+  }
+
 }

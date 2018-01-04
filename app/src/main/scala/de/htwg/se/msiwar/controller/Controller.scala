@@ -44,6 +44,7 @@ trait Controller extends Publisher{
   def openingBackgroundImagePath : String
   def levelBackgroundImagePath : String
   def actionbarBackgroundImagePath : String
+  def appIconImagePath : String
 
   def activePlayerNumber : Int
   def activePlayerActionPoints : Int
