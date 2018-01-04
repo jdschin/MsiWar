@@ -9,6 +9,10 @@ import de.htwg.se.msiwar.util.{Direction, GameConfigProvider, JSONException}
 import scala.util.control.Breaks
 
 case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameModel {
+  var openingBackgroundImagePath:String = gameConfigProvider.openingBackgroundImagePath
+  var levelBackgroundImagePath:String =  gameConfigProvider.levelBackgroundImagePath
+  var actionbarBackgroundImagePath:String =  gameConfigProvider.actionbarBackgroundImagePath
+
   private var attackImagePath = gameConfigProvider.attackImagePath
   private var attackSoundPath = gameConfigProvider.attackSoundPath
   private var gameObjects = gameConfigProvider.gameObjects
@@ -23,6 +27,9 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
   }
 
   private def reset(): Unit = {
+    openingBackgroundImagePath = gameConfigProvider.openingBackgroundImagePath
+    levelBackgroundImagePath =  gameConfigProvider.levelBackgroundImagePath
+    actionbarBackgroundImagePath =  gameConfigProvider.actionbarBackgroundImagePath
     attackImagePath = gameConfigProvider.attackImagePath
     attackSoundPath = gameConfigProvider.attackSoundPath
     gameObjects = gameConfigProvider.gameObjects
@@ -321,17 +328,5 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
 
   override def activePlayerHealthPoints: Int = {
     activePlayer.currentHealthPoints
-  }
-
-  override def openingBackgroundImagePath: String = {
-    gameConfigProvider.openingBackgroundImagePath
-  }
-
-  override def levelBackgroundImagePath:String = {
-    gameConfigProvider.levelBackgroundImagePath
-  }
-
-  override def actionbarBackgroundImagePath:String = {
-    gameConfigProvider.actionbarBackgroundImagePath
   }
 }
