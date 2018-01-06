@@ -76,6 +76,16 @@ class ModelSpec extends FlatSpec with Matchers {
     player2.currentHealthPoints should be(1)
   }
 
+  it should "return winner id when player 2 gets destroyed" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.executeAction(2, Direction.DOWN)
+    model.executeAction(2, Direction.DOWN)
+    model.winnerId.isDefined should be(true)
+  }
+
   it should "return row count 10 at game start" in {
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerEmptyMapScenario()
