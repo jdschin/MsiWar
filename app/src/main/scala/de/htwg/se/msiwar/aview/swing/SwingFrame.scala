@@ -3,6 +3,7 @@ package de.htwg.se.msiwar.aview.swing
 import javax.swing.WindowConstants
 
 import de.htwg.se.msiwar.controller.{Controller, GameStarted, PlayerWon}
+import de.htwg.se.msiwar.util.ImageUtils
 
 import scala.swing._
 
@@ -12,6 +13,12 @@ class SwingFrame(controller: Controller) extends Frame {
   title = "Pixel Tank War"
   resizable = false
   contents = contentPanel
+
+  val imageOpt = ImageUtils.loadImageIcon(controller.appIconImagePath)
+  if(imageOpt.isDefined) {
+    iconImage = imageOpt.get.getImage
+  }
+
   packAndCenter()
   peer.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
 
