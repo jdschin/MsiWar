@@ -53,7 +53,7 @@ class SwingPanel(controller: Controller) extends BorderPanel with Reactor {
       e.rowColumnIndexes.foreach(t => {
         labels(t._1)(t._2).border = new javax.swing.border.LineBorder(java.awt.Color.GREEN, 4, true)
       })
-    case e: AttackActionResult =>
+    case e: AttackResult =>
       SoundPlayer.playWav(e.attackSoundPath)
       updateLabelTemporary(e.rowIndex, e.columnIndex, e.attackImagePath, 1)
     case e: KeyTyped =>

@@ -60,6 +60,11 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
       case e: NoSuchElementException => print(e.getMessage)
     }
     reset()
+
+    // Fire initial events
+    publish(ModelGameStarted())
+    updateTurn()
+    publish(ModelTurnStarted(activePlayerNumber))
   }
 
   override def activePlayerName: String = {
@@ -109,7 +114,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
           val newPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
           val oldPosition = activePlayer.position.copy()
           gameBoard.moveGameObject(activePlayer, newPosition)
-          publish(GameBoardChanged(List((newPosition.rowIdx, newPosition.columnIdx), (oldPosition.rowIdx, oldPosition.columnIdx))))
+          publish(ModelCellChanged(List((newPosition.rowIdx, newPosition.columnIdx), (oldPosition.rowIdx, oldPosition.columnIdx))))
 
         case SHOOT =>
           val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range), ignoreLastPosition = false)
@@ -122,20 +127,30 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
                 if (playerCollisionObject.currentHealthPoints < 0) {
                   removePlayerFromGame(playerCollisionObject)
                 }
-                publish(GameBoardChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
-              case _ => publish(GameBoardChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
+                publish(ModelCellChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
+              case _ => publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
             }
-            publish(AttackResult(collisionObject.position.rowIdx, collisionObject.position.columnIdx, hit = true, attackImagePath, attackSoundPath))
+            publish(ModelAttackResult(collisionObject.position.rowIdx, collisionObject.position.columnIdx, hit = true, attackImagePath, attackSoundPath))
           } else {
             val targetPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
-            publish(GameBoardChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
-            publish(AttackResult(targetPosition.rowIdx, targetPosition.columnIdx, hit = false, attackImagePath, attackSoundPath))
+            publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
+            publish(ModelAttackResult(targetPosition.rowIdx, targetPosition.columnIdx, hit = false, attackImagePath, attackSoundPath))
           }
         case WAIT => // Do nothing
       }
       activePlayer.currentActionPoints -= actionToExecute.actionPoints
       lastExecutedAction = Option(actionToExecute)
-      publish(ActivePlayerStatsChanged())
+      publish(ModelPlayerStatsChanged())
+    }
+    updateTurn()
+  }
+
+  private def updateTurn(): Unit = {
+    if (winnerId.isDefined) {
+      publish(ModelPlayerWon(winnerId.get, wonImagePath))
+    } else if (turnOver) {
+      nextTurn
+      publish(ModelTurnStarted(activePlayerNumber))
     }
   }
 
@@ -193,7 +208,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     }
   }
 
-  override def nextTurn: Int = {
+  private def nextTurn: Int = {
     var foundNextPlayer = false
     Breaks.breakable(
       for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
@@ -232,7 +247,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
 
   override def turnCounter: Int = turnNumber
 
-  override def turnOver: Boolean = {
+  private def turnOver: Boolean = {
     !activePlayer.hasActionPointsLeft
   }
 

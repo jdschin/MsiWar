@@ -14,7 +14,7 @@ class Tui(controller: Controller) extends Reactor {
       printBoard()
     case e: PlayerWon => println(Console.GREEN + "\nPlayer" + e.playerNumber + " wins!\n" + Console.WHITE)
     case _: GameStarted => println(Console.GREEN + "\nNew Game started!\n" + Console.WHITE)
-    case e: AttackActionResult =>
+    case e: AttackResult =>
       if (e.hit) {
         println(Console.GREEN + "\nAttack hits\n" + Console.WHITE)
       } else {

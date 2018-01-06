@@ -14,6 +14,17 @@ class ModelSpec extends FlatSpec with Matchers {
     model.turnCounter should be(1)
   }
 
+  it should "increase turn counter by 1 when all players uses all action points one time" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.executeAction(3, Direction.DOWN)
+    model.turnCounter should be(1)
+    model.executeAction(3, Direction.DOWN)
+    model.turnCounter should be(2)
+  }
+
   it should "not return a winner id when more than 1 player is alive " in {
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerEmptyMapScenario()
@@ -32,7 +43,7 @@ class ModelSpec extends FlatSpec with Matchers {
 
   it should "return a lower amount of action points for active player after an action has been executed" in {
     val testConfigProvider = new TestConfigProvider
-    testConfigProvider.load2PlayerEmptyMapScenario()
+    testConfigProvider.load2PlayerDamageTestScenario()
 
     val model = GameModelImpl(testConfigProvider)
 
@@ -43,24 +54,6 @@ class ModelSpec extends FlatSpec with Matchers {
       val actionPointsBefore = model.activePlayerActionPoints
       model.executeAction(actionId, Direction.DOWN)
       actionPointsBefore should be > model.activePlayerActionPoints
-      model.reset()
-    }
-  }
-
-  it should "return turn over with value 'true' when active player 1 spent all action points" in {
-    val testConfigProvider = new TestConfigProvider
-    testConfigProvider.load2PlayerEmptyMapScenario()
-
-    val model = GameModelImpl(testConfigProvider)
-
-    val actionIds = model.actionIdsForPlayer(1)
-    val actionIdsIterator = actionIds.iterator
-    while (actionIdsIterator.hasNext) {
-      val actionId = actionIdsIterator.next()
-      while(model.activePlayerActionPoints > 0) {
-        model.executeAction(actionId, Direction.DOWN)
-      }
-      model.turnOver should be(true)
       model.reset()
     }
   }

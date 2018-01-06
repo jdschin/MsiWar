@@ -5,9 +5,12 @@ import de.htwg.se.msiwar.util.Direction.Direction
 import scala.swing.Publisher
 import scala.swing.event.Event
 
-case class GameBoardChanged(rowColumnIndexes: List[(Int, Int)]) extends Event
-case class ActivePlayerStatsChanged() extends Event
-case class AttackResult(rowIndex: Int, columnIndex: Int, hit: Boolean, attackImagePath: String, attackSoundPath: String) extends Event
+case class ModelGameStarted() extends Event
+case class ModelCellChanged(rowColumnIndexes: List[(Int, Int)]) extends Event
+case class ModelPlayerStatsChanged() extends Event
+case class ModelAttackResult(rowIndex: Int, columnIndex: Int, hit: Boolean, attackImagePath: String, attackSoundPath: String) extends Event
+case class ModelTurnStarted(playerNumber: Int) extends Event
+case class ModelPlayerWon(playerNumber: Int, wonImagePath: String) extends Event
 
 trait GameModel extends Publisher {
   def actionIdsForPlayer(playerNumber: Int): Set[Int]
@@ -45,7 +48,5 @@ trait GameModel extends Publisher {
   def columnCount: Int
 
   def turnCounter: Int
-  def turnOver: Boolean
-  def nextTurn: Int
   def winnerId: Option[Int]
 }

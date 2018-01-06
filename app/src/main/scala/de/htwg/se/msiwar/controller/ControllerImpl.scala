@@ -9,9 +9,12 @@ case class ControllerImpl(var model: GameModel) extends Controller {
   listenTo(model)
 
   reactions += {
-    case e: GameBoardChanged => publish(CellChanged(e.rowColumnIndexes))
-    case _: ActivePlayerStatsChanged => publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
-    case e: AttackResult => publish(AttackActionResult(e.rowIndex, e.columnIndex, e.hit, e.attackImagePath, e.attackSoundPath))
+    case e: ModelCellChanged => publish(CellChanged(e.rowColumnIndexes))
+    case _: ModelPlayerStatsChanged => publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
+    case e: ModelAttackResult => publish(AttackResult(e.rowIndex, e.columnIndex, e.hit, e.attackImagePath, e.attackSoundPath))
+    case e: ModelTurnStarted => publish(TurnStarted(e.playerNumber))
+    case e: ModelPlayerWon => publish(PlayerWon(e.playerNumber,e.wonImagePath))
+    case _: ModelGameStarted => publish(GameStarted())
   }
 
   override def cellContentToText(rowIndex: Int, columnIndex: Int): String = {
@@ -24,24 +27,12 @@ case class ControllerImpl(var model: GameModel) extends Controller {
 
   override def executeAction(actionId: Int, direction: Direction): Unit = {
     model.executeAction(actionId, direction)
-    updateTurn()
     cellsInRange(model.lastExecutedActionId)
   }
 
   override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
     model.executeAction(actionId, rowIndex, columnIndex)
-    updateTurn()
     cellsInRange(model.lastExecutedActionId)
-  }
-
-  def updateTurn(): Unit = {
-    val winnerId = model.winnerId
-    if (winnerId.isDefined) {
-      publish(PlayerWon(winnerId.get, model.wonImagePath))
-    } else if (model.turnOver) {
-      model.nextTurn
-      publish(TurnStarted(model.activePlayerNumber))
-    }
   }
 
   override def cellsInRange(actionId: Option[Int]): Unit = {
@@ -106,11 +97,6 @@ case class ControllerImpl(var model: GameModel) extends Controller {
 
   override def startGame(scenarioId: Int): Unit = {
     model.startGame(scenarioId)
-
-    // Fire initial events
-    publish(GameStarted())
-    updateTurn()
-    publish(TurnStarted(model.activePlayerNumber))
   }
 
   override def turnCounter: Int = {
