@@ -26,7 +26,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     scenariosById.put(i, availableScenarios(i))
   }
 
-  private def reset(): Unit = {
+  def reset(): Unit = {
     openingBackgroundImagePath = gameConfigProvider.openingBackgroundImagePath
     levelBackgroundImagePath =  gameConfigProvider.levelBackgroundImagePath
     actionbarBackgroundImagePath =  gameConfigProvider.actionbarBackgroundImagePath
@@ -35,8 +35,16 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     gameObjects = gameConfigProvider.gameObjects
     gameBoard = GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects)
     activePlayer = player(1)
+
+    gameObjects.collect({ case o: PlayerObject => o }).foreach(p => resetPlayer(p))
+
     turnNumber = 1
     lastExecutedAction = Option.empty[Action]
+  }
+
+  private def resetPlayer(playerToReset: PlayerObject): Unit = {
+    playerToReset.resetActionPoints()
+    playerToReset.resetHealthPoints()
   }
 
   override def startGame(scenarioId: Int): Unit = {
