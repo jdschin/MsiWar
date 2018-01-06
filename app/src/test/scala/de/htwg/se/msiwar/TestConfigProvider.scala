@@ -26,7 +26,7 @@ class TestConfigProvider extends GameConfigProvider {
 
   def load2PlayerEmptyMapScenario(): Unit = {
      rowCount = 10
-     colCount = 10
+     colCount = 2
 
     // Setup actions
     val moveAction = Action(1, "Panzer bewegen", "images/action_move.png", "move.wav", 1, 1, MOVE, 0)
@@ -36,7 +36,7 @@ class TestConfigProvider extends GameConfigProvider {
 
     // Setup players
     val player1 = PlayerObject("Spieler1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, 1, "images/background_won_red.png", 3, 3, actions)
-    val player2 = PlayerObject("Spieler2", "images/medium_tank_blue.png", Position(0, 9), Direction.DOWN, 2, "images/background_won_blue.png", 3, 3, actions)
+    val player2 = PlayerObject("Spieler2", "images/medium_tank_blue.png", Position(0, 1), Direction.DOWN, 2, "images/background_won_blue.png", 3, 3, actions)
 
     gameObjects = List(player1, player2)
   }

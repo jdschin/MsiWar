@@ -47,23 +47,23 @@ class ModelSpec extends FlatSpec with Matchers {
     }
   }
 
-  // TODO LG fix this test
-  /*it should "return turn over with value 'true' when active player 1 spent all action points" in {
+  it should "return turn over with value 'true' when active player 1 spent all action points" in {
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerEmptyMapScenario()
 
     val model = GameModelImpl(testConfigProvider)
 
     val actionIds = model.actionIdsForPlayer(1)
-    while (actionIds.iterator.hasNext) {
-      val actionId = actionIds.iterator.next()
+    val actionIdsIterator = actionIds.iterator
+    while (actionIdsIterator.hasNext) {
+      val actionId = actionIdsIterator.next()
       while(model.activePlayerActionPoints > 0) {
         model.executeAction(actionId, Direction.DOWN)
       }
       model.turnOver should be(true)
       model.reset()
     }
-  }*/
+  }
 
   it should "return row count 10 at game start" in {
     val testConfigProvider = new TestConfigProvider
@@ -73,11 +73,11 @@ class ModelSpec extends FlatSpec with Matchers {
     model.rowCount should be(10)
   }
 
-  it should "return column count 10 at game start" in {
+  it should "return column count 2 at game start" in {
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerEmptyMapScenario()
 
     val model = GameModelImpl(testConfigProvider)
-    model.columnCount should be(10)
+    model.columnCount should be(2)
   }
 }
