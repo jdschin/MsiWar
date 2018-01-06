@@ -1,6 +1,6 @@
 package de.htwg.se.msiwar
 
-import de.htwg.se.msiwar.model.GameModelImpl
+import de.htwg.se.msiwar.model.{GameModelImpl, PlayerObject}
 import de.htwg.se.msiwar.util.Direction
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -63,6 +63,17 @@ class ModelSpec extends FlatSpec with Matchers {
       model.turnOver should be(true)
       model.reset()
     }
+  }
+
+  it should "return a lower health amount for player after hit" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    val player2 = testConfigProvider.gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == 2).get
+    player2.currentHealthPoints should be(3)
+    model.executeAction(2, Direction.DOWN)
+    player2.currentHealthPoints should be(1)
   }
 
   it should "return row count 10 at game start" in {
