@@ -8,6 +8,10 @@ import de.htwg.se.msiwar.util.IterationFunction._
 import scala.Option.empty
 
 case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
+  if(rows < 0 || columns < 0){
+    throw new IllegalArgumentException("rows and columns must be positive")
+  }
+
   private val board = Array.ofDim[GameObject](rows, columns)
 
   gameObjects.foreach(placeGameObject)

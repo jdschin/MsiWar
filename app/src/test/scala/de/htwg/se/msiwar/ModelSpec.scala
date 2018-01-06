@@ -6,7 +6,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class ModelSpec extends FlatSpec with Matchers {
 
-  "GameModelImpl" should "return turn counter of 1 at game start" in {
+  GameModelImpl.getClass.getSimpleName should "return turn counter of 1 at game start" in {
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerEmptyMapScenario()
 

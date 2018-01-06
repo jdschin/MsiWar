@@ -5,7 +5,15 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class GameBoardSpec extends FlatSpec with Matchers {
 
-  "GameBoard" should "" in {
-    val gameBoard = GameBoard(1, 1, List())
+  GameBoard.getClass.getSimpleName should "throw IllegalArgumentException when column or row count is negative" in {
+    a [IllegalArgumentException] should be thrownBy {
+      GameBoard(-1, 1, List())
+    }
+    a [IllegalArgumentException] should be thrownBy {
+      GameBoard(1, -1, List())
+    }
+    a [IllegalArgumentException] should be thrownBy {
+      GameBoard(-1, -1, List())
+    }
   }
 }
