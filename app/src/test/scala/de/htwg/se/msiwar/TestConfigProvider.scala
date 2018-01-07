@@ -64,4 +64,8 @@ class TestConfigProvider extends GameConfigProvider {
   override def listScenarios: List[String] = {
     List[String]()
   }
+
+  override def generateGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int, completion: (Boolean) => Unit): Unit = {
+    // TODO
+  }
 }

@@ -1,7 +1,8 @@
 package de.htwg.se.msiwar.util
 
-import java.io.{File, FileNotFoundException}
+import java.io.FileNotFoundException
 
+import akka.actor.{ActorSystem, Props}
 import de.htwg.se.msiwar.model.ActionType._
 import de.htwg.se.msiwar.model._
 
@@ -10,7 +11,7 @@ import scala.util.parsing.json.JSON
 
 case class JSONException(private val message: String = "JSON parsing failed") extends Exception(message)
 
-class GameConfigProviderImpl extends GameConfigProvider{
+class GameConfigProviderImpl extends GameConfigProvider {
   // Global sounds
   var attackSoundPath = "sounds/explosion.wav"
 
@@ -25,14 +26,14 @@ class GameConfigProviderImpl extends GameConfigProvider{
   var colCount = 9
 
   // Setup actions
-  private val moveAction = Action(id=1, "Panzer bewegen", "images/action_move.png", "move.wav", actionPoints=1, range=1, MOVE, damage=0)
-  private val shootAction = Action(id=2, "Schießen", "images/action_attack.png", "shoot.wav", actionPoints=1, range=3, SHOOT, damage=2)
-  private val waitAction = Action(id=3, "Warten", "images/action_wait.png", "shoot.wav", actionPoints=1, range=1, WAIT, damage=2)
+  private val moveAction = Action(id = 1, "Panzer bewegen", "images/action_move.png", "move.wav", actionPoints = 1, range = 1, MOVE, damage = 0)
+  private val shootAction = Action(id = 2, "Schießen", "images/action_attack.png", "shoot.wav", actionPoints = 1, range = 3, SHOOT, damage = 2)
+  private val waitAction = Action(id = 3, "Warten", "images/action_wait.png", "shoot.wav", actionPoints = 1, range = 1, WAIT, damage = 2)
   private var actions = List(moveAction, shootAction, waitAction)
 
   // Setup players
-  private val player1 = PlayerObject("Spieler1", "images/light_tank_red.png", Position(1, 2), Direction.DOWN, playerNumber=1, "images/background_won_red.png", maxActionPoints=3, maxHealthPoints=3, actions)
-  private val player2 = PlayerObject("Spieler2", "images/medium_tank_blue.png", Position(7, 6), Direction.LEFT, playerNumber=2, "images/background_won_blue.png", maxActionPoints=3, maxHealthPoints=3, actions)
+  private val player1 = PlayerObject("Spieler1", "images/light_tank_red.png", Position(1, 2), Direction.DOWN, playerNumber = 1, "images/background_won_red.png", maxActionPoints = 3, maxHealthPoints = 3, actions)
+  private val player2 = PlayerObject("Spieler2", "images/medium_tank_blue.png", Position(7, 6), Direction.LEFT, playerNumber = 2, "images/background_won_blue.png", maxActionPoints = 3, maxHealthPoints = 3, actions)
 
   private val wood1 = BlockObject("B", "images/block_wood.png", Position(0, 0))
   private val wood2 = BlockObject("B", "images/block_wood.png", Position(0, 1))
@@ -190,4 +191,29 @@ class GameConfigProviderImpl extends GameConfigProvider{
 
     PlayerObject(name, imagePath, Position(rowIndex, columnIndex), viewDirectionOpt.get, playerNumber, wonImagePath, maxActionPoints, maxHealthPoints, actions)
   }
+
+  override def generateGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int, completion: (Boolean) => Unit): Unit = {
+    // Global sounds
+    attackSoundPath = "sounds/explosion.wav"
+
+    // Global images
+    openingBackgroundImagePath = "images/background_opening.png"
+    levelBackgroundImagePath = "images/background_desert.png"
+    actionbarBackgroundImagePath = "images/background_actionbar.png"
+    attackImagePath = "images/hit.png"
+
+    // Setup board
+    this.rowCount = 9
+    this.colCount = 9
+
+    val system = ActorSystem("GameGenerationSystem")
+
+    val master = system.actorOf(Props(new GameGenerationMaster(numberOfWorkers = 2, numberOfMessages = 4, numberOfPlayers, rowCount, columnCount, actions, (gameObjects) => {
+      this.gameObjects = gameObjects
+      completion(true)
+    })), name = "master")
+
+    master ! Generate
+  }
+
 }

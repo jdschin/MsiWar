@@ -13,8 +13,9 @@ case class ControllerImpl(var model: GameModel) extends Controller {
     case _: ModelPlayerStatsChanged => publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
     case e: ModelAttackResult => publish(AttackResult(e.rowIndex, e.columnIndex, e.hit, e.attackImagePath, e.attackSoundPath))
     case e: ModelTurnStarted => publish(TurnStarted(e.playerNumber))
-    case e: ModelPlayerWon => publish(PlayerWon(e.playerNumber,e.wonImagePath))
+    case e: ModelPlayerWon => publish(PlayerWon(e.playerNumber, e.wonImagePath))
     case _: ModelGameStarted => publish(GameStarted())
+    case _: ModelCouldNotGenerateGame => publish(CouldNotGenerateGame())
   }
 
   override def cellContentToText(rowIndex: Int, columnIndex: Int): String = {
@@ -103,7 +104,7 @@ case class ControllerImpl(var model: GameModel) extends Controller {
     model.turnCounter
   }
 
-  override def actionPointCost(actionId: Int) : Int = {
+  override def actionPointCost(actionId: Int): Int = {
     model.actionPointCost(actionId)
   }
 
@@ -125,5 +126,9 @@ case class ControllerImpl(var model: GameModel) extends Controller {
 
   override def appIconImagePath: String = {
     model.appIconImagePath
+  }
+
+  override def startRandomGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int): Unit = {
+    model.startRandomGame(numberOfPlayers, rowCount, columnCount)
   }
 }

@@ -6,6 +6,7 @@ import scala.swing.Publisher
 import scala.swing.event.Event
 
 case class GameStarted() extends Event
+case class CouldNotGenerateGame() extends Event
 case class CellChanged(rowColumnIndexes: List[(Int, Int)]) extends Event
 case class CellsInRange(rowColumnIndexes: List[(Int, Int)]) extends Event
 case class TurnStarted(playerNumber: Int) extends Event
@@ -178,4 +179,13 @@ trait Controller extends Publisher{
     * @param scenarioId the scenario id to configure game from
     */
   def startGame(scenarioId: Int) : Unit
-}
+
+  /**
+    * Starts a newly generated game
+    * @param numberOfPlayers the number of the players of the game
+    * @param rowCount the number of rows of the board
+    * @param columnCount the number of columns of the board
+    */
+  def startRandomGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int): Unit
+
+  }

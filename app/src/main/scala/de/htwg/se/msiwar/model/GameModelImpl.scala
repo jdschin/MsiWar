@@ -59,12 +59,26 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
       case e: JSONException => print(e.getMessage)
       case e: NoSuchElementException => print(e.getMessage)
     }
-    reset()
+    resetAndFireInitialEvents()
+  }
 
+  private def resetAndFireInitialEvents(): Unit = {
+    reset()
     // Fire initial events
     publish(ModelGameStarted())
     updateTurn()
     publish(ModelTurnStarted(activePlayerNumber))
+  }
+
+  override def startRandomGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int): Unit = {
+
+    gameConfigProvider.generateGame(1, 1, 1, (couldGenerateGame) => {
+      if (couldGenerateGame) {
+        resetAndFireInitialEvents()
+      } else {
+        publish(ModelCouldNotGenerateGame())
+      }
+    })
   }
 
   override def activePlayerName: String = {
