@@ -21,6 +21,7 @@ trait Controller extends Publisher{
     * @return the text representation of the cell
     */
   def cellContentToText(rowIndex: Int, columnIndex: Int) : String
+
   /**
     * @param rowIndex row to get path of the image representation
     * @param columnIndex column to get path of the image representation
@@ -157,10 +158,9 @@ trait Controller extends Publisher{
   def activePlayerHealthPoints : Int
 
   /**
-    * @param playerNumber the player number (=id) to get name for
-    * @return the player name for given player number (=id)
+    * @return the player name for active player
     */
-  def playerName(playerNumber: Int) : String
+  def activePlayerName: String
 
   /**
     * @return the current turn counter value

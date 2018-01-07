@@ -91,7 +91,7 @@ case class ControllerImpl(var model: GameModel) extends Controller {
     model.activePlayerNumber
   }
 
-  override def playerName(playerNumber: Int): String = {
+  override def activePlayerName: String = {
     model.activePlayerName
   }
 
