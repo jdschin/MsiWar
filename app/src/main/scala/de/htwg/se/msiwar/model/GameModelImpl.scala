@@ -9,9 +9,9 @@ import de.htwg.se.msiwar.util.{Direction, GameConfigProvider, JSONException}
 import scala.util.control.Breaks
 
 case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameModel {
-  var openingBackgroundImagePath:String = gameConfigProvider.openingBackgroundImagePath
-  var levelBackgroundImagePath:String =  gameConfigProvider.levelBackgroundImagePath
-  var actionbarBackgroundImagePath:String =  gameConfigProvider.actionbarBackgroundImagePath
+  var openingBackgroundImagePath: String = gameConfigProvider.openingBackgroundImagePath
+  var levelBackgroundImagePath: String = gameConfigProvider.levelBackgroundImagePath
+  var actionbarBackgroundImagePath: String = gameConfigProvider.actionbarBackgroundImagePath
 
   private var attackImagePath = gameConfigProvider.attackImagePath
   private var attackSoundPath = gameConfigProvider.attackSoundPath
@@ -28,8 +28,8 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
 
   def reset(): Unit = {
     openingBackgroundImagePath = gameConfigProvider.openingBackgroundImagePath
-    levelBackgroundImagePath =  gameConfigProvider.levelBackgroundImagePath
-    actionbarBackgroundImagePath =  gameConfigProvider.actionbarBackgroundImagePath
+    levelBackgroundImagePath = gameConfigProvider.levelBackgroundImagePath
+    actionbarBackgroundImagePath = gameConfigProvider.actionbarBackgroundImagePath
     attackImagePath = gameConfigProvider.attackImagePath
     attackSoundPath = gameConfigProvider.attackSoundPath
     gameObjects = gameConfigProvider.gameObjects
