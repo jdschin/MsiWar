@@ -6,8 +6,8 @@ import de.htwg.se.msiwar.util.ImageUtils
 
 import scala.swing.{BorderPanel, Dialog, Graphics2D}
 
-class SwingAboutDialog extends Dialog{
-  private val backgroundImage = ImageUtils.loadImage("images/about.png")
+class SwingControlsDialog extends Dialog{
+  private val backgroundImage = ImageUtils.loadImage("images/controls.png")
   private val contentPanel = new BorderPanel{
     override protected def paintComponent(g: Graphics2D): Unit = {
       super.paintComponent(g)
@@ -17,7 +17,7 @@ class SwingAboutDialog extends Dialog{
     }
   }
 
-  title = "Pixel Tank War V.1.0 - About"
+  title = "Pixel Tank War V.1.0 - Steuerung"
   preferredSize = new Dimension(600, 650)
   modal = true
   resizable = false

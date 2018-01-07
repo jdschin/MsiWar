@@ -30,7 +30,8 @@ class SwingMenuBar(controller: Controller) extends MenuBar {
     mnemonic = Key.H
 
     contents += new MenuItem(Action("Controls...") {
-      // TODO show hot key window
+      val controlsDialog = new SwingControlsDialog
+      controlsDialog.visible = true
     })
 
     contents += new MenuItem(Action("About...") {
