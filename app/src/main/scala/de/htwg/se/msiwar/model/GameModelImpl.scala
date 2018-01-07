@@ -75,6 +75,15 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     player(playerNumber).actions.map(_.id).toSet
   }
 
+  override def actionPointCost(actionId: Int): Int = {
+    val foundAction = actions.find(_.id == actionId)
+    if (foundAction.isDefined) {
+      foundAction.get.actionPoints
+    } else {
+      0
+    }
+  }
+
   override def actionDescription(actionId: Int): String = {
     val foundAction = actions.find(_.id == actionId)
     if (foundAction.isDefined) {

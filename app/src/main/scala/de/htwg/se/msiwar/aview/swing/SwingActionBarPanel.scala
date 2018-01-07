@@ -36,13 +36,13 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
             icon = null
           }
           text = actionId.toString
+          tooltip = createActionTooltip(actionId)
           horizontalTextPosition = Alignment.Right
           verticalTextPosition = Alignment.Bottom
         } else {
           icon = null
           text = "Action" + actionId
         }
-        tooltip = controller.actionDescription(actionId)
       }
       listenTo(actionBtn)
       actionBar.contents += actionBtn
@@ -52,6 +52,19 @@ class SwingActionBarPanel(controller: Controller) extends FlowPanel {
     _contents += actionBar
     revalidate()
     repaint()
+  }
+
+  private def createActionTooltip(actionId: Int): String = {
+    val tooltipSb = new StringBuilder
+    tooltipSb.append(controller.actionDescription(actionId))
+    tooltipSb.append(" (")
+    tooltipSb.append(controller.actionPointCost(actionId))
+    tooltipSb.append(" AP, ")
+    tooltipSb.append(controller.actionDamage(actionId))
+    tooltipSb.append(" Damage, ")
+    tooltipSb.append(controller.actionRange(actionId))
+    tooltipSb.append(" Range)")
+    tooltipSb.toString()
   }
 
   def resize(width: Int, height: Int): Unit = {

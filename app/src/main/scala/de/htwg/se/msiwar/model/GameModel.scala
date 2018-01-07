@@ -21,6 +21,12 @@ trait GameModel extends Publisher {
   def actionIdsForPlayer(playerNumber: Int): Set[Int]
 
   /**
+    * @param actionId the action id to get action point cost for
+    * @return the action point cost for given action id
+    */
+  def actionPointCost(actionId: Int) : Int
+
+  /**
     * @param actionId the action id to get description for
     * @return the description for given action id
     */

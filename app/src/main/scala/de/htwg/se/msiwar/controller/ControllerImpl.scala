@@ -103,6 +103,10 @@ case class ControllerImpl(var model: GameModel) extends Controller {
     model.turnCounter
   }
 
+  override def actionPointCost(actionId: Int) : Int = {
+    model.actionPointCost(actionId)
+  }
+
   override def actionDamage(actionId: Int): Int = {
     model.actionDamage(actionId)
   }
