@@ -9,12 +9,12 @@ import scala.swing._
 
 class SwingFrame(controller: Controller) extends Frame {
   private val contentPanel = new SwingPanel(controller)
+  private val imageOpt = ImageUtils.loadImageIcon(controller.appIconImagePath)
 
   title = "Pixel Tank War"
   resizable = false
   contents = contentPanel
 
-  val imageOpt = ImageUtils.loadImageIcon(controller.appIconImagePath)
   if(imageOpt.isDefined) {
     iconImage = imageOpt.get.getImage
   }
@@ -25,7 +25,7 @@ class SwingFrame(controller: Controller) extends Frame {
   listenTo(controller)
   reactions += {
     case _: GameStarted =>
-      contentPanel.rebuild
+      contentPanel.rebuild()
       packAndCenter()
     case e: PlayerWon =>
       contentPanel.showPlayerWon(e)
