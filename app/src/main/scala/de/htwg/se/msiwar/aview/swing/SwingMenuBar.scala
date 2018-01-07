@@ -34,7 +34,8 @@ class SwingMenuBar(controller: Controller) extends MenuBar {
     })
 
     contents += new MenuItem(Action("About...") {
-      // TODO show about window
+      val aboutDialog = new SwingAboutDialog
+      aboutDialog.visible = true
     })
   }
 }
