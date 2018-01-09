@@ -28,12 +28,12 @@ class TestConfigProvider extends GameConfigProvider {
     rowCount = 2
     colCount = 1
 
-    val shootAction = Action(id=2, "Schießen", "images/action_attack.png", "shoot.wav", actionPoints=1, range=3, SHOOT, damage=2)
+    val shootAction = Action(id=2, "Shoot", "images/action_attack.png", "shoot.wav", actionPoints=1, range=3, SHOOT, damage=2)
     actions = List(shootAction)
 
     // Setup players
-    val player1 = PlayerObject("Spieler1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", maxActionPoints=3, maxHealthPoints=3, actions)
-    val player2 = PlayerObject("Spieler2", "images/medium_tank_blue.png", Position(1, 0), Direction.UP, playerNumber=2, "images/background_won_blue.png", maxActionPoints=3, maxHealthPoints=3, actions)
+    val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", maxActionPoints=3, maxHealthPoints=3, actions)
+    val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(1, 0), Direction.UP, playerNumber=2, "images/background_won_blue.png", maxActionPoints=3, maxHealthPoints=3, actions)
 
     gameObjects = List(player1, player2)
   }
@@ -43,14 +43,14 @@ class TestConfigProvider extends GameConfigProvider {
      colCount = 2
 
     // Setup actions
-    val moveAction = Action(id=1, "Panzer bewegen", "images/action_move.png", "move.wav", actionPoints=1, range=1, MOVE, damage=0)
-    val shootAction = Action(id=2, "Schießen", "images/action_attack.png", "shoot.wav", actionPoints=1, range=3, SHOOT, damage=2)
-    val waitAction = Action(id=3, "Warten", "images/action_wait.png", "shoot.wav", actionPoints=1, range=1, WAIT, damage=2)
+    val moveAction = Action(id=1, "Move", "images/action_move.png", "move.wav", actionPoints=1, range=1, MOVE, damage=0)
+    val shootAction = Action(id=2, "Shoot", "images/action_attack.png", "shoot.wav", actionPoints=1, range=3, SHOOT, damage=2)
+    val waitAction = Action(id=3, "Wait", "images/action_wait.png", "shoot.wav", actionPoints=1, range=1, WAIT, damage=2)
     actions = List(moveAction, shootAction, waitAction)
 
     // Setup players
-    val player1 = PlayerObject("Spieler1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", maxActionPoints=1, maxHealthPoints=3, actions)
-    val player2 = PlayerObject("Spieler2", "images/medium_tank_blue.png", Position(0, 1), Direction.DOWN, playerNumber=2, "images/background_won_blue.png", maxActionPoints=1, maxHealthPoints=3, actions)
+    val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", maxActionPoints=1, maxHealthPoints=3, actions)
+    val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(0, 1), Direction.DOWN, playerNumber=2, "images/background_won_blue.png", maxActionPoints=1, maxHealthPoints=3, actions)
 
     gameObjects = List(player1, player2)
   }

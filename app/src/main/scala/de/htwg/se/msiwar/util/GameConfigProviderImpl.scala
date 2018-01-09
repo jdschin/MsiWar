@@ -26,14 +26,14 @@ class GameConfigProviderImpl extends GameConfigProvider {
   var colCount = 9
 
   // Setup actions
-  private val moveAction = Action(id = 1, "Panzer bewegen", "images/action_move.png", "move.wav", actionPoints = 1, range = 1, MOVE, damage = 0)
-  private val shootAction = Action(id = 2, "Schießen", "images/action_attack.png", "shoot.wav", actionPoints = 1, range = 3, SHOOT, damage = 2)
-  private val waitAction = Action(id = 3, "Warten", "images/action_wait.png", "shoot.wav", actionPoints = 1, range = 1, WAIT, damage = 2)
+  private val moveAction = Action(id = 1, "Move", "images/action_move.png", "move.wav", actionPoints = 1, range = 1, MOVE, damage = 0)
+  private val shootAction = Action(id = 2, "Shoot", "images/action_attack.png", "shoot.wav", actionPoints = 1, range = 3, SHOOT, damage = 2)
+  private val waitAction = Action(id = 3, "Wait", "images/action_wait.png", "shoot.wav", actionPoints = 1, range = 1, WAIT, damage = 2)
   private var actions = List(moveAction, shootAction, waitAction)
 
   // Setup players
-  private val player1 = PlayerObject("Spieler1", "images/light_tank_red.png", Position(1, 2), Direction.DOWN, playerNumber = 1, "images/background_won_red.png", maxActionPoints = 3, maxHealthPoints = 3, actions)
-  private val player2 = PlayerObject("Spieler2", "images/medium_tank_blue.png", Position(7, 6), Direction.LEFT, playerNumber = 2, "images/background_won_blue.png", maxActionPoints = 3, maxHealthPoints = 3, actions)
+  private val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(1, 2), Direction.DOWN, playerNumber = 1, "images/background_won_red.png", maxActionPoints = 3, maxHealthPoints = 3, actions)
+  private val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(7, 6), Direction.LEFT, playerNumber = 2, "images/background_won_blue.png", maxActionPoints = 3, maxHealthPoints = 3, actions)
 
   private val wood1 = BlockObject("B", "images/block_wood.png", Position(0, 0))
   private val wood2 = BlockObject("B", "images/block_wood.png", Position(0, 1))
