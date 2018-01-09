@@ -12,6 +12,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
   var openingBackgroundImagePath: String = gameConfigProvider.openingBackgroundImagePath
   var levelBackgroundImagePath: String = gameConfigProvider.levelBackgroundImagePath
   var actionbarBackgroundImagePath: String = gameConfigProvider.actionbarBackgroundImagePath
+  var appIconImagePath: String = gameConfigProvider.appIconImagePath
 
   private var attackImagePath = gameConfigProvider.attackImagePath
   private var attackSoundPath = gameConfigProvider.attackSoundPath
@@ -30,6 +31,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     openingBackgroundImagePath = gameConfigProvider.openingBackgroundImagePath
     levelBackgroundImagePath = gameConfigProvider.levelBackgroundImagePath
     actionbarBackgroundImagePath = gameConfigProvider.actionbarBackgroundImagePath
+    appIconImagePath = gameConfigProvider.appIconImagePath
     attackImagePath = gameConfigProvider.attackImagePath
     attackSoundPath = gameConfigProvider.attackSoundPath
     gameObjects = gameConfigProvider.gameObjects
@@ -366,10 +368,6 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     } else {
       Option.empty
     }
-  }
-
-  override def appIconImagePath: String = {
-    "images/app_icon.png"
   }
 
   override def activePlayerActionPoints: Int = {

@@ -13,6 +13,7 @@ class TestConfigProvider extends GameConfigProvider {
   var openingBackgroundImagePath = "images/background_opening.png"
   var levelBackgroundImagePath = "images/background_woodlands.png"
   var actionbarBackgroundImagePath = "images/background_actionbar.png"
+  var appIconImagePath = "images/app_icon.png"
 
   var attackImagePath = "images/hit.png"
   // Setup board

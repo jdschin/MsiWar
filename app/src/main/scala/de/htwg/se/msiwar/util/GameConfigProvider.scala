@@ -8,6 +8,7 @@ trait GameConfigProvider {
   def levelBackgroundImagePath: String
   def actionbarBackgroundImagePath: String
   def attackImagePath: String
+  def appIconImagePath: String
 
   def gameObjects: List[GameObject]
 

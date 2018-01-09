@@ -20,6 +20,7 @@ class GameConfigProviderImpl extends GameConfigProvider {
   var levelBackgroundImagePath = "images/background_woodlands.png"
   var actionbarBackgroundImagePath = "images/background_actionbar.png"
   var attackImagePath = "images/hit.png"
+  var appIconImagePath = "images/app_icon.png"
 
   // Setup board
   var rowCount = 9
