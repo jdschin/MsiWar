@@ -1,10 +1,13 @@
 package de.htwg.se.msiwar
 
+import java.nio.file.{Files, Paths}
+
 import de.htwg.se.msiwar.model.{GameModelImpl, PlayerObject}
 import de.htwg.se.msiwar.util.Direction
 import org.scalatest.{FlatSpec, Matchers}
 
 class ModelSpec extends FlatSpec with Matchers {
+  private val resourcePathPrefix = "src/main/resources/"
 
   GameModelImpl.getClass.getSimpleName should "return turn counter of 1 at game start" in {
     val testConfigProvider = new TestConfigProvider
@@ -69,7 +72,7 @@ class ModelSpec extends FlatSpec with Matchers {
     player2.currentHealthPoints should be(1)
   }
 
-  it should "return winner id when player 2 gets destroyed" in {
+  it should "return winner id of player 1 when player 2 gets destroyed" in {
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerDamageTestScenario()
 
@@ -77,6 +80,7 @@ class ModelSpec extends FlatSpec with Matchers {
     model.executeAction(2, Direction.DOWN)
     model.executeAction(2, Direction.DOWN)
     model.winnerId.isDefined should be(true)
+    model.winnerId.get should be(1)
   }
 
   it should "return row count 10 at game start" in {
@@ -93,5 +97,13 @@ class ModelSpec extends FlatSpec with Matchers {
 
     val model = GameModelImpl(testConfigProvider)
     model.columnCount should be(2)
+  }
+
+  it should "return a valid path for opening background" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    Files.exists(Paths.get(resourcePathPrefix + model.openingBackgroundImagePath)) should be(true)
   }
 }
