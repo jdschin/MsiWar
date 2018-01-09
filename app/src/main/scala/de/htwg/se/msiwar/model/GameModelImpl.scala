@@ -13,9 +13,9 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
   var levelBackgroundImagePath: String = gameConfigProvider.levelBackgroundImagePath
   var actionbarBackgroundImagePath: String = gameConfigProvider.actionbarBackgroundImagePath
   var appIconImagePath: String = gameConfigProvider.appIconImagePath
+  var attackImagePath:String = gameConfigProvider.attackImagePath
+  var attackSoundPath:String = gameConfigProvider.attackSoundPath
 
-  private var attackImagePath = gameConfigProvider.attackImagePath
-  private var attackSoundPath = gameConfigProvider.attackSoundPath
   private var gameObjects = gameConfigProvider.gameObjects
   private var gameBoard = GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects)
   private var activePlayer = player(1)

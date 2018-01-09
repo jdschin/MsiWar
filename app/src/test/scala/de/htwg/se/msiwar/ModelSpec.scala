@@ -106,4 +106,44 @@ class ModelSpec extends FlatSpec with Matchers {
     val model = GameModelImpl(testConfigProvider)
     Files.exists(Paths.get(resourcePathPrefix + model.openingBackgroundImagePath)) should be(true)
   }
+
+  it should "return a valid path for level background" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    Files.exists(Paths.get(resourcePathPrefix + model.levelBackgroundImagePath)) should be(true)
+  }
+
+  it should "return a valid path for action bar background" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    Files.exists(Paths.get(resourcePathPrefix + model.actionbarBackgroundImagePath)) should be(true)
+  }
+
+  it should "return a valid path for app icon" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    Files.exists(Paths.get(resourcePathPrefix + model.appIconImagePath)) should be(true)
+  }
+
+  it should "return a valid path for attack image" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    Files.exists(Paths.get(resourcePathPrefix + model.attackImagePath)) should be(true)
+  }
+
+  it should "return a valid path for attack sound" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    Files.exists(Paths.get(resourcePathPrefix + model.attackSoundPath)) should be(true)
+  }
 }
