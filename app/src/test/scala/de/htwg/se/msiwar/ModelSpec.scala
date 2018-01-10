@@ -72,6 +72,14 @@ class ModelSpec extends FlatSpec with Matchers {
     player2.currentHealthPoints should be(1)
   }
 
+  it should "return the health of the active player" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.activePlayerHealthPoints should be(3)
+  }
+
   it should "return winner id of player 1 when player 2 gets destroyed" in {
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerDamageTestScenario()
@@ -105,6 +113,42 @@ class ModelSpec extends FlatSpec with Matchers {
 
     val model = GameModelImpl(testConfigProvider)
     Files.exists(Paths.get(resourcePathPrefix + model.openingBackgroundImagePath)) should be(true)
+  }
+
+  it should "return a list of scenario ids available" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.scenarioIds.size should be(2)
+  }
+
+  it should "return a scenario name for a valid scenario id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+
+    val scenarioNameFound = model.scenarioName(0)
+    scenarioNameFound.isDefined should be(true)
+    scenarioNameFound.get should be("S1 Scenario (2-Player)")
+  }
+
+  it should "not return a scenario name for a unknown scenario id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    val scenarioNameNotFound = model.scenarioName(3)
+    scenarioNameNotFound.isDefined should be(false)
+  }
+
+  it should "not return a won image path when no winner id is set" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.wonImagePath should be("")
   }
 
   it should "return a valid path for level background" in {
@@ -145,5 +189,37 @@ class ModelSpec extends FlatSpec with Matchers {
 
     val model = GameModelImpl(testConfigProvider)
     Files.exists(Paths.get(resourcePathPrefix + model.attackSoundPath)) should be(true)
+  }
+
+  it should "return damage value for an action id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.actionDamage(2) should be(2)
+  }
+
+  it should "return damage value of 0 for an unknown action id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.actionDamage(1) should be(0)
+  }
+
+  it should "return range value for an action id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.actionRange(2) should be(3)
+  }
+
+  it should "return range value of 0 for an unknown action id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.actionRange(1) should be(0)
   }
 }

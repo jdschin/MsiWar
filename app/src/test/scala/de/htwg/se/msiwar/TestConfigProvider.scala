@@ -7,6 +7,9 @@ import de.htwg.se.msiwar.util.{Direction, GameConfigProvider}
 class TestConfigProvider extends GameConfigProvider {
   private var actions:List[Action] = List[Action]()
 
+  val testScenario1 = "S1_Scenario_(2-Player).json"
+  val testScenario2 = "S2_Scenario_(3-Player).json"
+
   // Global sounds
   var attackSoundPath = "sounds/explosion.wav"
   // Global images
@@ -63,7 +66,7 @@ class TestConfigProvider extends GameConfigProvider {
   }
 
   override def listScenarios: List[String] = {
-    List[String]()
+    List[String](testScenario1,testScenario2)
   }
 
   override def generateGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int, completion: (Boolean) => Unit): Unit = {
