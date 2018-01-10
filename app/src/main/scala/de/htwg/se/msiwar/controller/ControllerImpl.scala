@@ -3,8 +3,6 @@ package de.htwg.se.msiwar.controller
 import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.Direction.Direction
 
-case class ScenarioNotFoundException(message: String) extends Exception
-
 case class ControllerImpl(var model: GameModel) extends Controller {
   listenTo(model)
 
