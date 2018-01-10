@@ -22,8 +22,10 @@ class ModelSpec extends FlatSpec with Matchers {
     testConfigProvider.load2PlayerEmptyMapScenario()
 
     val model = GameModelImpl(testConfigProvider)
+    model.canExecuteAction(3, Direction.DOWN) should be(true)
     model.executeAction(3, Direction.DOWN)
     model.turnCounter should be(1)
+    model.canExecuteAction(3, Direction.DOWN) should be(true)
     model.executeAction(3, Direction.DOWN)
     model.turnCounter should be(2)
   }
@@ -44,6 +46,14 @@ class ModelSpec extends FlatSpec with Matchers {
     model.winnerId.isDefined should be(true)
   }
 
+  it should "not allow action execution when game is won" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.loadInstantWinScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.canExecuteAction(1, Direction.DOWN) should be(false)
+  }
+
   it should "return a lower amount of action points for active player after an action has been executed" in {
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerDamageTestScenario()
@@ -55,6 +65,7 @@ class ModelSpec extends FlatSpec with Matchers {
     while (actionIdsIterator.hasNext) {
       val actionId = actionIdsIterator.next()
       val actionPointsBefore = model.activePlayerActionPoints
+      model.canExecuteAction(actionId, Direction.DOWN) should be(true)
       model.executeAction(actionId, Direction.DOWN)
       actionPointsBefore should be > model.activePlayerActionPoints
       model.reset()
@@ -68,6 +79,7 @@ class ModelSpec extends FlatSpec with Matchers {
     val model = GameModelImpl(testConfigProvider)
     val player2 = testConfigProvider.gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == 2).get
     player2.currentHealthPoints should be(3)
+    model.canExecuteAction(2, Direction.DOWN) should be(true)
     model.executeAction(2, Direction.DOWN)
     player2.currentHealthPoints should be(1)
   }
@@ -85,7 +97,9 @@ class ModelSpec extends FlatSpec with Matchers {
     testConfigProvider.load2PlayerDamageTestScenario()
 
     val model = GameModelImpl(testConfigProvider)
+    model.canExecuteAction(2, Direction.DOWN) should be(true)
     model.executeAction(2, Direction.DOWN)
+    model.canExecuteAction(2, Direction.DOWN) should be(true)
     model.executeAction(2, Direction.DOWN)
     model.winnerId.isDefined should be(true)
     model.winnerId.get should be(1)
@@ -221,5 +235,77 @@ class ModelSpec extends FlatSpec with Matchers {
 
     val model = GameModelImpl(testConfigProvider)
     model.actionRange(1) should be(0)
+  }
+
+  it should "return action cost value for an action id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.actionPointCost(2) should be(1)
+  }
+
+  it should "return action cost value of 0 for an unknown action id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.actionPointCost(1) should be(0)
+  }
+
+  it should "return action description for an action id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.actionDescription(2) should be("Shoot")
+  }
+
+  it should "not return action description for an unknown action id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.actionDescription(1) should be("")
+  }
+
+  it should "return action icon path for an action id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.actionIconPath(2).isDefined should be(true)
+  }
+
+  it should "not return action icon path for an unknown action id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.actionIconPath(1).isDefined should be(false)
+  }
+
+  it should "start a new game for valid scenario id" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.startGame(0)
+  }
+
+  it should "start a random game" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.startRandomGame(2,9,9)
+  }
+
+  it should "return the name of the active player" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.activePlayerName should be("Player1")
   }
 }
