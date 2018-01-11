@@ -10,7 +10,7 @@ class GameGenerationMaster(numberOfWorkers: Int, numberOfMessages: Int, numberOf
 
   def receive: PartialFunction[Any, Unit] = {
     case Generate =>
-      for (_ <- 0 until numberOfMessages) workerRouter ! Work(numberOfPlayers, rowCount, columnCount, actions)
+      for (_ <- 0 until numberOfMessages) workerRouter ! Work(numberOfPlayers, rowCount, columnCount)
     case Result(gameObjectsOpt) =>
 
       if (gameObjectsOpt.isDefined) {

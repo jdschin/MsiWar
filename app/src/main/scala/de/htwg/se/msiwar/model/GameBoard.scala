@@ -8,7 +8,7 @@ import de.htwg.se.msiwar.util.IterationFunction._
 import scala.Option.empty
 
 case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
-  if(rows < 0 || columns < 0){
+  if (rows < 0 || columns < 0) {
     throw new IllegalArgumentException("rows and columns must be positive")
   }
 
@@ -63,7 +63,7 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
       }
       performOnPositionNTimes((from.rowIdx, from.columnIdx), range, modifyPositionFunction, (rowIdx, columnIdx) => {
         val pos = Position(rowIdx, columnIdx)
-        if (isInBound(pos) && !collisionObject.isDefined) {
+        if (isInBound(pos) && collisionObject.isEmpty) {
           val gameObject = gameObjectAt(pos)
           if (gameObject.isDefined) {
             collisionObject = Option(gameObject.get)
@@ -118,23 +118,32 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     }
   }
 
-  def cellsInRange(position: Position, action: Action): List[(Int, Int)] = {
-    var cellsInRangeList = List[(Int, Int)]()
+  def reachableCells(position: Position, action: Action): List[(Int, Int)] = {
+    var reachableCellsList = List[(Int, Int)]()
     val range = action.range
 
     action.actionType match {
-      case _: ActionType.WAIT.type => cellsInRangeList = (position.rowIdx, position.columnIdx) :: cellsInRangeList
+      case _: ActionType.WAIT.type => reachableCellsList = (position.rowIdx, position.columnIdx) :: reachableCellsList
       case _ =>
-        val loopFunctions = incRowIdx _ :: incColumnIdx _ :: decRowIdx _ :: decColumnIdx _ :: incRowIdxIncColumnIdx _ :: decRowIdxDecColumnIdx _ :: incRowIdxDecColumnIdx _ :: decRowIdxIncColumnIdx _ :: Nil
-
-        loopFunctions.foreach(f => {
-          performOnPositionNTimes((position.rowIdx, position.columnIdx), range, f, (rowIdx, columnIdx) => {
-            cellsInRangeList = addPosToListIfValid(Position(rowIdx, columnIdx), position, cellsInRangeList, action.actionType)
-          })
+        cellsInRange(position, range).foreach(positionInRange => {
+          reachableCellsList = addPosToListIfValid(positionInRange, position, reachableCellsList, action.actionType)
         })
     }
+    reachableCellsList
+  }
+
+  def cellsInRange(position: Position, range: Int): List[Position] = {
+    var cellsInRangeList = List[Position]()
+    val loopFunctions = incRowIdx _ :: incColumnIdx _ :: decRowIdx _ :: decColumnIdx _ :: incRowIdxIncColumnIdx _ :: decRowIdxDecColumnIdx _ :: incRowIdxDecColumnIdx _ :: decRowIdxIncColumnIdx _ :: Nil
+
+    loopFunctions.foreach(f => {
+      performOnPositionNTimes((position.rowIdx, position.columnIdx), range, f, (rowIdx, columnIdx) => {
+        cellsInRangeList = Position(rowIdx, columnIdx) :: cellsInRangeList
+      })
+    })
     cellsInRangeList
   }
+
 
   def calculateDirection(from: Position, to: Position): Direction = {
     if (from.columnIdx > to.columnIdx) {

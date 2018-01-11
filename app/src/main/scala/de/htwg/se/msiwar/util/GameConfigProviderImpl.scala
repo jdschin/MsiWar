@@ -199,17 +199,17 @@ class GameConfigProviderImpl extends GameConfigProvider {
 
     // Global images
     openingBackgroundImagePath = "images/background_opening.png"
-    levelBackgroundImagePath = "images/background_desert.png"
+    levelBackgroundImagePath = RandomImagePaths.backgroundImagePath()
     actionbarBackgroundImagePath = "images/background_actionbar.png"
     attackImagePath = "images/hit.png"
 
     // Setup board
-    this.rowCount = 9
-    this.colCount = 9
+    this.rowCount = rowCount
+    this.colCount = columnCount
 
     val system = ActorSystem("GameGenerationSystem")
 
-    val master = system.actorOf(Props(new GameGenerationMaster(numberOfWorkers = 2, numberOfMessages = 4, numberOfPlayers, rowCount, columnCount, actions, (gameObjects) => {
+    val master = system.actorOf(Props(new GameGenerationMaster(numberOfWorkers = 4, numberOfMessages = 1000, numberOfPlayers, rowCount, columnCount, actions, (gameObjects) => {
       this.gameObjects = gameObjects
       completion(true)
     })), name = "master")

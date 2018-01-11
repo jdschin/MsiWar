@@ -74,7 +74,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
 
   override def startRandomGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int): Unit = {
 
-    gameConfigProvider.generateGame(1, 1, 1, (couldGenerateGame) => {
+    gameConfigProvider.generateGame(numberOfPlayers, rowCount, columnCount, (couldGenerateGame) => {
       if (couldGenerateGame) {
         resetAndFireInitialEvents()
       } else {
@@ -316,7 +316,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     if (actionId.isDefined) {
       val actionForId = activePlayer.actions.find(_.id == actionId.get)
       if (actionForId.isDefined) {
-        return gameBoard.cellsInRange(activePlayer.position, actionForId.get)
+        return gameBoard.reachableCells(activePlayer.position, actionForId.get)
       }
     }
     List()
