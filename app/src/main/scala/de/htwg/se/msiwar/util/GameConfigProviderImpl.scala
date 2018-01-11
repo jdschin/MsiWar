@@ -7,6 +7,7 @@ import de.htwg.se.msiwar.model.ActionType._
 import de.htwg.se.msiwar.model._
 
 import scala.io.Source
+import scala.util.Random._
 import scala.util.parsing.json.JSON
 
 case class JSONException(private val message: String = "JSON parsing failed") extends Exception(message)
@@ -193,7 +194,7 @@ class GameConfigProviderImpl extends GameConfigProvider {
     PlayerObject(name, imagePath, Position(rowIndex, columnIndex), viewDirectionOpt.get, playerNumber, wonImagePath, maxActionPoints, maxHealthPoints, actions)
   }
 
-  override def generateGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int, completion: (Boolean) => Unit): Unit = {
+  override def generateGame(completion: (Boolean) => Unit): Unit = {
     // Global sounds
     attackSoundPath = "sounds/explosion.wav"
 
@@ -204,14 +205,18 @@ class GameConfigProviderImpl extends GameConfigProvider {
     attackImagePath = "images/hit.png"
 
     // Setup board
-    this.rowCount = rowCount
-    this.colCount = columnCount
+    this.rowCount = nextInt(8) + 2
+    this.colCount = nextInt(18) + 2
 
     val system = ActorSystem("GameGenerationSystem")
 
-    val master = system.actorOf(Props(new GameGenerationMaster(numberOfWorkers = 4, numberOfMessages = 1000, numberOfPlayers, rowCount, columnCount, actions, (gameObjects) => {
-      this.gameObjects = gameObjects
-      completion(true)
+    val master = system.actorOf(Props(new GameGenerationMaster(numberOfWorkers = 4, numberOfMessages = 100, rowCount, colCount, actions, (gameObjects) => {
+      if (gameObjects.isDefined) {
+        this.gameObjects = gameObjects.get
+        completion(true)
+      } else {
+        completion(false)
+      }
     })), name = "master")
 
     master ! Generate

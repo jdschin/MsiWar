@@ -298,7 +298,7 @@ class ModelSpec extends FlatSpec with Matchers {
     testConfigProvider.load2PlayerDamageTestScenario()
 
     val model = GameModelImpl(testConfigProvider)
-    model.startRandomGame(2,9,9)
+    model.startRandomGame()
   }
 
   it should "return the name of the active player" in {

@@ -126,7 +126,7 @@ case class ControllerImpl(var model: GameModel) extends Controller {
     model.appIconImagePath
   }
 
-  override def startRandomGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int): Unit = {
-    model.startRandomGame(numberOfPlayers, rowCount, columnCount)
+  override def startRandomGame(): Unit = {
+    model.startRandomGame()
   }
 }

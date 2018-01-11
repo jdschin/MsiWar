@@ -182,10 +182,7 @@ trait Controller extends Publisher{
 
   /**
     * Starts a newly generated game
-    * @param numberOfPlayers the number of the players of the game
-    * @param rowCount the number of rows of the board
-    * @param columnCount the number of columns of the board
     */
-  def startRandomGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int): Unit
+  def startRandomGame(): Unit
 
   }

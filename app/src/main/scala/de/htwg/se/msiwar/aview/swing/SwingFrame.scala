@@ -2,7 +2,7 @@ package de.htwg.se.msiwar.aview.swing
 
 import javax.swing.WindowConstants
 
-import de.htwg.se.msiwar.controller.{Controller, GameStarted, PlayerWon}
+import de.htwg.se.msiwar.controller.{Controller, CouldNotGenerateGame, GameStarted, PlayerWon}
 import de.htwg.se.msiwar.util.ImageUtils
 
 import scala.swing._
@@ -15,7 +15,7 @@ class SwingFrame(controller: Controller) extends Frame {
   resizable = false
   contents = contentPanel
 
-  if(imageOpt.isDefined) {
+  if (imageOpt.isDefined) {
     iconImage = imageOpt.get.getImage
   }
 
@@ -30,9 +30,12 @@ class SwingFrame(controller: Controller) extends Frame {
     case e: PlayerWon =>
       contentPanel.showPlayerWon(e)
       packAndCenter()
+    case _: CouldNotGenerateGame =>
+      import javax.swing.JOptionPane
+      JOptionPane.showMessageDialog(null, "Unfortunately the game could not be generated", "Game Error", JOptionPane.PLAIN_MESSAGE)
   }
 
-  private def packAndCenter() : Unit = {
+  private def packAndCenter(): Unit = {
     pack()
     contentPanel.resize(peer.getWidth, peer.getHeight)
     // Center on monitor

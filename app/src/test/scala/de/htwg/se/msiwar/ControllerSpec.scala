@@ -246,6 +246,6 @@ class ControllerSpec extends FlatSpec with Matchers {
 
     val model = GameModelImpl(testConfigProvider)
     val controller = ControllerImpl(model)
-    controller.startRandomGame(2,9,9)
+    controller.startRandomGame()
   }
 }

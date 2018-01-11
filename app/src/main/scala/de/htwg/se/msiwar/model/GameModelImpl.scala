@@ -72,9 +72,9 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     publish(ModelTurnStarted(activePlayerNumber))
   }
 
-  override def startRandomGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int): Unit = {
+  override def startRandomGame(): Unit = {
 
-    gameConfigProvider.generateGame(numberOfPlayers, rowCount, columnCount, (couldGenerateGame) => {
+    gameConfigProvider.generateGame(couldGenerateGame => {
       if (couldGenerateGame) {
         resetAndFireInitialEvents()
       } else {

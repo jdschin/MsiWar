@@ -14,7 +14,7 @@ trait GameConfigProvider {
 
   def listScenarios: List[String]
   def loadFromFile(configFilePath: String): Unit
-  def generateGame(numberOfPlayers: Int, rowCount: Int, columnCount: Int, completion: (Boolean) => Unit) : Unit
+  def generateGame(completion: (Boolean) => Unit) : Unit
 
   def rowCount: Int
   def colCount: Int

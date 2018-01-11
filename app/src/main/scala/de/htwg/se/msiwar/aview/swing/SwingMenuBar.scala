@@ -11,8 +11,7 @@ class SwingMenuBar(controller: Controller) extends MenuBar {
     mnemonic = Key.G
 
     contents += new MenuItem(Action("Random Level...") {
-      val levelGeneratorDialog = new SwingLevelGeneratorDialog(controller)
-      levelGeneratorDialog.visible = true
+      controller.startRandomGame()
     })
 
     contents += new Separator()

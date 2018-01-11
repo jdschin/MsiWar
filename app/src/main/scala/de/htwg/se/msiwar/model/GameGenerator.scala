@@ -2,6 +2,7 @@ package de.htwg.se.msiwar.model
 
 import de.htwg.se.msiwar.model.ActionType.{MOVE, SHOOT, WAIT}
 import de.htwg.se.msiwar.model.RandomImagePaths.blockImagePath
+import de.htwg.se.msiwar.util.Direction.Direction
 import de.htwg.se.msiwar.util.{Dijkstra, Direction}
 
 import scala.util.Random._
@@ -34,23 +35,23 @@ object RandomImagePaths {
     }
   }
 
-  private def tankColor(): String = {
-    nextInt(4) match {
-      case 0 => "red"
-      case 1 => "blue"
-      case 2 => "purple"
-      case 3 => "brown"
+  private def tankColor(playerNumber: Int): String = {
+    playerNumber match {
+      case 1 => "red"
+      case 2 => "blue"
+      case 3 => "purple"
+      case 4 => "brown"
     }
   }
 
-  def playerImagePath(): (String, String) = {
+  def playerImagePath(playerNumber: Int): (String, String) = {
     val tankType = RandomImagePaths.tankType()
-    val tankColor = RandomImagePaths.tankColor()
+    val tankColor = RandomImagePaths.tankColor(playerNumber)
     (s"images/${tankType}_tank_$tankColor.png", s"images/background_won_$tankColor.png")
   }
 }
 
-case class GameGenerator(numberOfPlayers: Int, rowCount: Int, columnCount: Int) {
+case class GameGenerator(rowCount: Int, columnCount: Int) {
 
   private var gameObjects = List[GameObject]()
   private val moveAction = Action(id = 1, "Move", "images/action_move.png", "move.wav", actionPoints = 1, range = 1, MOVE, damage = 0)
@@ -60,12 +61,11 @@ case class GameGenerator(numberOfPlayers: Int, rowCount: Int, columnCount: Int) 
   private val actions = List(moveAction, shootAction, waitAction)
 
   def generate(): Option[List[GameObject]] = {
+    val numberOfPlayers = nextInt(3) + 2
 
     gameObjects = List[GameObject]()
 
-    //val numberOfObjects = ((rowCount * columnCount) * 0.5).intValue() - numberOfPlayers
     val numberOfObjects = nextInt(rowCount * columnCount)
-
 
     for (i <- 1 until numberOfPlayers + 1) {
       gameObjects = gameObjects ::: List(randomPlayerObject(i))
@@ -118,14 +118,27 @@ case class GameGenerator(numberOfPlayers: Int, rowCount: Int, columnCount: Int) 
   }
 
   private def randomPlayerObject(playerNumber: Int): PlayerObject = {
-    val imagePath = RandomImagePaths.playerImagePath()
+    val imagePath = RandomImagePaths.playerImagePath(playerNumber)
 
     var playerActions = actions
     if (imagePath._1.contains("heavy")) {
       playerActions = playerActions ::: List(rocketAction)
     }
-    PlayerObject(s"Spieler$playerNumber", imagePath._1, randomFreePosition(), Direction.DOWN, playerNumber = playerNumber,
+    PlayerObject(s"Spieler$playerNumber", imagePath._1, randomFreePosition(), randomDirection(), playerNumber = playerNumber,
       imagePath._2, maxActionPoints = nextInt(10) + 1, maxHealthPoints = nextInt(10) + 1, playerActions)
+  }
+
+  private def randomDirection(): Direction = {
+    nextInt(8) match {
+      case 0 => Direction.DOWN
+      case 1 => Direction.UP
+      case 2 => Direction.RIGHT
+      case 3 => Direction.LEFT
+      case 4 => Direction.RIGHT_DOWN
+      case 5 => Direction.LEFT_DOWN
+      case 6 => Direction.RIGHT_UP
+      case 7 => Direction.LEFT_UP
+    }
   }
 
   private def randomPosition(): Position = {
