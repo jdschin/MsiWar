@@ -308,4 +308,39 @@ class ModelSpec extends FlatSpec with Matchers {
     val model = GameModelImpl(testConfigProvider)
     model.activePlayerName should be("Player1")
   }
+
+  it should "allow to shoot at position where no target is and miss" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.executeAction(2, Direction.DOWN)
+    model.canExecuteAction(2, Direction.DOWN) should be(true)
+  }
+
+  it should "allow to shoot at a blocking object which is not a player" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerSmallMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.executeAction(2, Direction.UP)
+    model.canExecuteAction(2, Direction.UP) should be(true)
+  }
+
+  it should "allow the player to move" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.executeAction(1, Direction.DOWN)
+    model.canExecuteAction(1, Direction.DOWN) should be(true)
+  }
+
+  it should "not return a last executed action id at game start" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.lastExecutedActionId.isDefined should be(false)
+  }
 }

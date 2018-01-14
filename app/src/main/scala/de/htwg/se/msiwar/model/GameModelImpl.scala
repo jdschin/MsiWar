@@ -1,10 +1,8 @@
 package de.htwg.se.msiwar.model
 
-import java.io.FileNotFoundException
-
 import de.htwg.se.msiwar.model.ActionType._
 import de.htwg.se.msiwar.util.Direction.Direction
-import de.htwg.se.msiwar.util.{Direction, GameConfigProvider, JSONException}
+import de.htwg.se.msiwar.util.{Direction, GameConfigProvider}
 
 import scala.util.control.Breaks
 
@@ -50,16 +48,9 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
   }
 
   override def startGame(scenarioId: Int): Unit = {
-    try {
-      val scenarioNameOpt = scenariosById.get(scenarioId)
-      if (scenariosById.get(scenarioId).isDefined) {
-        gameConfigProvider.loadFromFile(scenarioNameOpt.get)
-      }
-    }
-    catch {
-      case e: FileNotFoundException => print(e.getMessage)
-      case e: JSONException => print(e.getMessage)
-      case e: NoSuchElementException => print(e.getMessage)
+    val scenarioNameOpt = scenariosById.get(scenarioId)
+    if (scenariosById.get(scenarioId).isDefined) {
+      gameConfigProvider.loadFromFile(scenarioNameOpt.get)
     }
     resetAndFireInitialEvents()
   }
