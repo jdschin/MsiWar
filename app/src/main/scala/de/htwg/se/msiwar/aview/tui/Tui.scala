@@ -31,8 +31,7 @@ class Tui(controller: Controller) extends Reactor {
     val executeActionRe = "(\\d+)(lu|ld|ru|rd|l|r|u|d)".r
     input match {
       case scenarioRe(scenarioId: String) => controller.startGame(scenarioId.toInt)
-      // TODO start random game
-      case "n" | "N" => controller.startGame(1)
+      case "n" | "N" => controller.startRandomGame()
       case "s" | "S" => printScenarioList()
       case "q" | "Q" => continue = false
       case "h" | "H" => printHelp()

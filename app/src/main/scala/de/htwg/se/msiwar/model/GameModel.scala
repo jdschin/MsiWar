@@ -4,6 +4,8 @@ import de.htwg.se.msiwar.util.Direction.Direction
 
 import scala.swing.Publisher
 import scala.swing.event.Event
+import scala.util.Random._
+
 
 case class ModelGameStarted() extends Event
 case class ModelCouldNotGenerateGame() extends Event
@@ -176,8 +178,10 @@ trait GameModel extends Publisher {
 
   /**
     * Starts a newly generated game
+    * @param rowCount number of rows. Default value is a number between 2 and 10
+    * @param columnCount number of columns. Default value is a number between 2 and 20
     */
-  def startRandomGame() : Unit
+  def startRandomGame(rowCount: Int = nextInt(9) + 2 , columnCount: Int = nextInt(19) + 2) : Unit
 
   /**
     * @return the row count of the game board

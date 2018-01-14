@@ -11,8 +11,8 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
   var levelBackgroundImagePath: String = gameConfigProvider.levelBackgroundImagePath
   var actionbarBackgroundImagePath: String = gameConfigProvider.actionbarBackgroundImagePath
   var appIconImagePath: String = gameConfigProvider.appIconImagePath
-  var attackImagePath:String = gameConfigProvider.attackImagePath
-  var attackSoundPath:String = gameConfigProvider.attackSoundPath
+  var attackImagePath: String = gameConfigProvider.attackImagePath
+  var attackSoundPath: String = gameConfigProvider.attackSoundPath
 
   private var gameObjects = gameConfigProvider.gameObjects
   private var gameBoard = GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects)
@@ -63,9 +63,8 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     publish(ModelTurnStarted(activePlayerNumber))
   }
 
-  override def startRandomGame(): Unit = {
-
-    gameConfigProvider.generateGame(couldGenerateGame => {
+  override def startRandomGame(rowCount: Int, columnCount: Int): Unit = {
+    gameConfigProvider.generateGame(rowCount, columnCount, couldGenerateGame => {
       if (couldGenerateGame) {
         resetAndFireInitialEvents()
       } else {
