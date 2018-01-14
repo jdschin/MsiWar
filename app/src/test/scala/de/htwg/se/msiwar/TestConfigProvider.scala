@@ -2,6 +2,7 @@ package de.htwg.se.msiwar
 
 import java.io.FileNotFoundException
 
+import akka.actor.{ActorSystem, Props}
 import de.htwg.se.msiwar.model.ActionType.{MOVE, SHOOT, WAIT}
 import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.{Direction, GameConfigProvider}
@@ -93,6 +94,32 @@ class TestConfigProvider extends GameConfigProvider {
   }
 
   override def generateGame(rowCount: Int, columnCount: Int, completion: (Boolean) => Unit): Unit = {
-    // TODO
+    // Global sounds
+    attackSoundPath = "sounds/explosion.wav"
+
+    // Global images
+    openingBackgroundImagePath = "images/background_opening.png"
+    levelBackgroundImagePath = RandomImagePaths.backgroundImagePath()
+    actionbarBackgroundImagePath = "images/background_actionbar.png"
+    attackImagePath = "images/hit.png"
+
+    // Setup board
+    this.rowCount = rowCount
+    this.colCount = columnCount
+
+    val system = ActorSystem("GameGenerationSystem")
+
+    val master = system.actorOf(Props(new GameGenerationMaster(numberOfWorkers = 4, numberOfMessages = 100, rowCount, colCount, actions, (gameObjects) => {
+      if (gameObjects.isDefined) {
+        this.gameObjects = gameObjects.get
+        completion(true)
+      } else {
+        completion(false)
+      }
+    })), name = "master")
+
+    master ! Generate
   }
+
+
 }

@@ -2,9 +2,13 @@ package de.htwg.se.msiwar
 
 import java.nio.file.{Files, Paths}
 
-import de.htwg.se.msiwar.model.{GameModelImpl, PlayerObject}
+import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.Direction
 import org.scalatest.{FlatSpec, Matchers}
+
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Promise}
+
 
 class ModelSpec extends FlatSpec with Matchers {
   private val resourcePathPrefix = "src/main/resources/"
@@ -285,20 +289,57 @@ class ModelSpec extends FlatSpec with Matchers {
     model.actionIconPath(1).isDefined should be(false)
   }
 
-  it should "start a new game for valid scenario id" in {
+
+  it should "start a new game for valid scenario id and return the correct initial events" in {
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerDamageTestScenario()
 
+    val gameStartedPromise = Promise[Boolean]()
+    val turnStartedPromise = Promise[Int]()
+
     val model = GameModelImpl(testConfigProvider)
+
+    TestEventHandler(model, Option(gameStartedPromise), Option.empty, Option(turnStartedPromise))
+
     model.startGame(0)
+
+    val gameStarted = Await.result(gameStartedPromise.future, 50000 millis)
+    val playerNumber = Await.result(turnStartedPromise.future, 50000 millis)
+    gameStarted should be(true)
+    playerNumber should be(1)
   }
 
   it should "start a random game" in {
+
+    val gameStartedPromise = Promise[Boolean]()
+
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerDamageTestScenario()
 
     val model = GameModelImpl(testConfigProvider)
     model.startRandomGame()
+
+    TestEventHandler(model, Option(gameStartedPromise), Option.empty, Option.empty)
+
+    val result = Await.result(gameStartedPromise.future, 50000 millis)
+    result should be(true)
+  }
+
+  it should " fail at starting a random game with invalid row and column configuration" in {
+
+    val couldNotGenerateGamePromise = Promise[Boolean]()
+
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerDamageTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+
+    model.startRandomGame(0, 0)
+
+    TestEventHandler(model, Option.empty, Option(couldNotGenerateGamePromise), Option.empty)
+
+    val result = Await.result(couldNotGenerateGamePromise.future, 50000 millis)
+    result should be(true)
   }
 
   it should "return the name of the active player" in {

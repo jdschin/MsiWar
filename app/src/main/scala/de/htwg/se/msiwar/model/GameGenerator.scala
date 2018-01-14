@@ -9,7 +9,7 @@ import scala.util.Random._
 
 object RandomImagePaths {
   def blockImagePath(): String = {
-    nextInt(6) match {
+    nextInt(7) match {
       case 0 => "images/block_city.png"
       case 1 => "images/block_desert_city.png"
       case 2 => "images/block_dune.png"

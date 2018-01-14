@@ -15,11 +15,13 @@ class GameGenerationMaster(numberOfWorkers: Int, numberOfMessages: Int, rowCount
     case Result(gameObjectsOpt) =>
       messageCounter += 1
       if (gameObjectsOpt.isDefined) {
+        context.stop(self)
+        context.system.terminate()
         completion(gameObjectsOpt)
-        context.stop(self)
       } else if (messageCounter == numberOfMessages) {
-        completion(Option.empty)
         context.stop(self)
+        context.system.terminate()
+        completion(Option.empty)
       }
   }
 
