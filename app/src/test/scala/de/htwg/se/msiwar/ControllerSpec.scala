@@ -6,6 +6,7 @@ import de.htwg.se.msiwar.controller.ControllerImpl
 import de.htwg.se.msiwar.model.GameModelImpl
 import de.htwg.se.msiwar.util.{Direction, GameConfigProviderImpl}
 import org.scalatest.{FlatSpec, Matchers}
+
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Promise}
 
@@ -14,7 +15,7 @@ class ControllerSpec extends FlatSpec with Matchers {
 
   ControllerImpl.getClass.getSimpleName should "return turn counter of 1 at game start" in {
     val controller = ControllerImpl(GameModelImpl(new GameConfigProviderImpl))
-    controller.turnCounter should be (1)
+    controller.turnCounter should be(1)
   }
 
   it should "return a valid path for opening background" in {
@@ -91,7 +92,7 @@ class ControllerSpec extends FlatSpec with Matchers {
     controller.canExecuteAction(2, Direction.DOWN) should be(true)
     controller.executeAction(2, Direction.DOWN)
     controller.canExecuteAction(2, 1, 0) should be(true)
-    controller.executeAction(1,1,0)
+    controller.executeAction(1, 1, 0)
   }
 
   it should "return the action ids for a player" in {
@@ -243,18 +244,19 @@ class ControllerSpec extends FlatSpec with Matchers {
   }
 
   it should "start a random game" in {
-    val couldNotGenerateGamePromise = Promise[Boolean]()
+    val gameStartedPromise = Promise[Boolean]()
 
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerDamageTestScenario()
 
     val model = GameModelImpl(testConfigProvider)
     val controller = ControllerImpl(model)
+
+    TestEventHandler(model, Option(gameStartedPromise), Option.empty, Option.empty)
+
     controller.startRandomGame()
 
-    TestEventHandler(model, Option.empty, Option(couldNotGenerateGamePromise), Option.empty)
-
-    val result = Await.result(couldNotGenerateGamePromise.future, 50000 millis)
+    val result = Await.result(gameStartedPromise.future, 5000 millis)
     result should be(true)
   }
 }
