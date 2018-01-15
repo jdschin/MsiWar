@@ -16,7 +16,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
 
   private var gameObjects = gameConfigProvider.gameObjects
   private var gameBoard = GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects)
-  private var activePlayer = player(1)
+  private var activePlayer = player(1).get
   private var turnNumber = 1
   private var lastExecutedAction = Option.empty[Action]
   private val scenariosById = new scala.collection.mutable.HashMap[Int, String]()
@@ -34,7 +34,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     attackSoundPath = gameConfigProvider.attackSoundPath
     gameObjects = gameConfigProvider.gameObjects
     gameBoard = GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects)
-    activePlayer = player(1)
+    activePlayer = player(1).get
 
     gameObjects.collect({ case o: PlayerObject => o }).foreach(p => resetPlayer(p))
 
@@ -77,8 +77,8 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     activePlayer.name
   }
 
-  override def actionIdsForPlayer(playerNumber: Int): Set[Int] = {
-    player(playerNumber).actions.map(_.id).toSet
+  override def actionIdsForPlayer(playerNumber: Int): Option[Set[Int]] = {
+    player(playerNumber) map (_.actions.map(_.id).toSet)
   }
 
   override def actionPointCost(actionId: Int): Int = {
@@ -248,9 +248,8 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     gameObjects.collect({ case s: PlayerObject => s }).reduceLeft((a, b) => if (a.playerNumber < b.playerNumber) a else b)
   }
 
-  private def player(playerNumber: Int): PlayerObject = {
-    val foundPlayer = gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == playerNumber)
-    foundPlayer.get
+  private def player(playerNumber: Int): Option[PlayerObject] = {
+    gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == playerNumber)
   }
 
   override def activePlayerNumber: Int = {
@@ -337,7 +336,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
 
   override def wonImagePath: String = {
     if (winnerId.isDefined) {
-      player(winnerId.get).wonImagePath
+      player(winnerId.get).get.wonImagePath
     } else {
       ""
     }

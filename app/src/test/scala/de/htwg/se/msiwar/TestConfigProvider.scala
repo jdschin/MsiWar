@@ -46,6 +46,23 @@ class TestConfigProvider extends GameConfigProvider {
     gameObjects = List(player1, player2)
   }
 
+  def load3PlayerTestScenario(): Unit = {
+    rowCount = 3
+    colCount = 3
+
+    val shootAction = Action(id=2, "Shoot", "images/action_attack.png", "shoot.wav", actionPoints=1, range=3, SHOOT, damage=2)
+    actions = List(shootAction)
+
+    // Setup players
+    val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", maxActionPoints=3, maxHealthPoints=3, actions)
+    val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(2, 0), Direction.UP, playerNumber=2, "images/background_won_blue.png", maxActionPoints=3, maxHealthPoints=1, actions)
+    val player3 = PlayerObject("Player3", "images/medium_tank_blue.png", Position(2, 1), Direction.UP, playerNumber=3, "images/background_won_blue.png", maxActionPoints=3, maxHealthPoints=3, actions)
+
+    val wood = BlockObject("B", "images/block_wood.png", Position(1, 1))
+
+    gameObjects = List(player1, player2,player3, wood)
+  }
+
   def load2PlayerSmallMapScenario(): Unit = {
     rowCount = 3
     colCount = 4

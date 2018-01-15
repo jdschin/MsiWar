@@ -47,7 +47,7 @@ case class ControllerImpl(var model: GameModel) extends Controller {
   }
 
   override def actionIds(playerNumber: Int): Set[Int] = {
-    model.actionIdsForPlayer(playerNumber)
+    model.actionIdsForPlayer(playerNumber).get
   }
 
   override def actionDescription(actionId: Int): String = {

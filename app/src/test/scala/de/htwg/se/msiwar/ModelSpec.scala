@@ -64,7 +64,7 @@ class ModelSpec extends FlatSpec with Matchers {
 
     val model = GameModelImpl(testConfigProvider)
 
-    val actionIds = model.actionIdsForPlayer(1)
+    val actionIds = model.actionIdsForPlayer(1).get
     val actionIdsIterator = actionIds.iterator
     while (actionIdsIterator.hasNext) {
       val actionId = actionIdsIterator.next()
@@ -107,6 +107,15 @@ class ModelSpec extends FlatSpec with Matchers {
     model.executeAction(2, Direction.DOWN)
     model.winnerId.isDefined should be(true)
     model.winnerId.get should be(1)
+  }
+
+  it should "return no action ids for a dead player" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load3PlayerTestScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.executeAction(2, Direction.DOWN)
+    model.actionIdsForPlayer(2).isEmpty should be(true)
   }
 
   it should "return row count 10 at game start" in {

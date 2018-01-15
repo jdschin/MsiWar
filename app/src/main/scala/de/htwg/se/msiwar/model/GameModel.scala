@@ -19,9 +19,9 @@ trait GameModel extends Publisher {
 
   /**
     * @param playerNumber the number of the player to get action ids for
-    * @return the actions ids for given player id
+    * @return the action ids for given player id, if present. An empty Option if not
     */
-  def actionIdsForPlayer(playerNumber: Int): Set[Int]
+  def actionIdsForPlayer(playerNumber: Int): Option[Set[Int]]
 
   /**
     * @param actionId the action id to get action point cost for
