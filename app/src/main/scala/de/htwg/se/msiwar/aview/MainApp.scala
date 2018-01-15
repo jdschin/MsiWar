@@ -8,7 +8,7 @@ import de.htwg.se.msiwar.util.GameConfigProviderImpl
 
 object MainApp {
   val createdModel = GameModelImpl(new GameConfigProviderImpl)
-  val controller = new ControllerImpl(createdModel)
+  val controller = ControllerImpl(createdModel)
   private val swingFrame = new SwingFrame(controller)
   swingFrame.visible = true
 

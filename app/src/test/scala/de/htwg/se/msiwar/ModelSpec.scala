@@ -385,4 +385,45 @@ class ModelSpec extends FlatSpec with Matchers {
     val model = GameModelImpl(testConfigProvider)
     model.lastExecutedActionId.isDefined should be(false)
   }
+
+  it should "return an empty list when action id is not set" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerEmptyMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.cellsInRange(Option.empty[Int]) should be (List())
+  }
+
+  it should "return value of X when a cell content has no object" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerSmallMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.cellContentToText(2,0) should be ("X")
+  }
+
+  it should "return name of block object when a cell content has an object" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerSmallMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.cellContentToText(0,0) should be ("B")
+  }
+
+  it should "return an empty Option[String] when there is no cell content at position" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerSmallMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.cellContentImagePath(2,0) should be (Option.empty[String])
+  }
+
+  it should "return an image path when there is a cell content at position" in {
+    val testConfigProvider = new TestConfigProvider
+    testConfigProvider.load2PlayerSmallMapScenario()
+
+    val model = GameModelImpl(testConfigProvider)
+    model.cellContentImagePath(0,0).isDefined should be (true)
+    model.cellContentImagePath(0,0).get should be ("images/block_wood.png")
+  }
 }
