@@ -216,6 +216,7 @@ class GameConfigProviderImpl extends GameConfigProvider {
       } else {
         completion(false)
       }
+      system.terminate()
     })), name = "master")
 
     master ! Generate

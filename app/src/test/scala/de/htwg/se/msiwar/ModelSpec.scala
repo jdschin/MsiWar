@@ -303,8 +303,8 @@ class ModelSpec extends FlatSpec with Matchers {
 
     model.startGame(0)
 
-    val gameStarted = Await.result(gameStartedPromise.future, 50000 millis)
-    val playerNumber = Await.result(turnStartedPromise.future, 50000 millis)
+    val gameStarted = Await.result(gameStartedPromise.future, 500 millis)
+    val playerNumber = Await.result(turnStartedPromise.future, 500 millis)
     gameStarted should be(true)
     playerNumber should be(1)
   }
@@ -317,11 +317,12 @@ class ModelSpec extends FlatSpec with Matchers {
     testConfigProvider.load2PlayerDamageTestScenario()
 
     val model = GameModelImpl(testConfigProvider)
-    model.startRandomGame()
-
     TestEventHandler(model, Option(gameStartedPromise), Option.empty, Option.empty)
 
-    val result = Await.result(gameStartedPromise.future, 50000 millis)
+    model.startRandomGame()
+
+
+    val result = Await.result(gameStartedPromise.future, 500 millis)
     result should be(true)
   }
 
@@ -334,11 +335,11 @@ class ModelSpec extends FlatSpec with Matchers {
 
     val model = GameModelImpl(testConfigProvider)
 
-    model.startRandomGame(0, 0)
-
     TestEventHandler(model, Option.empty, Option(couldNotGenerateGamePromise), Option.empty)
 
-    val result = Await.result(couldNotGenerateGamePromise.future, 50000 millis)
+    model.startRandomGame(0, 0)
+
+    val result = Await.result(couldNotGenerateGamePromise.future, 500 millis)
     result should be(true)
   }
 

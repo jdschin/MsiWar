@@ -6,3 +6,4 @@ libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % 
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.4"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.8"
+libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.9" % Test

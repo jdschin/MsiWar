@@ -16,11 +16,9 @@ class GameGenerationMaster(numberOfWorkers: Int, numberOfMessages: Int, rowCount
       messageCounter += 1
       if (gameObjectsOpt.isDefined) {
         context.stop(self)
-        context.system.terminate()
         completion(gameObjectsOpt)
       } else if (messageCounter == numberOfMessages) {
         context.stop(self)
-        context.system.terminate()
         completion(Option.empty)
       }
   }
