@@ -6,6 +6,8 @@ import de.htwg.se.msiwar.controller.ControllerImpl
 import de.htwg.se.msiwar.model.GameModelImpl
 import de.htwg.se.msiwar.util.{Direction, GameConfigProviderImpl}
 import org.scalatest.{FlatSpec, Matchers}
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Promise}
 
 class ControllerSpec extends FlatSpec with Matchers {
   private val resourcePathPrefix = "src/main/resources/"
@@ -241,11 +243,18 @@ class ControllerSpec extends FlatSpec with Matchers {
   }
 
   it should "start a random game" in {
+    val couldNotGenerateGamePromise = Promise[Boolean]()
+
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerDamageTestScenario()
 
     val model = GameModelImpl(testConfigProvider)
     val controller = ControllerImpl(model)
     controller.startRandomGame()
+
+    TestEventHandler(model, Option.empty, Option(couldNotGenerateGamePromise), Option.empty)
+
+    val result = Await.result(couldNotGenerateGamePromise.future, 50000 millis)
+    result should be(true)
   }
 }

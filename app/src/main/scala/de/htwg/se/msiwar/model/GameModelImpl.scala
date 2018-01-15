@@ -199,9 +199,6 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     var result = false
     if (actionForId.isDefined) {
       val actionToExecute = actionForId.get
-      if ((activePlayer.currentActionPoints - actionToExecute.actionPoints) < 0) {
-        return false
-      }
       actionToExecute.actionType match {
         case MOVE =>
           val newPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
