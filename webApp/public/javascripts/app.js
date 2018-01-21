@@ -127,6 +127,10 @@ function createImageSizeUndefined(src) {
 
 function createNewTable(json) {
 
+    var grid = document.getElementById("grid")
+    if (grid != null) {
+        grid.remove();
+    }
     var content = document.getElementById("content");
     var tableGrid = document.createElement("table");
     tableGrid.id = "grid";

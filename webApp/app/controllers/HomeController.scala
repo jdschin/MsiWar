@@ -8,8 +8,8 @@ import akka.http.scaladsl.model.ws.{Message, TextMessage, WebSocketRequest}
 import akka.stream.Materializer
 import akka.stream.scaladsl.{BroadcastHub, Flow, Keep, MergeHub, Sink, Source}
 import akka.{Done, NotUsed}
-import de.htwg.se.msiwar.aview.MainApp._
-import de.htwg.se.msiwar.controller.{AttackActionResult, CellChanged, GameStarted, PlayerWon}
+import de.htwg.se.msiwar.aview.MainApp.controller
+import de.htwg.se.msiwar.controller.{AttackResult, CellChanged, GameStarted, PlayerWon}
 import play.api.libs.json.{JsArray, JsObject, JsValue, Json}
 import play.api.mvc._
 
@@ -36,7 +36,7 @@ class HomeController @Inject()(cc: ControllerComponents)
   reactions += {
     case e: CellChanged => sendCellChangedJsonToClient(e.rowColumnIndexes)
     case _: GameStarted => sendGameStartedJsonToClient()
-    case e: AttackActionResult => sendAttackActionResultJsonToClient(e.rowIndex, e.columnIndex, e.attackImagePath)
+    case e: AttackResult => sendAttackActionResultJsonToClient(e.rowIndex, e.columnIndex, e.attackImagePath)
     case e: PlayerWon => sendPlayerWonJsonToClient(e.wonImagePath)
   }
 
