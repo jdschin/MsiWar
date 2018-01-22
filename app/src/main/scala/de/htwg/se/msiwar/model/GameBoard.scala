@@ -171,7 +171,7 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     }
   }
 
-  def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int): Position = {
+  def calculatePositionForDirection(oldPosition: Position, direction: Direction, range: Int): Option[Position] = {
     var newPosition: Option[Position] = empty
     var modifyPositionFunction: (Int, Int) => (Int, Int) = changeNothing
 
@@ -183,6 +183,6 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
         newPosition = Option(pos)
       }
     })
-    newPosition.get
+    newPosition
   }
 }

@@ -126,30 +126,39 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
       val actionToExecute = actionForId.get
       actionToExecute.actionType match {
         case MOVE =>
-          val newPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
-          val oldPosition = activePlayer.position.copy()
-          gameBoard.moveGameObject(activePlayer, newPosition)
-          publish(ModelCellChanged(List((newPosition.rowIdx, newPosition.columnIdx), (oldPosition.rowIdx, oldPosition.columnIdx))))
+          val newPositionOpt = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+          if (newPositionOpt.isDefined) {
+            val newPosition = newPositionOpt.get
+            val oldPosition = activePlayer.position.copy()
+            gameBoard.moveGameObject(activePlayer, newPosition)
+            publish(ModelCellChanged(List((newPosition.rowIdx, newPosition.columnIdx), (oldPosition.rowIdx, oldPosition.columnIdx))))
 
+          }
         case SHOOT =>
-          val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range), ignoreLastPosition = false)
-          if (collisionObjectOpt.isDefined) {
-            val collisionObject = collisionObjectOpt.get
-            collisionObject match {
-              case playerCollisionObject: PlayerObject =>
-                playerCollisionObject.currentHealthPoints -= actionToExecute.damage
-                // Remove player if dead
-                if (playerCollisionObject.currentHealthPoints < 0) {
-                  removePlayerFromGame(playerCollisionObject)
-                }
-                publish(ModelCellChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
-              case _ => publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
+          val positionForDirection = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+          if (positionForDirection.isDefined) {
+            val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, positionForDirection.get, ignoreLastPosition = false)
+            if (collisionObjectOpt.isDefined) {
+              val collisionObject = collisionObjectOpt.get
+              collisionObject match {
+                case playerCollisionObject: PlayerObject =>
+                  playerCollisionObject.currentHealthPoints -= actionToExecute.damage
+                  // Remove player if dead
+                  if (playerCollisionObject.currentHealthPoints < 0) {
+                    removePlayerFromGame(playerCollisionObject)
+                  }
+                  publish(ModelCellChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
+                case _ => publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
+              }
+              publish(ModelAttackResult(collisionObject.position.rowIdx, collisionObject.position.columnIdx, hit = true, attackImagePath, attackSoundPath))
+            } else {
+              val targetPositionOpt = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+              if (targetPositionOpt.isDefined) {
+                val targetPosition = targetPositionOpt.get
+                publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
+                publish(ModelAttackResult(targetPosition.rowIdx, targetPosition.columnIdx, hit = false, attackImagePath, attackSoundPath))
+              }
             }
-            publish(ModelAttackResult(collisionObject.position.rowIdx, collisionObject.position.columnIdx, hit = true, attackImagePath, attackSoundPath))
-          } else {
-            val targetPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
-            publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
-            publish(ModelAttackResult(targetPosition.rowIdx, targetPosition.columnIdx, hit = false, attackImagePath, attackSoundPath))
           }
         case WAIT => // Do nothing
       }
@@ -201,10 +210,12 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
       val actionToExecute = actionForId.get
       actionToExecute.actionType match {
         case MOVE =>
-          val newPosition = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
-          result = gameBoard.isInBound(newPosition) &&
-            gameBoard.gameObjectAt(newPosition).isEmpty
-
+          val newPositionOpt = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+          if (newPositionOpt.isDefined) {
+            val newPosition = newPositionOpt.get
+            result = gameBoard.isInBound(newPosition) &&
+              gameBoard.gameObjectAt(newPosition).isEmpty
+          }
         case _ => result = true
       }
     }

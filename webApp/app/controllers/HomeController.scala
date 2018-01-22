@@ -136,8 +136,8 @@ class HomeController @Inject()(cc: ControllerComponents)
 
       val printSink: Sink[Message, Future[Done]] =
         Sink.foreach {
-          case message: TextMessage.Strict =>
-            println(message.text)
+          case _: TextMessage.Strict =>
+          //println(message.text)
         }
 
       val jsonSource: Source[Message, NotUsed] =
