@@ -6,12 +6,13 @@ import de.htwg.se.msiwar.controller.Controller
 import de.htwg.se.msiwar.util.ImageUtils
 
 import scala.swing.event.ButtonClicked
-import scala.swing.{Alignment, FlowPanel, Graphics2D, GridPanel, ToggleButton}
+import scala.swing.{Alignment, FlowPanel, Graphics2D, GridPanel, Label, ToggleButton}
 
 class SwingActionBarPanel(controller: Controller) extends FlowPanel {
   private val actionBarButtons = scala.collection.mutable.Map[Int, ToggleButton]()
   private var backgroundImage = ImageUtils.loadImage(controller.actionbarBackgroundImagePath)
   private var currentActionId: Option[Int] = Option.empty
+  private val messagePanel = new Label("Please start a new game")
 
   preferredSize = new Dimension(50, 50)
   reactions += {
