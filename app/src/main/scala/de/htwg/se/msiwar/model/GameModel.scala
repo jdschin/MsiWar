@@ -61,6 +61,13 @@ trait GameModel extends Publisher {
   def cellContentToText(rowIndex: Int, columnIndex: Int): String
 
   /**
+    * @param rowIndex row to get content for
+    * @param columnIndex column to get content for
+    * @return the GameObject at the cell
+    */
+  def cellContent(rowIndex: Int, columnIndex: Int) : Option[GameObject]
+
+  /**
     * @param rowIndex row to get path of the image representation
     * @param columnIndex column to get path of the image representation
     * @return the path of the image representation of the cell

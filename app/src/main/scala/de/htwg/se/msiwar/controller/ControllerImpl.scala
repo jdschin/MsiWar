@@ -20,6 +20,10 @@ case class ControllerImpl(var model: GameModel) extends Controller {
     model.cellContentToText(rowIndex, columnIndex)
   }
 
+  override def cellContent(rowIndex: Int, columnIndex: Int) : Option[GameObject] = {
+    model.cellContent(rowIndex, columnIndex);
+  }
+
   override def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String] = {
     model.cellContentImagePath(rowIndex, columnIndex)
   }

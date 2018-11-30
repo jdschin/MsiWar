@@ -1,5 +1,6 @@
 package de.htwg.se.msiwar.controller
 
+import de.htwg.se.msiwar.model.GameObject
 import de.htwg.se.msiwar.util.Direction.Direction
 
 import scala.swing.Publisher
@@ -29,6 +30,13 @@ trait Controller extends Publisher{
     * @return the path of the image representation of the cell
     */
   def cellContentImagePath(rowIndex: Int, columnIndex: Int) : Option[String]
+
+  /**
+    * @param rowIndex row to get content for
+    * @param columnIndex column to get content for
+    * @return the GameObject at the cell
+    */
+  def cellContent(rowIndex: Int, columnIndex: Int) : Option[GameObject]
 
   /**
     * Calculates the cells in range for active player and given actionId

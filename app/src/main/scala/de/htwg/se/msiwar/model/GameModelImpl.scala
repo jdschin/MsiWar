@@ -309,6 +309,10 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     }
   }
 
+  override def cellContent(rowIndex: Int, columnIndex: Int) : Option[GameObject] = {
+    gameBoard.gameObjectAt(rowIndex, columnIndex)
+  }
+
   override def cellsInRange(actionId: Option[Int]): List[(Int, Int)] = {
     if (actionId.isDefined) {
       val actionForId = activePlayer.actions.find(_.id == actionId.get)
