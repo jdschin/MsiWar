@@ -38,8 +38,10 @@ case class ControllerImpl(var model: GameModel) extends Controller {
     cellsInRange(model.lastExecutedActionId)
   }
 
-  override def cellsInRange(actionId: Option[Int]): Unit = {
-    publish(CellsInRange(model.cellsInRange(actionId)))
+  override def cellsInRange(actionId: Option[Int]): List[(Int, Int)] = {
+    val cells = model.cellsInRange(actionId)
+    publish(CellsInRange(cells))
+    cells
   }
 
   override def canExecuteAction(actionId: Int, direction: Direction): Boolean = {

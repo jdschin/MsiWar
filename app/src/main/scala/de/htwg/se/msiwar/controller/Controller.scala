@@ -41,10 +41,9 @@ trait Controller extends Publisher{
   /**
     * Calculates the cells in range for active player and given actionId
     * when no action id is enabled, result is always empty
-    * Result is published by CellsInRange Event
     * @param actionId the id of the action to calculate cells in range for
     **/
-  def cellsInRange(actionId: Option[Int]) : Unit
+  def cellsInRange(actionId: Option[Int]) : List[(Int, Int)]
 
   /**
     * Executes the given action id in the given direction
