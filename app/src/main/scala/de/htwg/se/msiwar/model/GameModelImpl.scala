@@ -310,7 +310,29 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
   }
 
   override def cellContent(rowIndex: Int, columnIndex: Int) : Option[GameObject] = {
-    gameBoard.gameObjectAt(rowIndex, columnIndex)
+    val objectAt = gameBoard.gameObjectAt(rowIndex, columnIndex)
+    if (objectAt.isDefined) {
+      objectAt.get match {
+        case playerObj: PlayerObject =>
+          Option(PlayerObject(playerObj.name,
+          imagePathForViewDirection(playerObj.imagePath, playerObj.viewDirection),
+          playerObj.position,
+          playerObj.viewDirection,
+          playerObj.playerNumber,
+          playerObj.wonImagePath,
+          playerObj.currentActionPoints,
+          playerObj.currentHealthPoints,
+          playerObj.actions)
+        )
+        case blockObject: BlockObject =>
+          Option(BlockObject(blockObject.name,
+            blockObject.imagePath,
+            blockObject.position)
+          )
+      }
+    } else {
+      Option.empty[GameObject]
+    }
   }
 
   override def cellsInRange(actionId: Option[Int]): List[(Int, Int)] = {
