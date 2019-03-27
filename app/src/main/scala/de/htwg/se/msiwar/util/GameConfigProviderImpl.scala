@@ -72,7 +72,7 @@ class GameConfigProviderImpl extends GameConfigProvider {
   @throws(classOf[FileNotFoundException])
   @throws(classOf[JSONException])
   @throws(classOf[NoSuchElementException])
-  def loadFromFile(configFilePath: String): Unit = {
+  def loadFromFile(configFilePath: String): GameConfigProvider = {
     val json = Source.fromInputStream(getClass.getClassLoader.getResourceAsStream("scenarios/" + configFilePath)).getLines.mkString
     JSON.parseFull(json) match {
       case Some(jsonMap: Map[String, Any]) =>
@@ -131,8 +131,7 @@ class GameConfigProviderImpl extends GameConfigProvider {
 
       case _ => throw JSONException()
     }
-
-
+    this
   }
 
   private def actionFromMap(actionMap: Map[String, Any]): Action = {
@@ -150,7 +149,6 @@ class GameConfigProviderImpl extends GameConfigProvider {
   }
 
   private def blockObjectFromMap(blockMap: Map[String, Any]): BlockObject = {
-
     val name = blockMap("name").asInstanceOf[String]
     val imagePath = blockMap("imagePath").asInstanceOf[String]
     val positionMap = blockMap("position").asInstanceOf[Map[String, Double]]
@@ -162,7 +160,6 @@ class GameConfigProviderImpl extends GameConfigProvider {
   }
 
   private def playerObjectFromMap(playerMap: Map[String, Any], allActions: List[Action]) = {
-
     val name = playerMap("name").asInstanceOf[String]
     val imagePath = playerMap("imagePath").asInstanceOf[String]
     val positionMap = playerMap("position").asInstanceOf[Map[String, Any]]
@@ -193,22 +190,12 @@ class GameConfigProviderImpl extends GameConfigProvider {
     PlayerObject(name, imagePath, Position(rowIndex, columnIndex), viewDirectionOpt.get, playerNumber, wonImagePath, maxActionPoints, maxHealthPoints, actions)
   }
 
-  override def generateGame(rowCount: Int, columnCount: Int, completion: (Boolean) => Unit): Unit = {
-    // Global sounds
-    attackSoundPath = "sounds/explosion.wav"
-
-    // Global images
-    openingBackgroundImagePath = "images/background_opening.png"
-    levelBackgroundImagePath = RandomImagePaths.backgroundImagePath()
-    actionbarBackgroundImagePath = "images/background_actionbar.png"
-    attackImagePath = "images/hit.png"
-
+  override def generateGame(rowCount: Int, columnCount: Int, completion: (Boolean) => Unit): GameConfigProvider = {
     // Setup board
     this.rowCount = rowCount
     this.colCount = columnCount
 
     val system = ActorSystem("GameGenerationSystem")
-
     val master = system.actorOf(Props(new GameGenerationMaster(numberOfWorkers = 4, numberOfMessages = 100, rowCount, colCount, actions, (gameObjects) => {
       if (gameObjects.isDefined) {
         this.gameObjects = gameObjects.get
@@ -220,6 +207,6 @@ class GameConfigProviderImpl extends GameConfigProvider {
     })), name = "master")
 
     master ! Generate
+    this
   }
-
 }

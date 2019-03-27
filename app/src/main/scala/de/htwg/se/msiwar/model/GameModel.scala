@@ -107,13 +107,15 @@ trait GameModel extends Publisher {
     */
   def appIconImagePath: String
 
+  def updateTurn
+
   /**
     * Executes the given action id in the given direction
     * NOTE: always call GameModel#canExecuteAction(Int, Direction) before
     * @param actionId the id of the action to execute
     * @param direction the direction of the action to execute
     */
-  def executeAction(actionId: Int, direction:Direction): Unit
+  def executeAction(actionId: Int, direction:Direction): GameModel
 
   /**
     * Executes the given action id in the given direction
@@ -122,7 +124,7 @@ trait GameModel extends Publisher {
     * @param rowIndex the target row
     * @param columnIndex the target column
     */
-  def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit
+  def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): GameModel
 
   /**
     * Verifies if the action for given id in given direction can be executed or will result in an error

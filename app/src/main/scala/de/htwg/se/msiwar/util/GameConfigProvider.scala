@@ -13,8 +13,8 @@ trait GameConfigProvider {
   def gameObjects: List[GameObject]
 
   def listScenarios: List[String]
-  def loadFromFile(configFilePath: String): Unit
-  def generateGame(rowCount: Int, columnCount: Int, completion: (Boolean) => Unit) : Unit
+  def loadFromFile(configFilePath: String): GameConfigProvider
+  def generateGame(rowCount: Int, columnCount: Int, completion: (Boolean) => Unit) : GameConfigProvider
 
   def rowCount: Int
   def colCount: Int

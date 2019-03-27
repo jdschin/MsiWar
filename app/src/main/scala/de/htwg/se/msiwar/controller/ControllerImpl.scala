@@ -34,7 +34,8 @@ case class ControllerImpl(var model: GameModel) extends Controller {
   }
 
   override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
-    model.executeAction(actionId, rowIndex, columnIndex)
+    model = model.executeAction(actionId, rowIndex, columnIndex)
+    publish(ModelPlayerStatsChanged())
     cellsInRange(model.lastExecutedActionId)
   }
 

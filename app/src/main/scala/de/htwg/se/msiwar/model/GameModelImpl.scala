@@ -6,40 +6,23 @@ import de.htwg.se.msiwar.util.{Direction, GameConfigProvider}
 
 import scala.util.control.Breaks
 
-case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameModel {
-  var openingBackgroundImagePath: String = gameConfigProvider.openingBackgroundImagePath
-  var levelBackgroundImagePath: String = gameConfigProvider.levelBackgroundImagePath
-  var actionbarBackgroundImagePath: String = gameConfigProvider.actionbarBackgroundImagePath
-  var appIconImagePath: String = gameConfigProvider.appIconImagePath
-  var attackImagePath: String = gameConfigProvider.attackImagePath
-  var attackSoundPath: String = gameConfigProvider.attackSoundPath
+case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: GameBoard, lastExecutedAction: Option[Action]) extends GameModel {
+  val openingBackgroundImagePath: String = gameConfigProvider.openingBackgroundImagePath
+  val levelBackgroundImagePath: String = gameConfigProvider.levelBackgroundImagePath
+  val actionbarBackgroundImagePath: String = gameConfigProvider.actionbarBackgroundImagePath
+  val appIconImagePath: String = gameConfigProvider.appIconImagePath
+  val attackImagePath: String = gameConfigProvider.attackImagePath
+  val attackSoundPath: String = gameConfigProvider.attackSoundPath
 
-  private var gameObjects = gameConfigProvider.gameObjects
-  private var gameBoard = GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects)
-  private var activePlayer = player(1).get
-  private var turnNumber = 1
-  private var lastExecutedAction = Option.empty[Action]
-  private val scenariosById = new scala.collection.mutable.HashMap[Int, String]()
+  private val gameObjects = gameConfigProvider.gameObjects
+  private val activePlayer = player(1).get
+  private val turnNumber = 1
   private val availableScenarios = gameConfigProvider.listScenarios
-  for (i <- availableScenarios.indices) {
-    scenariosById.put(i, availableScenarios(i))
-  }
 
-  def reset(): Unit = {
-    openingBackgroundImagePath = gameConfigProvider.openingBackgroundImagePath
-    levelBackgroundImagePath = gameConfigProvider.levelBackgroundImagePath
-    actionbarBackgroundImagePath = gameConfigProvider.actionbarBackgroundImagePath
-    appIconImagePath = gameConfigProvider.appIconImagePath
-    attackImagePath = gameConfigProvider.attackImagePath
-    attackSoundPath = gameConfigProvider.attackSoundPath
-    gameObjects = gameConfigProvider.gameObjects
-    gameBoard = GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects)
-    activePlayer = player(1).get
-
+  def reset(gameConfigProvider: GameConfigProvider): GameModel = {
+    val newModel = copy(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects), Option.empty[Action])
     gameObjects.collect({ case o: PlayerObject => o }).foreach(p => resetPlayer(p))
-
-    turnNumber = 1
-    lastExecutedAction = Option.empty[Action]
+    newModel
   }
 
   private def resetPlayer(playerToReset: PlayerObject): Unit = {
@@ -48,15 +31,13 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
   }
 
   override def startGame(scenarioId: Int): Unit = {
-    val scenarioNameOpt = scenariosById.get(scenarioId)
-    if (scenariosById.get(scenarioId).isDefined) {
-      gameConfigProvider.loadFromFile(scenarioNameOpt.get)
-    }
-    resetAndFireInitialEvents()
+    val scenarioName = availableScenarios(scenarioId)
+    val configProvider = gameConfigProvider.loadFromFile(scenarioName)
+    resetAndFireInitialEvents(configProvider)
   }
 
-  private def resetAndFireInitialEvents(): Unit = {
-    reset()
+  private def resetAndFireInitialEvents(gameConfigProvider: GameConfigProvider): Unit = {
+    reset(gameConfigProvider)
     // Fire initial events
     publish(ModelGameStarted())
     updateTurn()
@@ -66,7 +47,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
   override def startRandomGame(rowCount: Int, columnCount: Int): Unit = {
     gameConfigProvider.generateGame(rowCount, columnCount, couldGenerateGame => {
       if (couldGenerateGame) {
-        resetAndFireInitialEvents()
+        resetAndFireInitialEvents(gameConfigProvider)
       } else {
         publish(ModelCouldNotGenerateGame())
       }
@@ -113,11 +94,11 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     }
   }
 
-  override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
+  override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): GameModel = {
     executeAction(actionId, gameBoard.calculateDirection(activePlayer.position, Position(rowIndex, columnIndex)))
   }
 
-  override def executeAction(actionId: Int, direction: Direction): Unit = {
+  override def executeAction(actionId: Int, direction: Direction): GameModel = {
     val actionForId = activePlayer.actions.find(_.id == actionId)
     if (actionForId.isDefined) {
       // Update view direction first to ensure correct view direction on action execution
@@ -163,10 +144,12 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
         case WAIT => // Do nothing
       }
       activePlayer.currentActionPoints -= actionToExecute.actionPoints
-      lastExecutedAction = Option(actionToExecute)
-      publish(ModelPlayerStatsChanged())
+      val model = copy(gameConfigProvider, gameBoard, Option(actionToExecute))
+      updateTurn()
+      model
+    } else {
+      this
     }
-    updateTurn()
   }
 
   private def updateTurn(): Unit = {
@@ -178,14 +161,15 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider) extends GameMod
     }
   }
 
-  private def removePlayerFromGame(playerObject: PlayerObject): Unit = {
+  private def removePlayerFromGame(playerObject: PlayerObject): GameModel = {
     gameBoard.removeGameObject(playerObject)
-    gameObjects = gameObjects.filter(gameObject => {
+    val newGameObjects = gameObjects.filter(gameObject => {
       gameObject match {
         case p: PlayerObject => p.playerNumber != playerObject.playerNumber
         case _ => true
       }
     })
+    copy(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, newGameObjects), lastExecutedAction)
   }
 
   override def lastExecutedActionId: Option[Int] = {
