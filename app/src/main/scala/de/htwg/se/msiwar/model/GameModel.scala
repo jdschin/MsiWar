@@ -1,6 +1,7 @@
 package de.htwg.se.msiwar.model
 
 import de.htwg.se.msiwar.util.Direction.Direction
+import de.htwg.se.msiwar.util.GameConfigProvider
 
 import scala.swing.Publisher
 import scala.swing.event.Event
@@ -75,6 +76,11 @@ trait GameModel extends Publisher {
   def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String]
 
   /**
+    * @return the image path of the won image
+    */
+  def wonImagePath: String
+
+  /**
     * Calculates the cells in range for active player and given actionId
     * when no action id is enabled, result is always empty
     * @param actionId the id of the action to calculate cells in range for
@@ -83,29 +89,9 @@ trait GameModel extends Publisher {
   def cellsInRange(actionId: Option[Int]): List[(Int, Int)]
 
   /**
-    * @return the image path for the opening background
+    * @return the used game config provider
     */
-  def openingBackgroundImagePath: String
-
-  /**
-    * @return the image path for the level background
-    */
-  def levelBackgroundImagePath: String
-
-  /**
-    * @return the image path of the actionbar background
-    */
-  def actionbarBackgroundImagePath: String
-
-  /**
-    * @return the image path of the won image
-    */
-  def wonImagePath: String
-
-  /**
-    * @return the image path of the application icon
-    */
-  def appIconImagePath: String
+  def gameConfigProvider: GameConfigProvider
 
   /**
     * Executes the given action id in the given direction

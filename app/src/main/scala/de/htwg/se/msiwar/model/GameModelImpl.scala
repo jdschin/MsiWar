@@ -7,12 +7,6 @@ import de.htwg.se.msiwar.util.{Direction, GameConfigProvider}
 import scala.util.control.Breaks
 
 case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: GameBoard, lastExecutedAction: Option[Action], activePlayer: PlayerObject, turnNumber: Int) extends GameModel {
-  val openingBackgroundImagePath = gameConfigProvider.openingBackgroundImagePath
-  val levelBackgroundImagePath = gameConfigProvider.levelBackgroundImagePath
-  val actionbarBackgroundImagePath = gameConfigProvider.actionbarBackgroundImagePath
-  val appIconImagePath = gameConfigProvider.appIconImagePath
-  val attackImagePath = gameConfigProvider.attackImagePath
-  val attackSoundPath = gameConfigProvider.attackSoundPath
 
   private val gameObjects = gameConfigProvider.gameObjects
   private val availableScenarios = gameConfigProvider.listScenarios
@@ -123,13 +117,13 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
                   publish(ModelCellChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
                 case _ => publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
               }
-              publish(ModelAttackResult(collisionObject.position.rowIdx, collisionObject.position.columnIdx, hit = true, attackImagePath, attackSoundPath))
+              publish(ModelAttackResult(collisionObject.position.rowIdx, collisionObject.position.columnIdx, hit = true, gameConfigProvider.attackImagePath, gameConfigProvider.attackSoundPath))
             } else {
               val targetPositionOpt = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
               if (targetPositionOpt.isDefined) {
                 val targetPosition = targetPositionOpt.get
                 publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
-                publish(ModelAttackResult(targetPosition.rowIdx, targetPosition.columnIdx, hit = false, attackImagePath, attackSoundPath))
+                publish(ModelAttackResult(targetPosition.rowIdx, targetPosition.columnIdx, hit = false, gameConfigProvider.attackImagePath, gameConfigProvider.attackSoundPath))
               }
             }
           }
@@ -145,11 +139,13 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   def updateTurn(): GameModel = {
+    var newModel: GameModel = this
     if (winnerId.isDefined) {
       publish(ModelPlayerWon(winnerId.get, wonImagePath))
-    } else if (turnOver) {
-      nextTurn
+    } else if (!activePlayer.hasActionPointsLeft) {
+      newModel = nextTurn
     }
+    newModel
   }
 
   private def removePlayerFromGame(playerObject: PlayerObject): GameModel = {
@@ -228,7 +224,8 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
         playerObject.resetActionPoints()
       }
     }
-    copy(gameConfigProvider, gameBoard, lastExecutedAction, nextPlayer, nextTurn)
+    val result = copy(gameConfigProvider, gameBoard, lastExecutedAction, nextPlayer, nextTurn)
+    result
   }
 
   private def firstPlayerAlive(): PlayerObject = {
@@ -244,10 +241,6 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   override def turnCounter: Int = turnNumber
-
-  private def turnOver: Boolean = {
-    !activePlayer.hasActionPointsLeft
-  }
 
   override def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String] = {
     val objectAt = gameBoard.gameObjectAt(rowIndex, columnIndex)
@@ -356,7 +349,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   override def scenarioIds: Set[Int] = {
-    gameConfigProvider.listScenarios.zipWithIndex.toSet[Int]
+    gameConfigProvider.listScenarios.indices.toSet
   }
 
   override def scenarioName(scenarioId: Int): Option[String] = {

@@ -90,15 +90,15 @@ case class ControllerImpl(var model: GameModel) extends Controller {
   }
 
   override def openingBackgroundImagePath: String = {
-    model.openingBackgroundImagePath
+    model.gameConfigProvider.openingBackgroundImagePath
   }
 
   override def levelBackgroundImagePath: String = {
-    model.levelBackgroundImagePath
+    model.gameConfigProvider.levelBackgroundImagePath
   }
 
   override def actionbarBackgroundImagePath: String = {
-    model.actionbarBackgroundImagePath
+    model.gameConfigProvider.actionbarBackgroundImagePath
   }
 
   override def activePlayerNumber: Int = {
@@ -142,7 +142,7 @@ case class ControllerImpl(var model: GameModel) extends Controller {
   }
 
   override def appIconImagePath: String = {
-    model.appIconImagePath
+    model.gameConfigProvider.appIconImagePath
   }
 
   override def startRandomGame(): Unit = {
