@@ -21,7 +21,7 @@ case class ControllerImpl(var model: GameModel) extends Controller {
   }
 
   override def cellContent(rowIndex: Int, columnIndex: Int) : Option[GameObject] = {
-    model.cellContent(rowIndex, columnIndex);
+    model.cellContent(rowIndex, columnIndex)
   }
 
   override def cellContentImagePath(rowIndex: Int, columnIndex: Int): Option[String] = {
@@ -29,13 +29,21 @@ case class ControllerImpl(var model: GameModel) extends Controller {
   }
 
   override def executeAction(actionId: Int, direction: Direction): Unit = {
-    model.executeAction(actionId, direction)
-    cellsInRange(model.lastExecutedActionId)
+    model = model.executeAction(actionId, direction)
+    checkAfterActionExecution
   }
 
   override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
     model = model.executeAction(actionId, rowIndex, columnIndex)
+    checkAfterActionExecution
+  }
+
+  private def checkAfterActionExecution = {
+    if (model.winnerId.isDefined) {
+      publish(ModelPlayerWon(model.winnerId.get, model.wonImagePath))
+    }
     publish(ModelPlayerStatsChanged())
+    publish(TurnStarted(model.activePlayerNumber))
     cellsInRange(model.lastExecutedActionId)
   }
 
@@ -102,7 +110,11 @@ case class ControllerImpl(var model: GameModel) extends Controller {
   }
 
   override def startGame(scenarioId: Int): Unit = {
-    model.startGame(scenarioId)
+    model = model.startGame(scenarioId)
+
+    publish(GameStarted())
+    model = model.updateTurn
+    publish(TurnStarted(model.activePlayerNumber))
   }
 
   override def turnCounter: Int = {
@@ -134,6 +146,10 @@ case class ControllerImpl(var model: GameModel) extends Controller {
   }
 
   override def startRandomGame(): Unit = {
-    model.startRandomGame()
+    model = model.startRandomGame()
+
+    publish(GameStarted())
+    model = model.updateTurn
+    publish(TurnStarted(model.activePlayerNumber))
   }
 }

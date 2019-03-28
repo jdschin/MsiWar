@@ -6,17 +6,15 @@ import de.htwg.se.msiwar.util.{Direction, GameConfigProvider}
 
 import scala.util.control.Breaks
 
-case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: GameBoard, lastExecutedAction: Option[Action]) extends GameModel {
-  val openingBackgroundImagePath: String = gameConfigProvider.openingBackgroundImagePath
-  val levelBackgroundImagePath: String = gameConfigProvider.levelBackgroundImagePath
-  val actionbarBackgroundImagePath: String = gameConfigProvider.actionbarBackgroundImagePath
-  val appIconImagePath: String = gameConfigProvider.appIconImagePath
-  val attackImagePath: String = gameConfigProvider.attackImagePath
-  val attackSoundPath: String = gameConfigProvider.attackSoundPath
+case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: GameBoard, lastExecutedAction: Option[Action], activePlayer: PlayerObject, turnNumber: Int) extends GameModel {
+  val openingBackgroundImagePath = gameConfigProvider.openingBackgroundImagePath
+  val levelBackgroundImagePath = gameConfigProvider.levelBackgroundImagePath
+  val actionbarBackgroundImagePath = gameConfigProvider.actionbarBackgroundImagePath
+  val appIconImagePath = gameConfigProvider.appIconImagePath
+  val attackImagePath = gameConfigProvider.attackImagePath
+  val attackSoundPath = gameConfigProvider.attackSoundPath
 
   private val gameObjects = gameConfigProvider.gameObjects
-  private val activePlayer = player(1).get
-  private val turnNumber = 1
   private val availableScenarios = gameConfigProvider.listScenarios
 
   def reset(gameConfigProvider: GameConfigProvider): GameModel = {
@@ -30,28 +28,22 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
     playerToReset.resetHealthPoints()
   }
 
-  override def startGame(scenarioId: Int): Unit = {
+  override def startGame(scenarioId: Int): GameModel = {
     val scenarioName = availableScenarios(scenarioId)
     val configProvider = gameConfigProvider.loadFromFile(scenarioName)
-    resetAndFireInitialEvents(configProvider)
+    reset(configProvider)
   }
 
-  private def resetAndFireInitialEvents(gameConfigProvider: GameConfigProvider): Unit = {
-    reset(gameConfigProvider)
-    // Fire initial events
-    publish(ModelGameStarted())
-    updateTurn()
-    publish(ModelTurnStarted(activePlayerNumber))
-  }
-
-  override def startRandomGame(rowCount: Int, columnCount: Int): Unit = {
+  override def startRandomGame(rowCount: Int, columnCount: Int): GameModel = {
+    var newModel: GameModel = this
     gameConfigProvider.generateGame(rowCount, columnCount, couldGenerateGame => {
       if (couldGenerateGame) {
-        resetAndFireInitialEvents(gameConfigProvider)
+        newModel = reset(gameConfigProvider)
       } else {
         publish(ModelCouldNotGenerateGame())
       }
     })
+    newModel
   }
 
   override def activePlayerName: String = {
@@ -152,12 +144,11 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
     }
   }
 
-  private def updateTurn(): Unit = {
+  def updateTurn(): GameModel = {
     if (winnerId.isDefined) {
       publish(ModelPlayerWon(winnerId.get, wonImagePath))
     } else if (turnOver) {
       nextTurn
-      publish(ModelTurnStarted(activePlayerNumber))
     }
   }
 
@@ -215,12 +206,14 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
     }
   }
 
-  private def nextTurn: Int = {
+  private def nextTurn: GameModel = {
     var foundNextPlayer = false
+    var nextPlayer = firstPlayerAlive()
+    var nextTurn = turnCounter
     Breaks.breakable(
       for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
         if (playerObject.playerNumber > activePlayerNumber) {
-          activePlayer = playerObject
+          nextPlayer = playerObject
           foundNextPlayer = true
           Breaks.break()
         }
@@ -229,14 +222,13 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
 
     // If every player did his turn, start the next turn with first player alive
     if (!foundNextPlayer) {
-      activePlayer = firstPlayerAlive()
-      turnNumber += 1
+      nextTurn += 1
       // Reset action points of all players when new turn has started
       for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
         playerObject.resetActionPoints()
       }
     }
-    turnCounter
+    copy(gameConfigProvider, gameBoard, lastExecutedAction, nextPlayer, nextTurn)
   }
 
   private def firstPlayerAlive(): PlayerObject = {
@@ -364,17 +356,12 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   override def scenarioIds: Set[Int] = {
-    scenariosById.keys.toSet
+    gameConfigProvider.listScenarios.zipWithIndex.toSet[Int]
   }
 
   override def scenarioName(scenarioId: Int): Option[String] = {
-    val scenarioNameOpt = scenariosById.get(scenarioId)
-    if (scenarioNameOpt.isDefined) {
-      val scenarioName = scenarioNameOpt.get
-      Option(scenarioName.substring(0, scenarioName.lastIndexOf('.')).replace('_', ' '))
-    } else {
-      Option.empty
-    }
+    val scenarioName = gameConfigProvider.listScenarios(scenarioId)
+    Option(scenarioName.substring(0, scenarioName.lastIndexOf('.')).replace('_', ' '))
   }
 
   override def activePlayerActionPoints: Int = {

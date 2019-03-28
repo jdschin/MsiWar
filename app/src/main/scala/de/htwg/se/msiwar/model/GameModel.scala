@@ -107,8 +107,6 @@ trait GameModel extends Publisher {
     */
   def appIconImagePath: String
 
-  def updateTurn
-
   /**
     * Executes the given action id in the given direction
     * NOTE: always call GameModel#canExecuteAction(Int, Direction) before
@@ -183,14 +181,14 @@ trait GameModel extends Publisher {
     * Starts a game configured by given scenario id
     * @param scenarioId the scenario id to configure game from
     */
-  def startGame(scenarioId: Int) : Unit
+  def startGame(scenarioId: Int) : GameModel
 
   /**
     * Starts a newly generated game
     * @param rowCount number of rows. Default value is a number between 2 and 10
     * @param columnCount number of columns. Default value is a number between 2 and 20
     */
-  def startRandomGame(rowCount: Int = nextInt(9) + 2 , columnCount: Int = nextInt(19) + 2) : Unit
+  def startRandomGame(rowCount: Int = nextInt(9) + 2 , columnCount: Int = nextInt(19) + 2) : GameModel
 
   /**
     * @return the row count of the game board
@@ -206,6 +204,11 @@ trait GameModel extends Publisher {
     * @return the current turn counter value
     */
   def turnCounter: Int
+
+  /**
+    * @return the updated game model
+    */
+  def updateTurn: GameModel
 
   /**
     * @return the winner id (=player number) if game is won otherwise returns nothing
