@@ -10,14 +10,7 @@ import scala.util.control.Breaks
 case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: GameBoard, lastExecutedAction: Option[Action], activePlayer: PlayerObject, turnNumber: Int) extends GameModel {
 
   override def init(gameConfigProvider: GameConfigProvider): GameModel = {
-    val newModel = copy(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects), Option.empty[Action])
-    gameBoard.gameObjects.collect({ case o: PlayerObject => o }).foreach(p => resetPlayer(p))
-    newModel
-  }
-
-  private def resetPlayer(playerToReset: PlayerObject): Unit = {
-    playerToReset.resetActionPoints()
-    playerToReset.resetHealthPoints()
+    copy(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects), Option.empty[Action])
   }
 
   override def startGame(scenarioId: Int): GameModel = {
