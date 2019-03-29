@@ -34,10 +34,11 @@ case class ControllerImpl(var model: GameModel) extends Controller {
 
   private def checkAfterActionExecution(actionResult: (GameModel, List[Event])) = {
     model = actionResult._1
-    actionResult._2.foreach(publish(_))
     if (model.winnerId.isDefined) {
       publish(PlayerWon(model.winnerId.get, model.wonImagePath))
     }
+
+    actionResult._2.foreach(publish(_))
     publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
     publish(TurnStarted(model.activePlayerNumber))
     cellsInRange(model.lastExecutedActionId)
@@ -109,7 +110,6 @@ case class ControllerImpl(var model: GameModel) extends Controller {
     model = model.startGame(scenarioId)
 
     publish(GameStarted())
-    model = model.updateTurn(Option.empty[Action])
     publish(TurnStarted(model.activePlayerNumber))
   }
 
@@ -145,7 +145,6 @@ case class ControllerImpl(var model: GameModel) extends Controller {
     model = model.startRandomGame()
 
     publish(GameStarted())
-    model = model.updateTurn(Option.empty[Action])
     publish(TurnStarted(model.activePlayerNumber))
   }
 }

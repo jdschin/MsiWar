@@ -191,11 +191,6 @@ trait GameModel extends Publisher {
   def init(gameConfigProvider: GameConfigProvider): GameModel
 
   /**
-    * @return the updated game model
-    */
-  def updateTurn(lastAction: Option[Action]): GameModel
-
-  /**
     * @return the winner id (=player number) if game is won otherwise returns nothing
     */
   def winnerId: Option[Int]

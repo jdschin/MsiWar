@@ -86,7 +86,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   override def executeAction(actionId: Int, direction: Direction): (GameModel, List[Event]) = {
-    var updatedModel: GameModel = this
+    val newGameBoard: GameBoard = gameBoard.copy(gameBoard.rows, gameBoard.columns, gameBoard.gameObjects)
     var events: List[Event] = List[Event]()
 
     val actionForId = activePlayer.actions.find(_.id == actionId)
@@ -97,17 +97,17 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
       val actionToExecute = actionForId.get
       actionToExecute.actionType match {
         case MOVE =>
-          val newPositionOpt = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+          val newPositionOpt = newGameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
           if (newPositionOpt.isDefined) {
             val newPosition = newPositionOpt.get
             val oldPosition = activePlayer.position.copy()
-            gameBoard.moveGameObject(activePlayer, newPosition)
+            newGameBoard.moveGameObject(activePlayer, newPosition)
             events = events.::(CellChanged(List((newPosition.rowIdx, newPosition.columnIdx), (oldPosition.rowIdx, oldPosition.columnIdx))))
           }
         case SHOOT =>
-          val positionForDirection = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+          val positionForDirection = newGameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
           if (positionForDirection.isDefined) {
-            val collisionObjectOpt = gameBoard.collisionObject(activePlayer.position, positionForDirection.get, ignoreLastPosition = false)
+            val collisionObjectOpt = newGameBoard.collisionObject(activePlayer.position, positionForDirection.get, ignoreLastPosition = false)
             if (collisionObjectOpt.isDefined) {
               val collisionObject = collisionObjectOpt.get
               collisionObject match {
@@ -115,15 +115,14 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
                   playerCollisionObject.currentHealthPoints -= actionToExecute.damage
                   // Remove player if dead
                   if (playerCollisionObject.currentHealthPoints < 0) {
-                    // TODO this changes will not been visible. We need to change update turn to adapt to gameboard changes
-                    updatedModel = removePlayerFromGame(playerCollisionObject)
+                    newGameBoard.removeGameObject(playerCollisionObject)
                   }
                   events = events.::(CellChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
                 case _ => events = events.::(CellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
               }
               events = events.::(AttackResult(collisionObject.position.rowIdx, collisionObject.position.columnIdx, hit = true, gameConfigProvider.attackImagePath, gameConfigProvider.attackSoundPath))
             } else {
-              val targetPositionOpt = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
+              val targetPositionOpt = newGameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
               if (targetPositionOpt.isDefined) {
                 val targetPosition = targetPositionOpt.get
                 events = events.::(CellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
@@ -134,17 +133,18 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
         case WAIT => // Do nothing
       }
       activePlayer.currentActionPoints -= actionToExecute.actionPoints
-      updatedModel = updateTurn(Option(actionToExecute))
+      val nextTurn = updateTurn(Option(actionToExecute))
+      (copy(gameConfigProvider, newGameBoard, Option(actionToExecute), nextTurn._1, nextTurn._2), events)
+    } else {
+      (this, List[Event]())
     }
-    (updatedModel, events)
   }
 
-  override def updateTurn(lastAction: Option[Action]): GameModel = {
-    var updatedModel: GameModel = this
+  private def updateTurn(lastAction: Option[Action]): (PlayerObject, Int) = {
     if (!activePlayer.hasActionPointsLeft) {
       var foundNextPlayer = false
       var nextPlayer = firstPlayerAlive()
-      var nextTurn = turnCounter
+      var nextTurnNumber = turnCounter
       Breaks.breakable(
         for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
           if (playerObject.playerNumber > activePlayerNumber) {
@@ -157,26 +157,16 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
 
       // If every player did his turn, start the next turn with first player alive
       if (!foundNextPlayer) {
-        nextTurn += 1
+        nextTurnNumber += 1
         // Reset action points of all players when new turn has started
         for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
           playerObject.resetActionPoints()
         }
       }
-      updatedModel = copy(gameConfigProvider, gameBoard, lastAction, nextPlayer, nextTurn)
+      (nextPlayer, nextTurnNumber)
+    } else {
+      (activePlayer, turnNumber)
     }
-    updatedModel
-  }
-
-  private def removePlayerFromGame(playerObject: PlayerObject): GameModel = {
-    gameBoard.removeGameObject(playerObject)
-    val newGameObjects = gameObjects.filter(gameObject => {
-      gameObject match {
-        case p: PlayerObject => p.playerNumber != playerObject.playerNumber
-        case _ => true
-      }
-    })
-    copy(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, newGameObjects), lastExecutedAction)
   }
 
   override def lastExecutedActionId: Option[Int] = {
