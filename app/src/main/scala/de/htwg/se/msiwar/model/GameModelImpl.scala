@@ -99,6 +99,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
             val newPosition = newPositionOpt.get
             val oldPosition = activePlayer.position.copy()
             gameBoard.moveGameObject(activePlayer, newPosition)
+            // TODO this event must be fired after action execution
             publish(ModelCellChanged(List((newPosition.rowIdx, newPosition.columnIdx), (oldPosition.rowIdx, oldPosition.columnIdx))))
 
           }
@@ -113,17 +114,22 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
                   playerCollisionObject.currentHealthPoints -= actionToExecute.damage
                   // Remove player if dead
                   if (playerCollisionObject.currentHealthPoints < 0) {
+                    // TODO this changes will not been visible. We need to change update turn to adapt to gameboard changes
                     updatedModel = removePlayerFromGame(playerCollisionObject)
                   }
+                  // TODO this event must be fired after action execution
                   publish(ModelCellChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
                 case _ => publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
               }
+              // TODO this event must be fired after action execution
               publish(ModelAttackResult(collisionObject.position.rowIdx, collisionObject.position.columnIdx, hit = true, gameConfigProvider.attackImagePath, gameConfigProvider.attackSoundPath))
             } else {
               val targetPositionOpt = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
               if (targetPositionOpt.isDefined) {
                 val targetPosition = targetPositionOpt.get
+                // TODO this event must be fired after action execution
                 publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
+                // TODO this event must be fired after action execution
                 publish(ModelAttackResult(targetPosition.rowIdx, targetPosition.columnIdx, hit = false, gameConfigProvider.attackImagePath, gameConfigProvider.attackSoundPath))
               }
             }
