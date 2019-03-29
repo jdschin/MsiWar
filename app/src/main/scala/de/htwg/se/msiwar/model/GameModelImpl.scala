@@ -85,6 +85,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   override def executeAction(actionId: Int, direction: Direction): GameModel = {
+    var updatedModel: GameModel = this
     val actionForId = activePlayer.actions.find(_.id == actionId)
     if (actionForId.isDefined) {
       // Update view direction first to ensure correct view direction on action execution
@@ -112,7 +113,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
                   playerCollisionObject.currentHealthPoints -= actionToExecute.damage
                   // Remove player if dead
                   if (playerCollisionObject.currentHealthPoints < 0) {
-                    removePlayerFromGame(playerCollisionObject)
+                    updatedModel = removePlayerFromGame(playerCollisionObject)
                   }
                   publish(ModelCellChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
                 case _ => publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
@@ -130,22 +131,19 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
         case WAIT => // Do nothing
       }
       activePlayer.currentActionPoints -= actionToExecute.actionPoints
-      val model = copy(gameConfigProvider, gameBoard, Option(actionToExecute))
-      updateTurn()
-      model
-    } else {
-      this
+      updatedModel = updateTurn(Option(actionToExecute))
     }
+    updatedModel
   }
 
-  def updateTurn(): GameModel = {
-    var newModel: GameModel = this
+  override def updateTurn(lastAction: Option[Action]): GameModel = {
+    var updatedModel: GameModel = this
     if (winnerId.isDefined) {
       publish(ModelPlayerWon(winnerId.get, wonImagePath))
     } else if (!activePlayer.hasActionPointsLeft) {
-      newModel = nextTurn
+      updatedModel = nextTurn(lastAction)
     }
-    newModel
+    updatedModel
   }
 
   private def removePlayerFromGame(playerObject: PlayerObject): GameModel = {
@@ -202,7 +200,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
     }
   }
 
-  private def nextTurn: GameModel = {
+  private def nextTurn(lastAction: Option[Action]): GameModel = {
     var foundNextPlayer = false
     var nextPlayer = firstPlayerAlive()
     var nextTurn = turnCounter
@@ -224,7 +222,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
         playerObject.resetActionPoints()
       }
     }
-    val result = copy(gameConfigProvider, gameBoard, lastExecutedAction, nextPlayer, nextTurn)
+    val result = copy(gameConfigProvider, gameBoard, lastAction, nextPlayer, nextTurn)
     result
   }
 

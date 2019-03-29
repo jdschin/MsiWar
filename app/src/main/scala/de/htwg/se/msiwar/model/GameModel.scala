@@ -200,7 +200,7 @@ trait GameModel extends Publisher {
   /**
     * @return the updated game model
     */
-  def updateTurn: GameModel
+  def updateTurn(lastAction: Option[Action]): GameModel
 
   /**
     * @return the winner id (=player number) if game is won otherwise returns nothing

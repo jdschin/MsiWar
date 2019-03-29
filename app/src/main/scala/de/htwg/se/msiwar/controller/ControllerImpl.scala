@@ -113,7 +113,7 @@ case class ControllerImpl(var model: GameModel) extends Controller {
     model = model.startGame(scenarioId)
 
     publish(GameStarted())
-    model = model.updateTurn
+    model = model.updateTurn(Option.empty[Action])
     publish(TurnStarted(model.activePlayerNumber))
   }
 
@@ -149,7 +149,7 @@ case class ControllerImpl(var model: GameModel) extends Controller {
     model = model.startRandomGame()
 
     publish(GameStarted())
-    model = model.updateTurn
+    model = model.updateTurn(Option.empty[Action])
     publish(TurnStarted(model.activePlayerNumber))
   }
 }
