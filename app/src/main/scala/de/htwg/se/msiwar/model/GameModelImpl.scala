@@ -9,8 +9,6 @@ import scala.util.control.Breaks
 
 case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: GameBoard, lastExecutedAction: Option[Action], activePlayer: PlayerObject, turnNumber: Int) extends GameModel {
 
-  private val availableScenarios = gameConfigProvider.listScenarios
-
   override def init(gameConfigProvider: GameConfigProvider): GameModel = {
     val newModel = copy(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects), Option.empty[Action])
     gameBoard.gameObjects.collect({ case o: PlayerObject => o }).foreach(p => resetPlayer(p))
@@ -23,7 +21,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   override def startGame(scenarioId: Int): GameModel = {
-    val scenarioName = availableScenarios(scenarioId)
+    val scenarioName = gameConfigProvider.listScenarios(scenarioId)
     val configProvider = gameConfigProvider.loadFromFile(scenarioName)
     init(configProvider)
   }
