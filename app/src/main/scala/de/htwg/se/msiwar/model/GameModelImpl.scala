@@ -11,7 +11,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   private val gameObjects = gameConfigProvider.gameObjects
   private val availableScenarios = gameConfigProvider.listScenarios
 
-  def reset(gameConfigProvider: GameConfigProvider): GameModel = {
+  override def reset(gameConfigProvider: GameConfigProvider): GameModel = {
     val newModel = copy(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects), Option.empty[Action])
     gameObjects.collect({ case o: PlayerObject => o }).foreach(p => resetPlayer(p))
     newModel

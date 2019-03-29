@@ -192,6 +192,12 @@ trait GameModel extends Publisher {
   def turnCounter: Int
 
   /**
+    * @param gameConfigProvider the game config provider used for initial values after reset
+    * @return the new game model
+    */
+  def reset(gameConfigProvider: GameConfigProvider): GameModel
+
+  /**
     * @return the updated game model
     */
   def updateTurn: GameModel
