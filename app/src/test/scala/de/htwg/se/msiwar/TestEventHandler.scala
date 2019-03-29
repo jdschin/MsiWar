@@ -1,6 +1,6 @@
 package de.htwg.se.msiwar
 
-import de.htwg.se.msiwar.controller.{Controller, GameStarted, TurnStarted}
+import de.htwg.se.msiwar.controller.Controller
 import de.htwg.se.msiwar.model._
 
 import scala.concurrent.Promise
@@ -16,13 +16,11 @@ case class TestEventHandler(gameModel: GameModel,
   this.listenTo(controller)
 
   reactions += {
-    case e: ModelCellChanged =>
-    case _: ModelPlayerStatsChanged =>
-    case e: ModelAttackResult =>
-    case e: ModelTurnStarted => turnStartedPromise.map(p => p.complete(Try(e.playerNumber)))
+    case e: CellChanged =>
+    case _: PlayerStatsChanged =>
+    case e: AttackResult =>
     case e: TurnStarted => turnStartedPromise.map(p => p.complete(Try(e.playerNumber)))
-    case e: ModelPlayerWon =>
-    case _: ModelGameStarted => gameStartedPromise.map(p => p.complete(Try(true)))
+    case e: PlayerWon =>
     case _: GameStarted => gameStartedPromise.map(p => p.complete(Try(true)))
     case _: ModelCouldNotGenerateGame => couldNotGenerateGamePromise.map(p => p.complete(Try(true)))
   }

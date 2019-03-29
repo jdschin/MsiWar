@@ -4,6 +4,7 @@ import de.htwg.se.msiwar.model.ActionType._
 import de.htwg.se.msiwar.util.Direction.Direction
 import de.htwg.se.msiwar.util.{Direction, GameConfigProvider}
 
+import scala.swing.event.Event
 import scala.util.control.Breaks
 
 case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: GameBoard, lastExecutedAction: Option[Action], activePlayer: PlayerObject, turnNumber: Int) extends GameModel {
@@ -11,7 +12,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   private val gameObjects = gameConfigProvider.gameObjects
   private val availableScenarios = gameConfigProvider.listScenarios
 
-  override def reset(gameConfigProvider: GameConfigProvider): GameModel = {
+  override def init(gameConfigProvider: GameConfigProvider): GameModel = {
     val newModel = copy(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects), Option.empty[Action])
     gameObjects.collect({ case o: PlayerObject => o }).foreach(p => resetPlayer(p))
     newModel
@@ -25,14 +26,14 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   override def startGame(scenarioId: Int): GameModel = {
     val scenarioName = availableScenarios(scenarioId)
     val configProvider = gameConfigProvider.loadFromFile(scenarioName)
-    reset(configProvider)
+    init(configProvider)
   }
 
   override def startRandomGame(rowCount: Int, columnCount: Int): GameModel = {
     var newModel: GameModel = this
     gameConfigProvider.generateGame(rowCount, columnCount, couldGenerateGame => {
       if (couldGenerateGame) {
-        newModel = reset(gameConfigProvider)
+        newModel = init(gameConfigProvider)
       } else {
         publish(ModelCouldNotGenerateGame())
       }
@@ -80,12 +81,14 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
     }
   }
 
-  override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): GameModel = {
+  override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): (GameModel, List[Event]) = {
     executeAction(actionId, gameBoard.calculateDirection(activePlayer.position, Position(rowIndex, columnIndex)))
   }
 
-  override def executeAction(actionId: Int, direction: Direction): GameModel = {
+  override def executeAction(actionId: Int, direction: Direction): (GameModel, List[Event]) = {
     var updatedModel: GameModel = this
+    var events: List[Event] = List[Event]()
+
     val actionForId = activePlayer.actions.find(_.id == actionId)
     if (actionForId.isDefined) {
       // Update view direction first to ensure correct view direction on action execution
@@ -99,9 +102,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
             val newPosition = newPositionOpt.get
             val oldPosition = activePlayer.position.copy()
             gameBoard.moveGameObject(activePlayer, newPosition)
-            // TODO this event must be fired after action execution
-            publish(ModelCellChanged(List((newPosition.rowIdx, newPosition.columnIdx), (oldPosition.rowIdx, oldPosition.columnIdx))))
-
+            events = events.::(CellChanged(List((newPosition.rowIdx, newPosition.columnIdx), (oldPosition.rowIdx, oldPosition.columnIdx))))
           }
         case SHOOT =>
           val positionForDirection = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
@@ -117,20 +118,16 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
                     // TODO this changes will not been visible. We need to change update turn to adapt to gameboard changes
                     updatedModel = removePlayerFromGame(playerCollisionObject)
                   }
-                  // TODO this event must be fired after action execution
-                  publish(ModelCellChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
-                case _ => publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
+                  events = events.::(CellChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
+                case _ => events = events.::(CellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
               }
-              // TODO this event must be fired after action execution
-              publish(ModelAttackResult(collisionObject.position.rowIdx, collisionObject.position.columnIdx, hit = true, gameConfigProvider.attackImagePath, gameConfigProvider.attackSoundPath))
+              events = events.::(AttackResult(collisionObject.position.rowIdx, collisionObject.position.columnIdx, hit = true, gameConfigProvider.attackImagePath, gameConfigProvider.attackSoundPath))
             } else {
               val targetPositionOpt = gameBoard.calculatePositionForDirection(activePlayer.position, direction, actionToExecute.range)
               if (targetPositionOpt.isDefined) {
                 val targetPosition = targetPositionOpt.get
-                // TODO this event must be fired after action execution
-                publish(ModelCellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
-                // TODO this event must be fired after action execution
-                publish(ModelAttackResult(targetPosition.rowIdx, targetPosition.columnIdx, hit = false, gameConfigProvider.attackImagePath, gameConfigProvider.attackSoundPath))
+                events = events.::(CellChanged(List((activePlayer.position.rowIdx, activePlayer.position.columnIdx))))
+                events = events.::(AttackResult(targetPosition.rowIdx, targetPosition.columnIdx, hit = false, gameConfigProvider.attackImagePath, gameConfigProvider.attackSoundPath))
               }
             }
           }
@@ -139,15 +136,34 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
       activePlayer.currentActionPoints -= actionToExecute.actionPoints
       updatedModel = updateTurn(Option(actionToExecute))
     }
-    updatedModel
+    (updatedModel, events)
   }
 
   override def updateTurn(lastAction: Option[Action]): GameModel = {
     var updatedModel: GameModel = this
-    if (winnerId.isDefined) {
-      publish(ModelPlayerWon(winnerId.get, wonImagePath))
-    } else if (!activePlayer.hasActionPointsLeft) {
-      updatedModel = nextTurn(lastAction)
+    if (!activePlayer.hasActionPointsLeft) {
+      var foundNextPlayer = false
+      var nextPlayer = firstPlayerAlive()
+      var nextTurn = turnCounter
+      Breaks.breakable(
+        for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
+          if (playerObject.playerNumber > activePlayerNumber) {
+            nextPlayer = playerObject
+            foundNextPlayer = true
+            Breaks.break()
+          }
+        }
+      )
+
+      // If every player did his turn, start the next turn with first player alive
+      if (!foundNextPlayer) {
+        nextTurn += 1
+        // Reset action points of all players when new turn has started
+        for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
+          playerObject.resetActionPoints()
+        }
+      }
+      updatedModel = copy(gameConfigProvider, gameBoard, lastAction, nextPlayer, nextTurn)
     }
     updatedModel
   }
@@ -204,32 +220,6 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
     } else {
       Option.empty
     }
-  }
-
-  private def nextTurn(lastAction: Option[Action]): GameModel = {
-    var foundNextPlayer = false
-    var nextPlayer = firstPlayerAlive()
-    var nextTurn = turnCounter
-    Breaks.breakable(
-      for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
-        if (playerObject.playerNumber > activePlayerNumber) {
-          nextPlayer = playerObject
-          foundNextPlayer = true
-          Breaks.break()
-        }
-      }
-    )
-
-    // If every player did his turn, start the next turn with first player alive
-    if (!foundNextPlayer) {
-      nextTurn += 1
-      // Reset action points of all players when new turn has started
-      for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
-        playerObject.resetActionPoints()
-      }
-    }
-    val result = copy(gameConfigProvider, gameBoard, lastAction, nextPlayer, nextTurn)
-    result
   }
 
   private def firstPlayerAlive(): PlayerObject = {

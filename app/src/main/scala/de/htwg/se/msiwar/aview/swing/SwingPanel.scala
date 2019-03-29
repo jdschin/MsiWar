@@ -3,10 +3,11 @@ package de.htwg.se.msiwar.aview.swing
 
 import java.awt.Dimension
 import java.util.concurrent.{ScheduledThreadPoolExecutor, TimeUnit}
-import javax.swing.SwingUtilities
 
-import de.htwg.se.msiwar.controller.{Controller, _}
+import de.htwg.se.msiwar.controller.Controller
+import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.{ImageUtils, SoundPlayer}
+import javax.swing.SwingUtilities
 
 import scala.swing.event.{KeyTyped, MousePressed}
 import scala.swing.{BorderPanel, Graphics2D, GridPanel, Label, Reactor}

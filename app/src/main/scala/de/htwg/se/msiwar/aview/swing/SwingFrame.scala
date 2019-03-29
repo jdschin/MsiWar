@@ -1,9 +1,9 @@
 package de.htwg.se.msiwar.aview.swing
 
-import javax.swing.WindowConstants
-
-import de.htwg.se.msiwar.controller.{Controller, CouldNotGenerateGame, GameStarted, PlayerWon}
+import de.htwg.se.msiwar.controller.Controller
+import de.htwg.se.msiwar.model.{CouldNotGenerateGame, GameStarted, PlayerWon}
 import de.htwg.se.msiwar.util.ImageUtils
+import javax.swing.WindowConstants
 
 import scala.swing._
 

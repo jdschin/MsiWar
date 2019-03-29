@@ -1,6 +1,7 @@
 package de.htwg.se.msiwar.aview.tui
 
 import de.htwg.se.msiwar.controller._
+import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.Direction._
 
 import scala.swing.Reactor

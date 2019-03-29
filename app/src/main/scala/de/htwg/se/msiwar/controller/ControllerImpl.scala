@@ -3,16 +3,12 @@ package de.htwg.se.msiwar.controller
 import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.Direction.Direction
 
+import scala.swing.event.Event
+
 case class ControllerImpl(var model: GameModel) extends Controller {
   listenTo(model)
 
   reactions += {
-    case e: ModelCellChanged => publish(CellChanged(e.rowColumnIndexes))
-    case _: ModelPlayerStatsChanged => publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
-    case e: ModelAttackResult => publish(AttackResult(e.rowIndex, e.columnIndex, e.hit, e.attackImagePath, e.attackSoundPath))
-    case e: ModelTurnStarted => publish(TurnStarted(e.playerNumber))
-    case e: ModelPlayerWon => publish(PlayerWon(e.playerNumber, e.wonImagePath))
-    case _: ModelGameStarted => publish(GameStarted())
     case _: ModelCouldNotGenerateGame => publish(CouldNotGenerateGame())
   }
 
@@ -29,20 +25,20 @@ case class ControllerImpl(var model: GameModel) extends Controller {
   }
 
   override def executeAction(actionId: Int, direction: Direction): Unit = {
-    model = model.executeAction(actionId, direction)
-    checkAfterActionExecution
+    checkAfterActionExecution(model.executeAction(actionId, direction))
   }
 
   override def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): Unit = {
-    model = model.executeAction(actionId, rowIndex, columnIndex)
-    checkAfterActionExecution
+    checkAfterActionExecution(model.executeAction(actionId, rowIndex, columnIndex))
   }
 
-  private def checkAfterActionExecution = {
+  private def checkAfterActionExecution(actionResult: (GameModel, List[Event])) = {
+    model = actionResult._1
+    actionResult._2.foreach(publish(_))
     if (model.winnerId.isDefined) {
-      publish(ModelPlayerWon(model.winnerId.get, model.wonImagePath))
+      publish(PlayerWon(model.winnerId.get, model.wonImagePath))
     }
-    publish(ModelPlayerStatsChanged())
+    publish(PlayerStatsChanged(model.activePlayerNumber, model.activePlayerActionPoints))
     publish(TurnStarted(model.activePlayerNumber))
     cellsInRange(model.lastExecutedActionId)
   }

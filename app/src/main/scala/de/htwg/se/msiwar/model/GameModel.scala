@@ -7,14 +7,7 @@ import scala.swing.Publisher
 import scala.swing.event.Event
 import scala.util.Random._
 
-
-case class ModelGameStarted() extends Event
 case class ModelCouldNotGenerateGame() extends Event
-case class ModelCellChanged(rowColumnIndexes: List[(Int, Int)]) extends Event
-case class ModelPlayerStatsChanged() extends Event
-case class ModelAttackResult(rowIndex: Int, columnIndex: Int, hit: Boolean, attackImagePath: String, attackSoundPath: String) extends Event
-case class ModelTurnStarted(playerNumber: Int) extends Event
-case class ModelPlayerWon(playerNumber: Int, wonImagePath: String) extends Event
 
 trait GameModel extends Publisher {
 
@@ -99,7 +92,7 @@ trait GameModel extends Publisher {
     * @param actionId the id of the action to execute
     * @param direction the direction of the action to execute
     */
-  def executeAction(actionId: Int, direction:Direction): GameModel
+  def executeAction(actionId: Int, direction:Direction): (GameModel, List[Event])
 
   /**
     * Executes the given action id in the given direction
@@ -108,7 +101,7 @@ trait GameModel extends Publisher {
     * @param rowIndex the target row
     * @param columnIndex the target column
     */
-  def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): GameModel
+  def executeAction(actionId: Int, rowIndex: Int, columnIndex: Int): (GameModel, List[Event])
 
   /**
     * Verifies if the action for given id in given direction can be executed or will result in an error
@@ -195,7 +188,7 @@ trait GameModel extends Publisher {
     * @param gameConfigProvider the game config provider used for initial values after reset
     * @return the new game model
     */
-  def reset(gameConfigProvider: GameConfigProvider): GameModel
+  def init(gameConfigProvider: GameConfigProvider): GameModel
 
   /**
     * @return the updated game model

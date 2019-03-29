@@ -220,10 +220,10 @@ class ControllerSpec extends FlatSpec with Matchers {
     val playerOne = testConfigProvider.gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == 1).get
     var model: GameModel = GameModelImpl(testConfigProvider, GameBoard(testConfigProvider.rowCount, testConfigProvider.colCount, testConfigProvider.gameObjects), Option.empty[Action], playerOne, turn)
     model.canExecuteAction(3, Direction.DOWN) should be(true)
-    model = model.executeAction(3, Direction.DOWN)
+    model = model.executeAction(3, Direction.DOWN)._1
     model.turnCounter should be(1)
     model.canExecuteAction(3, Direction.DOWN) should be(true)
-    model = model.executeAction(3, Direction.DOWN)
+    model = model.executeAction(3, Direction.DOWN)._1
     model.turnCounter should be(2)
   }
 
@@ -240,9 +240,9 @@ class ControllerSpec extends FlatSpec with Matchers {
       val actionId = actionIdsIterator.next()
       val actionPointsBefore = model.activePlayerActionPoints
       model.canExecuteAction(actionId, Direction.DOWN) should be(true)
-      model = model.executeAction(actionId, Direction.DOWN)
+      model = model.executeAction(actionId, Direction.DOWN)._1
       actionPointsBefore should be > model.activePlayerActionPoints
-      model = model.reset(testConfigProvider)
+      model = model.init(testConfigProvider)
     }
   }
 
@@ -255,7 +255,7 @@ class ControllerSpec extends FlatSpec with Matchers {
     val player2 = testConfigProvider.gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == 2).get
     player2.currentHealthPoints should be(3)
     model.canExecuteAction(2, Direction.DOWN) should be(true)
-    model = model.executeAction(2, Direction.DOWN)
+    model = model.executeAction(2, Direction.DOWN)._1
     player2.currentHealthPoints should be(1)
   }
 
@@ -279,7 +279,7 @@ class ControllerSpec extends FlatSpec with Matchers {
 
     val player = testConfigProvider.gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == 1).get
     var model: GameModel = GameModelImpl(testConfigProvider, GameBoard(testConfigProvider.rowCount, testConfigProvider.colCount, testConfigProvider.gameObjects), Option.empty[Action], player, turn)
-    model = model.executeAction(2, Direction.DOWN)
+    model = model.executeAction(2, Direction.DOWN)._1
     model.actionIdsForPlayer(2).isEmpty should be(true)
   }
 
