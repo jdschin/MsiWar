@@ -123,20 +123,21 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
         case WAIT => // Do nothing
       }
       activePlayer.currentActionPoints -= actionToExecute.actionPoints
-      val nextTurn = updateTurn(Option(actionToExecute))
+      val nextTurn = updateTurn(Option(actionToExecute), newGameBoard)
       (copy(gameConfigProvider, newGameBoard, Option(actionToExecute), nextTurn._1, nextTurn._2), events)
     } else {
       (this, List[Event]())
     }
   }
 
-  private def updateTurn(lastAction: Option[Action]): (PlayerObject, Int) = {
+  private def updateTurn(lastAction: Option[Action], currentGameBoard: GameBoard): (PlayerObject, Int) = {
     if (!activePlayer.hasActionPointsLeft) {
       var foundNextPlayer = false
-      var nextPlayer = firstPlayerAlive()
+      // Set next player to first player found which is alive
+      var nextPlayer =  currentGameBoard.gameObjects.collect({ case s: PlayerObject => s }).reduceLeft((a, b) => if (a.playerNumber < b.playerNumber) a else b)
       var nextTurnNumber = turnCounter
       Breaks.breakable(
-        for (playerObject <- gameBoard.gameObjects.collect({ case s: PlayerObject => s })) {
+        for (playerObject <- currentGameBoard.gameObjects.collect({ case s: PlayerObject => s })) {
           if (playerObject.playerNumber > activePlayerNumber) {
             nextPlayer = playerObject
             foundNextPlayer = true
@@ -149,7 +150,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
       if (!foundNextPlayer) {
         nextTurnNumber += 1
         // Reset action points of all players when new turn has started
-        for (playerObject <- gameBoard.gameObjects.collect({ case s: PlayerObject => s })) {
+        for (playerObject <- currentGameBoard.gameObjects.collect({ case s: PlayerObject => s })) {
           playerObject.resetActionPoints()
         }
       }
@@ -200,10 +201,6 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
     } else {
       Option.empty
     }
-  }
-
-  private def firstPlayerAlive(): PlayerObject = {
-    gameBoard.gameObjects.collect({ case s: PlayerObject => s }).reduceLeft((a, b) => if (a.playerNumber < b.playerNumber) a else b)
   }
 
   private def player(playerNumber: Int): Option[PlayerObject] = {
