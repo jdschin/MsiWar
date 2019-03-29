@@ -1,6 +1,5 @@
 package de.htwg.se.msiwar.model
 
-import de.htwg.se.msiwar.aview.MainApp.gameConfigProvider
 import de.htwg.se.msiwar.model.ActionType._
 import de.htwg.se.msiwar.util.Direction.Direction
 import de.htwg.se.msiwar.util.{Direction, GameConfigProvider}
@@ -60,8 +59,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   private def actions: Set[Action] = {
-    val players = gameBoard.gameObjects.collect({ case s: PlayerObject => s })
-    players.flatMap(_.actions).toSet
+    gameBoard.gameObjects.collect({ case s: PlayerObject => s }).flatMap(_.actions).toSet
   }
 
   override def actionIconPath(actionId: Int): Option[String] = {
