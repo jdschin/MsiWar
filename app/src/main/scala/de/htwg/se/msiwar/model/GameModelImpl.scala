@@ -351,8 +351,12 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   override def scenarioName(scenarioId: Int): Option[String] = {
-    val scenarioName = gameConfigProvider.listScenarios(scenarioId)
-    Option(scenarioName.substring(0, scenarioName.lastIndexOf('.')).replace('_', ' '))
+    if(scenarioId >= 0 && scenarioId < gameConfigProvider.listScenarios.size) {
+      val scenarioName = gameConfigProvider.listScenarios(scenarioId)
+      Option(scenarioName.substring(0, scenarioName.lastIndexOf('.')).replace('_', ' '))
+    } else {
+      Option.empty
+    }
   }
 
   override def activePlayerActionPoints: Int = {
