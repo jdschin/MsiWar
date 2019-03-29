@@ -26,10 +26,11 @@ class TestConfigProvider extends GameConfigProvider {
   var colCount = 10
   var gameObjects: List[GameObject] = List[GameObject]()
 
-  override def loadFromFile(configFilePath: String): Unit = {
+  override def loadFromFile(configFilePath: String): GameConfigProvider = {
     if(configFilePath.isEmpty) {
       throw new FileNotFoundException("No file found for path " + configFilePath)
     }
+    this
   }
 
   def load2PlayerDamageTestScenario(): Unit = {
@@ -109,13 +110,14 @@ class TestConfigProvider extends GameConfigProvider {
     List[String](testScenario1,testScenario2)
   }
 
-  override def generateGame(rowCount: Int, columnCount: Int, completion: (Boolean) => Unit): Unit = {
+  override def generateGame(rowCount: Int, columnCount: Int, completion: (Boolean) => Unit): GameConfigProvider = {
     // For testing reasons. The game generation is tested in an other spec
     if (rowCount > 0 && columnCount > 0) {
       completion(true)
     } else {
       completion(false)
     }
+    this
   }
 
 }
