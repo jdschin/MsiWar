@@ -9,12 +9,11 @@ import scala.util.control.Breaks
 
 case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: GameBoard, lastExecutedAction: Option[Action], activePlayer: PlayerObject, turnNumber: Int) extends GameModel {
 
-  private val gameObjects = gameConfigProvider.gameObjects
   private val availableScenarios = gameConfigProvider.listScenarios
 
   override def init(gameConfigProvider: GameConfigProvider): GameModel = {
     val newModel = copy(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects), Option.empty[Action])
-    gameObjects.collect({ case o: PlayerObject => o }).foreach(p => resetPlayer(p))
+    gameBoard.gameObjects.collect({ case o: PlayerObject => o }).foreach(p => resetPlayer(p))
     newModel
   }
 
@@ -68,7 +67,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   private def actions: Set[Action] = {
-    val players = gameObjects.collect({ case s: PlayerObject => s })
+    val players = gameBoard.gameObjects.collect({ case s: PlayerObject => s })
     players.flatMap(_.actions).toSet
   }
 
@@ -146,7 +145,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
       var nextPlayer = firstPlayerAlive()
       var nextTurnNumber = turnCounter
       Breaks.breakable(
-        for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
+        for (playerObject <- gameBoard.gameObjects.collect({ case s: PlayerObject => s })) {
           if (playerObject.playerNumber > activePlayerNumber) {
             nextPlayer = playerObject
             foundNextPlayer = true
@@ -159,7 +158,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
       if (!foundNextPlayer) {
         nextTurnNumber += 1
         // Reset action points of all players when new turn has started
-        for (playerObject <- gameObjects.collect({ case s: PlayerObject => s })) {
+        for (playerObject <- gameBoard.gameObjects.collect({ case s: PlayerObject => s })) {
           playerObject.resetActionPoints()
         }
       }
@@ -204,7 +203,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   override def winnerId: Option[Int] = {
-    val playersAliveIds = gameObjects.collect({ case p: PlayerObject => p }).filter(_.hasHealthPointsLeft).map(_.playerNumber)
+    val playersAliveIds = gameBoard.gameObjects.collect({ case p: PlayerObject => p }).filter(_.hasHealthPointsLeft).map(_.playerNumber)
     if (playersAliveIds.lengthCompare(1) == 0) {
       Option(playersAliveIds.head)
     } else {
@@ -213,11 +212,11 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
   }
 
   private def firstPlayerAlive(): PlayerObject = {
-    gameObjects.collect({ case s: PlayerObject => s }).reduceLeft((a, b) => if (a.playerNumber < b.playerNumber) a else b)
+    gameBoard.gameObjects.collect({ case s: PlayerObject => s }).reduceLeft((a, b) => if (a.playerNumber < b.playerNumber) a else b)
   }
 
   private def player(playerNumber: Int): Option[PlayerObject] = {
-    gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == playerNumber)
+    gameBoard.gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == playerNumber)
   }
 
   override def activePlayerNumber: Int = {
