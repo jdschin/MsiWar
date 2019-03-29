@@ -1,5 +1,6 @@
 package de.htwg.se.msiwar.model
 
+import de.htwg.se.msiwar.aview.MainApp.gameConfigProvider
 import de.htwg.se.msiwar.model.ActionType._
 import de.htwg.se.msiwar.util.Direction.Direction
 import de.htwg.se.msiwar.util.{Direction, GameConfigProvider}
@@ -10,7 +11,8 @@ import scala.util.control.Breaks
 case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: GameBoard, lastExecutedAction: Option[Action], activePlayer: PlayerObject, turnNumber: Int) extends GameModel {
 
   override def init(gameConfigProvider: GameConfigProvider): GameModel = {
-    copy(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects), Option.empty[Action])
+    val player = gameConfigProvider.gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == 1).get
+    copy(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount, gameConfigProvider.gameObjects), Option.empty[Action], player,1)
   }
 
   override def startGame(scenarioId: Int): GameModel = {

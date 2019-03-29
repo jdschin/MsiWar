@@ -11,59 +11,9 @@ import scala.util.parsing.json.JSON
 
 case class JSONException(private val message: String = "JSON parsing failed") extends Exception(message)
 
-class GameConfigProviderImpl extends GameConfigProvider {
-  // Global sounds
-  var attackSoundPath = "sounds/explosion.wav"
-
-  // Global images
-  var openingBackgroundImagePath = "images/background_opening.png"
-  var levelBackgroundImagePath = "images/background_woodlands.png"
-  var actionbarBackgroundImagePath = "images/background_actionbar.png"
-  var attackImagePath = "images/hit.png"
-  var appIconImagePath = "images/app_icon.png"
-
-  // Setup board
-  var rowCount = 9
-  var colCount = 9
-
-  // Setup actions
-  private val moveAction = Action(id = 1, "Move", "images/action_move.png", "move.wav", actionPoints = 1, range = 1, MOVE, damage = 0)
-  private val shootAction = Action(id = 2, "Shoot", "images/action_attack.png", "shoot.wav", actionPoints = 1, range = 3, SHOOT, damage = 2)
-  private val waitAction = Action(id = 3, "Wait", "images/action_wait.png", "shoot.wav", actionPoints = 1, range = 1, WAIT, damage = 2)
-  private var actions = List(moveAction, shootAction, waitAction)
-
-  // Setup players
-  private val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(1, 2), Direction.DOWN, playerNumber = 1, "images/background_won_red.png", maxActionPoints = 3, maxHealthPoints = 3, actions)
-  private val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(7, 6), Direction.LEFT, playerNumber = 2, "images/background_won_blue.png", maxActionPoints = 3, maxHealthPoints = 3, actions)
-
-  private val wood1 = BlockObject("B", "images/block_wood.png", Position(0, 0))
-  private val wood2 = BlockObject("B", "images/block_wood.png", Position(0, 1))
-  private val wood3 = BlockObject("B", "images/block_wood.png", Position(3, 7))
-  private val wood4 = BlockObject("B", "images/block_wood.png", Position(8, 8))
-  private val wood5 = BlockObject("B", "images/block_wood.png", Position(5, 4))
-  private val wood6 = BlockObject("B", "images/block_wood.png", Position(3, 2))
-  private val wood7 = BlockObject("B", "images/block_wood.png", Position(3, 3))
-  private val wood8 = BlockObject("B", "images/block_wood.png", Position(5, 0))
-  private val wood9 = BlockObject("B", "images/block_wood.png", Position(6, 0))
-  private val wood10 = BlockObject("B", "images/block_wood.png", Position(5, 8))
-  private val wood11 = BlockObject("B", "images/block_wood.png", Position(6, 8))
-
-  private val mountain1 = BlockObject("B", "images/block_mountain.png", Position(7, 2))
-  private val mountain2 = BlockObject("B", "images/block_mountain.png", Position(6, 6))
-  private val mountain3 = BlockObject("B", "images/block_mountain.png", Position(5, 3))
-  private val mountain4 = BlockObject("B", "images/block_mountain.png", Position(3, 1))
-  private val mountain5 = BlockObject("B", "images/block_mountain.png", Position(6, 2))
-  private val mountain6 = BlockObject("B", "images/block_mountain.png", Position(0, 8))
-  private val mountain7 = BlockObject("B", "images/block_mountain.png", Position(1, 8))
-  private val mountain8 = BlockObject("B", "images/block_mountain.png", Position(0, 3))
-  private val mountain9 = BlockObject("B", "images/block_mountain.png", Position(0, 4))
-
-  private val lake1 = BlockObject("B", "images/block_lake.png", Position(1, 6))
-  private val lake2 = BlockObject("B", "images/block_lake.png", Position(8, 1))
-
-  private val city1 = BlockObject("B", "images/block_city.png", Position(3, 5))
-
-  var gameObjects: List[GameObject] = List(player1, player2, wood1, wood2, wood3, wood4, wood5, wood6, wood7, wood8, wood9, wood10, wood11, mountain1, mountain2, mountain3, mountain4, mountain5, mountain6, mountain7, mountain8, mountain9, lake1, lake2, city1)
+case class GameConfigProviderImpl(gameObjects: List[GameObject], attackSoundPath: String, openingBackgroundImagePath: String,
+                             levelBackgroundImagePath: String, actionbarBackgroundImagePath: String, attackImagePath: String,
+                             appIconImagePath: String, rowCount: Int, colCount : Int) extends GameConfigProvider {
 
   def listScenarios: List[String] = {
     FileLoader.loadFilesFromDirPath("/scenarios").sorted
@@ -73,65 +23,73 @@ class GameConfigProviderImpl extends GameConfigProvider {
   @throws(classOf[JSONException])
   @throws(classOf[NoSuchElementException])
   def loadFromFile(configFilePath: String): GameConfigProvider = {
+    var newAttackSoundPath = "sounds/explosion.wav"
+    var newLevelBackgroundImagePath = "images/background_woodlands.png"
+    var newActionbarBackgroundImagePath = "images/background_actionbar.png"
+    var newAttackImagePath = "images/hit.png"
+    var newRowCount = 9
+    var newColCount = 9
+    var newGameObjects: List[GameObject] = List[GameObject]()
+    var newActions: List[Action] = List[Action]()
+
     val json = Source.fromInputStream(getClass.getClassLoader.getResourceAsStream("scenarios/" + configFilePath)).getLines.mkString
     JSON.parseFull(json) match {
       case Some(jsonMap: Map[String, Any]) =>
-        gameObjects = List[GameObject]()
-        actions = List[Action]()
-
         jsonMap("levelBackgroundImagePath") match {
-          case s: String => levelBackgroundImagePath = s
+          case s: String => newLevelBackgroundImagePath = s
           case _ => throw JSONException()
         }
 
         jsonMap("actionbarBackgroundImagePath") match {
-          case s: String => actionbarBackgroundImagePath = s
+          case s: String => newActionbarBackgroundImagePath = s
           case _ => throw JSONException()
         }
 
         jsonMap("attackImagePath") match {
-          case s: String => attackImagePath = s
+          case s: String => newAttackImagePath = s
           case _ => throw JSONException()
         }
 
         jsonMap("attackSoundPath") match {
-          case s: String => attackSoundPath = s
+          case s: String => newAttackSoundPath = s
           case _ => throw JSONException()
         }
 
         jsonMap("rowCount") match {
-          case i: Double => rowCount = i.toInt
+          case i: Double => newRowCount = i.toInt
           case _ => throw JSONException()
         }
 
         jsonMap("colCount") match {
-          case i: Double => colCount = i.toInt
+          case i: Double => newColCount = i.toInt
           case _ => throw JSONException()
         }
 
         jsonMap("blockObjects") match {
           case listOfMaps: List[Map[String, Any]] =>
             val blockObjects: List[GameObject] = listOfMaps.map(blockObjectFromMap)
-            gameObjects = gameObjects ::: blockObjects
+            newGameObjects = newGameObjects ::: blockObjects
           case _ => throw JSONException()
         }
 
         jsonMap("actions") match {
           case listOfMaps: List[Map[String, Any]] =>
             val actionsFromJson: List[Action] = listOfMaps.map(actionFromMap)
-            actions = actions ::: actionsFromJson
+            newActions = newActions ::: actionsFromJson
           case _ => throw JSONException()
         }
         jsonMap("playerObjects") match {
           case listOfMaps: List[Map[String, Any]] =>
-            val playersFromJson: List[PlayerObject] = listOfMaps.map(playerObjectFromMap(_, actions))
-            gameObjects = gameObjects ::: playersFromJson
+            val playersFromJson: List[PlayerObject] = listOfMaps.map(playerObjectFromMap(_, newActions))
+            newGameObjects = newGameObjects ::: playersFromJson
           case _ => throw JSONException()
         }
 
       case _ => throw JSONException()
     }
-    this
+    copy(newGameObjects, newAttackSoundPath, "images/background_opening.png",
+      newLevelBackgroundImagePath, newActionbarBackgroundImagePath, newAttackImagePath,
+      "images/app_icon.png", newRowCount, newColCount)
   }
 
   private def actionFromMap(actionMap: Map[String, Any]): Action = {
@@ -191,14 +149,12 @@ class GameConfigProviderImpl extends GameConfigProvider {
   }
 
   override def generateGame(rowCount: Int, columnCount: Int, completion: (Boolean) => Unit): GameConfigProvider = {
-    // Setup board
-    this.rowCount = rowCount
-    this.colCount = columnCount
+    var newGameObjects: List[GameObject] = List[GameObject]()
 
     val system = ActorSystem("GameGenerationSystem")
-    val master = system.actorOf(Props(new GameGenerationMaster(numberOfWorkers = 4, numberOfMessages = 100, rowCount, colCount, actions, (gameObjects) => {
+    val master = system.actorOf(Props(new GameGenerationMaster(numberOfWorkers = 4, numberOfMessages = 100, rowCount, colCount, (gameObjects) => {
       if (gameObjects.isDefined) {
-        this.gameObjects = gameObjects.get
+        newGameObjects = newGameObjects ::: gameObjects.get
         completion(true)
       } else {
         completion(false)
@@ -207,6 +163,8 @@ class GameConfigProviderImpl extends GameConfigProvider {
     })), name = "master")
 
     master ! Generate
-    this
+    copy(newGameObjects, "sounds/explosion.wav", "images/background_opening.png",
+      "images/background_woodlands.png", "images/background_actionbar.png", "images/hit.png",
+      "images/app_icon.png", rowCount, columnCount)
   }
 }
