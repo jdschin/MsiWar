@@ -110,7 +110,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
                   val updatedPlayerCollisionObject = playerCollisionObject.copy(healthPoints = playerCollisionObject.healthPoints - actionToExecute.damage)
                   newGameBoard = newGameBoard.placeGameObject(updatedPlayerCollisionObject)
                   // Remove player if dead
-                  if (updatedPlayerCollisionObject.healthPoints < 0) {
+                  if (updatedPlayerCollisionObject.healthPoints <= 0) {
                     newGameBoard = newGameBoard.removeGameObject(updatedPlayerCollisionObject)
                   }
                   events = events.::(CellChanged(List((playerCollisionObject.position.rowIdx, playerCollisionObject.position.columnIdx), (updatedPlayerCollisionObject.position.rowIdx, updatedPlayerCollisionObject.position.columnIdx))))
