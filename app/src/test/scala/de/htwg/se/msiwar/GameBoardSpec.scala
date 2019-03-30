@@ -98,15 +98,15 @@ class GameBoardSpec extends FlatSpec with Matchers {
     val newPosition = Position(7, 7)
 
     val player = PlayerObject("Player1", "images/medium_tank_blue.png", oldPosition.copy(), Direction.LEFT,
-      playerNumber = 1, "images/background_won_blue.png", maxActionPoints = 3, maxHealthPoints = 3, List())
+      playerNumber = 1, "images/background_won_blue.png", actionPoints = 3, maxActionPoints = 3, healthPoints = 3, maxHealthPoints = 3, List())
 
-    val gameBoard = GameBoard(10, 10, List(player))
+    var gameBoard = GameBoard(10, 10, List(player))
 
-    gameBoard.moveGameObject(player, newPosition)
-    gameBoard.gameObjectAt(newPosition).get should be(player)
+    gameBoard = gameBoard.moveGameObject(player, newPosition)
+    gameBoard.gameObjectAt(newPosition).get should be(gameBoard.player(1).get)
     gameBoard.gameObjectAt(oldPosition).isEmpty should be(true)
-    player.position.columnIdx should be(7)
-    player.position.rowIdx should be(7)
+    gameBoard.player(1).get.position.columnIdx should be(7)
+    gameBoard.player(1).get.position.rowIdx should be(7)
   }
 
   it should "return no GameObject when it is removed" in {

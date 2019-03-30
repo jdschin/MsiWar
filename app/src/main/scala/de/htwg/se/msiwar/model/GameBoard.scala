@@ -1,5 +1,6 @@
 package de.htwg.se.msiwar.model
 
+import de.htwg.se.msiwar.model
 import de.htwg.se.msiwar.model.ActionType.ActionType
 import de.htwg.se.msiwar.util.Direction
 import de.htwg.se.msiwar.util.Direction._
@@ -7,17 +8,17 @@ import de.htwg.se.msiwar.util.IterationFunction._
 
 import scala.Option.empty
 
-case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
+case class GameBoard(rows: Int, columns: Int, private val gameObjects: List[GameObject]) {
   if (rows < 0 || columns < 0) {
     throw new IllegalArgumentException("rows and columns must be positive")
   }
 
   private val board = Array.ofDim[GameObject](rows, columns)
+  gameObjects.foreach(o => board(o.position.rowIdx)(o.position.columnIdx) = o)
 
-  gameObjects.foreach(placeGameObject)
-
-  def placeGameObject(gameObject: GameObject): Unit = {
+  def placeGameObject(gameObject: GameObject): GameBoard = {
     board(gameObject.position.rowIdx)(gameObject.position.columnIdx) = gameObject
+    copy(gameObjects = board.flatten.collect({ case s: PlayerObject => s case o: BlockObject => o}).toList)
   }
 
   def gameObjectAt(position: Position): Option[GameObject] = {
@@ -34,15 +35,18 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
     Option(objectAt)
   }
 
-  def moveGameObject(gameObject: GameObject, newPosition: Position): Unit = {
-    removeGameObject(gameObject)
-    gameObject.position.rowIdx = newPosition.rowIdx
-    gameObject.position.columnIdx = newPosition.columnIdx
-    placeGameObject(gameObject)
+  def moveGameObject(gameObject: GameObject, newPosition: Position): GameBoard = {
+    board(gameObject.position.rowIdx)(gameObject.position.columnIdx) = null
+    gameObject match {
+      case p: PlayerObject => board(newPosition.rowIdx)(newPosition.columnIdx) = p.copy(position = newPosition)
+      case b: BlockObject => board(newPosition.rowIdx)(newPosition.columnIdx) = b.copy(position = newPosition)
+    }
+    copy(gameObjects = board.flatten.collect({ case s: PlayerObject => s case o: BlockObject => o}).toList)
   }
 
-  def removeGameObject(gameObject: GameObject): Unit = {
+  def removeGameObject(gameObject: GameObject): GameBoard = {
     board(gameObject.position.rowIdx)(gameObject.position.columnIdx) = null
+    copy(gameObjects = board.flatten.collect({ case s: PlayerObject => s case o: BlockObject => o}).toList)
   }
 
   def collisionObject(from: Position, to: Position, ignoreLastPosition: Boolean): Option[GameObject] = {
@@ -72,8 +76,15 @@ case class GameBoard(rows: Int, columns: Int, gameObjects: List[GameObject]) {
       }
       )
     }
-
     collisionObject
+  }
+
+  def players: List[PlayerObject] = {
+    board.flatten.collect({ case s: PlayerObject => s }).toList
+  }
+
+  def player(playerNumber: Int): Option[PlayerObject] = {
+    players.find(_.playerNumber == playerNumber)
   }
 
   private def modifyPositionFunctionForDirection(direction: Direction): (Int, Int) => (Int, Int) = {

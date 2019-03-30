@@ -145,7 +145,7 @@ case class GameConfigProviderImpl(gameObjects: List[GameObject], attackSoundPath
       })
     }
 
-    PlayerObject(name, imagePath, Position(rowIndex, columnIndex), viewDirectionOpt.get, playerNumber, wonImagePath, maxActionPoints, maxHealthPoints, actions)
+    PlayerObject(name, imagePath, Position(rowIndex, columnIndex), viewDirectionOpt.get, playerNumber, wonImagePath, maxActionPoints, maxActionPoints, maxHealthPoints, maxHealthPoints, actions)
   }
 
   override def generateGame(rowCount: Int, columnCount: Int, completion: (Boolean) => Unit): GameConfigProvider = {

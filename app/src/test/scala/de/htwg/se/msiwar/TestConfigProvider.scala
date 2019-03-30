@@ -41,8 +41,8 @@ class TestConfigProvider extends GameConfigProvider {
     actions = List(shootAction)
 
     // Setup players
-    val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", maxActionPoints=3, maxHealthPoints=3, actions)
-    val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(1, 0), Direction.UP, playerNumber=2, "images/background_won_blue.png", maxActionPoints=3, maxHealthPoints=3, actions)
+    val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", actionPoints=3, maxActionPoints=3, healthPoints=3, maxHealthPoints=3, actions)
+    val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(1, 0), Direction.UP, playerNumber=2, "images/background_won_blue.png", actionPoints=3, maxActionPoints=3, healthPoints=3, maxHealthPoints=3, actions)
 
     gameObjects = List(player1, player2)
   }
@@ -55,9 +55,9 @@ class TestConfigProvider extends GameConfigProvider {
     actions = List(shootAction)
 
     // Setup players
-    val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", maxActionPoints=3, maxHealthPoints=3, actions)
-    val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(2, 0), Direction.UP, playerNumber=2, "images/background_won_blue.png", maxActionPoints=3, maxHealthPoints=1, actions)
-    val player3 = PlayerObject("Player3", "images/medium_tank_blue.png", Position(2, 1), Direction.UP, playerNumber=3, "images/background_won_blue.png", maxActionPoints=3, maxHealthPoints=3, actions)
+    val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", actionPoints=3, maxActionPoints=3, healthPoints=3, maxHealthPoints=3, actions)
+    val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(2, 0), Direction.UP, playerNumber=2, "images/background_won_blue.png", actionPoints=3, maxActionPoints=3, healthPoints=3, maxHealthPoints=1, actions)
+    val player3 = PlayerObject("Player3", "images/medium_tank_blue.png", Position(2, 1), Direction.UP, playerNumber=3, "images/background_won_blue.png", actionPoints=3, maxActionPoints=3, healthPoints=3, maxHealthPoints=3, actions)
 
     val wood = BlockObject("B", "images/block_wood.png", Position(1, 1))
 
@@ -72,8 +72,8 @@ class TestConfigProvider extends GameConfigProvider {
     actions = List(shootAction)
 
     // Setup players
-    val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(1, 1), Direction.DOWN, playerNumber=1, "images/background_won_red.png", maxActionPoints=3, maxHealthPoints=3, actions)
-    val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(1, 2), Direction.UP, playerNumber=2, "images/background_won_blue.png", maxActionPoints=3, maxHealthPoints=3, actions)
+    val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(1, 1), Direction.DOWN, playerNumber=1, "images/background_won_red.png", actionPoints=3, maxActionPoints=3, healthPoints=3, maxHealthPoints=3, actions)
+    val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(1, 2), Direction.UP, playerNumber=2, "images/background_won_blue.png", actionPoints=3, maxActionPoints=3, healthPoints=3, maxHealthPoints=3, actions)
 
     val wood1 = BlockObject("B", "images/block_wood.png", Position(0, 0))
     val wood2 = BlockObject("B", "images/block_wood.png", Position(0, 1))
@@ -94,8 +94,8 @@ class TestConfigProvider extends GameConfigProvider {
     actions = List(moveAction, shootAction, waitAction)
 
     // Setup players
-    val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", maxActionPoints=1, maxHealthPoints=3, actions)
-    val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(0, 1), Direction.DOWN, playerNumber=2, "images/background_won_blue.png", maxActionPoints=1, maxHealthPoints=3, actions)
+    val player1 = PlayerObject("Player1", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", actionPoints=1, maxActionPoints=1, healthPoints=3, maxHealthPoints=3, actions)
+    val player2 = PlayerObject("Player2", "images/medium_tank_blue.png", Position(0, 1), Direction.DOWN, playerNumber=2, "images/background_won_blue.png", actionPoints=1, maxActionPoints=1, healthPoints=3, maxHealthPoints=3, actions)
 
     gameObjects = List(player1, player2)
   }
@@ -103,7 +103,7 @@ class TestConfigProvider extends GameConfigProvider {
   def loadInstantWinScenario(): Unit = {
     rowCount = 1
     colCount = 1
-    gameObjects = List(PlayerObject("Winner", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", maxActionPoints=3, maxHealthPoints=3, List()))
+    gameObjects = List(PlayerObject("Winner", "images/light_tank_red.png", Position(0, 0), Direction.DOWN, playerNumber=1, "images/background_won_red.png", actionPoints=3, maxActionPoints=3, healthPoints=3, maxHealthPoints=3, List()))
   }
 
   override def listScenarios: List[String] = {
@@ -119,5 +119,4 @@ class TestConfigProvider extends GameConfigProvider {
     }
     this
   }
-
 }

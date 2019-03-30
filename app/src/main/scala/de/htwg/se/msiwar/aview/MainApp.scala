@@ -7,16 +7,12 @@ import de.htwg.se.msiwar.model._
 import de.htwg.se.msiwar.util.{GameConfigProvider, GameConfigProviderImpl}
 
 object MainApp {
-  var gameConfigProvider: GameConfigProvider = new GameConfigProviderImpl(List[GameObject](),"","","",
-    "", "", "", 1, 1)
-  val scenarioName = gameConfigProvider.listScenarios(0)
+  var gameConfigProvider: GameConfigProvider = GameConfigProviderImpl(List[GameObject](),"","","", "", "", "", 1, 1)
+  val scenarioName: String = gameConfigProvider.listScenarios.head
   gameConfigProvider = gameConfigProvider.loadFromFile(scenarioName)
 
-  val player = gameConfigProvider.gameObjects.collect({ case s: PlayerObject => s }).find(_.playerNumber == 1).get
-  val turn = 1
-
   val createdModel = GameModelImpl(gameConfigProvider, GameBoard(gameConfigProvider.rowCount, gameConfigProvider.colCount,
-    gameConfigProvider.gameObjects), Option.empty[Action], player, turn)
+    gameConfigProvider.gameObjects), Option.empty[Action], 1, 1)
 
   val controller = ControllerImpl(createdModel)
   val swingFrame = new SwingFrame(controller)

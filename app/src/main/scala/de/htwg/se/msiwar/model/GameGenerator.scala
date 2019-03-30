@@ -124,8 +124,10 @@ case class GameGenerator(rowCount: Int, columnCount: Int) {
     if (imagePath._1.contains("heavy")) {
       playerActions = playerActions ::: List(rocketAction)
     }
+    val ranActionPoints = nextInt(10) + 1
+    val ranHealthPoints = nextInt(10) + 1
     PlayerObject(s"Spieler$playerNumber", imagePath._1, randomFreePosition(), randomDirection(), playerNumber = playerNumber,
-      imagePath._2, maxActionPoints = nextInt(10) + 1, maxHealthPoints = nextInt(10) + 1, playerActions)
+      imagePath._2, actionPoints = ranActionPoints, maxActionPoints = ranActionPoints, healthPoints = ranHealthPoints, maxHealthPoints = ranHealthPoints, playerActions)
   }
 
   private def randomDirection(): Direction = {
