@@ -51,7 +51,7 @@ class TestConfigProvider extends GameConfigProvider {
     rowCount = 3
     colCount = 3
 
-    val shootAction = Action(id=2, "Shoot", "images/action_attack.png", "shoot.wav", actionPoints=1, range=3, SHOOT, damage=2)
+    val shootAction = Action(id=2, "Shoot", "images/action_attack.png", "shoot.wav", actionPoints=1, range=3, SHOOT, damage=3)
     actions = List(shootAction)
 
     // Setup players
