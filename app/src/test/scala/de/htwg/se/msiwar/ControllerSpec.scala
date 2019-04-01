@@ -326,11 +326,10 @@ class ControllerSpec extends FlatSpec with Matchers {
     val testConfigProvider = new TestConfigProvider
     testConfigProvider.load2PlayerDamageTestScenario()
 
-    val model = GameModelImpl(testConfigProvider, GameBoard(testConfigProvider.rowCount, testConfigProvider.colCount, testConfigProvider.gameObjects), Option.empty[Action], 1, 1)
+    val model: GameModel = GameModelImpl(testConfigProvider, GameBoard(testConfigProvider.rowCount, testConfigProvider.colCount, testConfigProvider.gameObjects), Option.empty[Action], 1, 1)
     val controller = ControllerImpl(model)
 
     TestEventHandler(model, controller, Option(gameStartedPromise), Option.empty, Option.empty)
-
     controller.startRandomGame()
 
     val result = Await.result(gameStartedPromise.future, 5000 millis)
@@ -344,15 +343,14 @@ class ControllerSpec extends FlatSpec with Matchers {
     val gameStartedPromise = Promise[Boolean]()
     val turnStartedPromise = Promise[Int]()
 
-    val model = GameModelImpl(testConfigProvider, GameBoard(testConfigProvider.rowCount, testConfigProvider.colCount, testConfigProvider.gameObjects), Option.empty[Action], 1, 1)
+    val model: GameModel = GameModelImpl(testConfigProvider, GameBoard(testConfigProvider.rowCount, testConfigProvider.colCount, testConfigProvider.gameObjects), Option.empty[Action], 1, 1)
     val controller = ControllerImpl(model)
 
     TestEventHandler(model, controller, Option(gameStartedPromise), Option.empty, Option(turnStartedPromise))
+    controller.startGame(0)
 
-    model.startGame(0)
-
-    val gameStarted = Await.result(gameStartedPromise.future, 500 millis)
-    val playerNumber = Await.result(turnStartedPromise.future, 500 millis)
+    val gameStarted = Await.result(gameStartedPromise.future, 5000 millis)
+    val playerNumber = Await.result(turnStartedPromise.future, 5000 millis)
     gameStarted should be(true)
     playerNumber should be(1)
   }
@@ -367,11 +365,10 @@ class ControllerSpec extends FlatSpec with Matchers {
     val model = GameModelImpl(testConfigProvider, GameBoard(testConfigProvider.rowCount, testConfigProvider.colCount, testConfigProvider.gameObjects), Option.empty[Action], 1, 1)
     val controller = ControllerImpl(model)
 
-    TestEventHandler(model, controller, Option.empty, Option(couldNotGenerateGamePromise), Option.empty)
-
+    TestEventHandler(controller.model, controller, Option.empty, Option(couldNotGenerateGamePromise), Option.empty)
     model.startRandomGame(0, 0)
 
-    val result = Await.result(couldNotGenerateGamePromise.future, 500 millis)
+    val result = Await.result(couldNotGenerateGamePromise.future, 5000 millis)
     result should be(true)
   }
 }
