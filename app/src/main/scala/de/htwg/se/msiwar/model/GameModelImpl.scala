@@ -131,6 +131,12 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
       newGameBoard = newGameBoard.placeGameObject(newActivePlayer.copy(actionPoints = newActivePlayer.actionPoints - actionToExecute.actionPoints))
 
       val nextTurn = updateTurn(Option(actionToExecute), newGameBoard)
+      // Reset player actions points when turn changed
+      if(nextTurn._2 != turnNumber){
+        for (playerObject <- newGameBoard.players) {
+          newGameBoard = newGameBoard.placeGameObject(playerObject.copy(actionPoints = playerObject.maxActionPoints))
+        }
+      }
       (copy(gameConfigProvider, newGameBoard, Option(actionToExecute), nextTurn._1, nextTurn._2), events)
     } else {
       (this, List[Event]())
@@ -157,11 +163,6 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
       // If every player did his turn, start the next turn with first player alive
       if (!foundNextPlayer) {
         nextTurnNumber += 1
-        // Reset action points of all players when new turn has started
-        for (playerObject <- currentGameBoard.players) {
-          val updatedPlayerObject = playerObject.copy(actionPoints = playerObject.maxActionPoints)
-          currentGameBoard.placeGameObject(updatedPlayerObject)
-        }
       }
       (nextPlayer.playerNumber, nextTurnNumber)
     } else {
