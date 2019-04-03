@@ -21,6 +21,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
 
   override def startRandomGame(rowCount: Int, columnCount: Int): GameModel = {
     var newModel: GameModel = this
+    // TODO use option/either
     gameConfigProvider.generateGame(rowCount, columnCount, couldGenerateGame => {
       if (couldGenerateGame) {
         newModel = init(gameConfigProvider)
@@ -93,6 +94,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
             events = events.::(CellChanged(List((newPosition.rowIdx, newPosition.columnIdx), (oldPosition.rowIdx, oldPosition.columnIdx))))
           }
         case SHOOT =>
+          // TODO move to sub functions
           val positionForDirection = newGameBoard.calculatePositionForDirection(newActivePlayer.position, direction, actionToExecute.range)
           if (positionForDirection.isDefined) {
             val collisionObjectOpt = newGameBoard.collisionObject(newActivePlayer.position, positionForDirection.get, ignoreLastPosition = false)
@@ -290,6 +292,7 @@ case class GameModelImpl(gameConfigProvider: GameConfigProvider, gameBoard: Game
 
   override def wonImagePath: String = {
     winnerId match {
+        // TODO replace get with match
       case Some(value) => player(value).get.wonImagePath
       case None => ""
     }
