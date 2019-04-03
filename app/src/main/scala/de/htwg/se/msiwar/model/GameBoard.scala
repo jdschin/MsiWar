@@ -1,6 +1,5 @@
 package de.htwg.se.msiwar.model
 
-import de.htwg.se.msiwar.model
 import de.htwg.se.msiwar.model.ActionType.ActionType
 import de.htwg.se.msiwar.util.Direction
 import de.htwg.se.msiwar.util.Direction._
@@ -9,9 +8,6 @@ import de.htwg.se.msiwar.util.IterationFunction._
 import scala.Option.empty
 
 case class GameBoard(rows: Int, columns: Int, private val gameObjects: List[GameObject]) {
-  if (rows < 0 || columns < 0) {
-    throw new IllegalArgumentException("rows and columns must be positive")
-  }
 
   private val board = Array.ofDim[GameObject](rows, columns)
   gameObjects.foreach(o => board(o.position.rowIdx)(o.position.columnIdx) = o)
